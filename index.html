@@ -9,6 +9,12 @@
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/layout.css">
+    
+    <!-- ✅ CSS Composants (AJOUTÉS) -->
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/home-pages.css">
+    
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/pages.css">
     <link rel="stylesheet" href="css/demo-search.css">
@@ -66,16 +72,16 @@
     
     <!-- Scripts - Architecture Modulaire (ordre corrigé) -->
     
-    <!-- 1. Core Classes de base (doivent être chargées en premier) -->
+    <!-- 1. Core Classes de base -->
     <script src="js/core/event-bus.js"></script>
     <script src="js/core/component-manager.js"></script>
     
-    <!-- 2. Utilities (doivent être chargés avant les composants qui les utilisent) -->
+    <!-- 2. Utilities -->
     <script src="js/utils/dom-utils.js"></script>
     <script src="js/utils/animation-utils.js"></script>
     <script src="js/utils/client-access.js"></script>
     
-    <!-- 3. Base Components (doivent être chargés avant les composants spécialisés) -->
+    <!-- 3. Base Components -->
     <script src="js/components/base-component.js"></script>
     <script src="js/pages/base-page.js"></script>
     <script src="js/demos/base-demo.js"></script>
@@ -98,7 +104,7 @@
     <script src="js/demos/chiffrage-demo.js"></script>
     <script src="js/demos/dstv-demo.js"></script>
     
-    <!-- 8. Configuration (doit être chargé après les composants) -->
+    <!-- 8. Configuration -->
     <script src="js/config/demo-config.js"></script>
     <script src="js/config/app-config.js"></script>
     

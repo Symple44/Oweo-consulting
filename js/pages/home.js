@@ -1,5 +1,5 @@
 // ========================================
-// js/pages/home.js - Page d'accueil
+// js/pages/home.js - Page d'accueil complète
 // ========================================
 
 class HomePage extends BasePage {
@@ -117,49 +117,70 @@ class HomePage extends BasePage {
                         
                         <div class="demos-grid">
                             <div class="demo-preview-card fade-in-up">
-                                <div class="demo-preview-header">
-                                    <div class="demo-icon">
-                                        <i class="fas fa-calculator"></i>
-                                    </div>
-                                    <div class="demo-meta">
-                                        <h3>Outil de Chiffrage</h3>
-                                        <p>Automatisation complète du chiffrage</p>
+                                <div class="demo-icon">
+                                    <i class="fas fa-calculator"></i>
+                                </div>
+                                <div class="demo-content">
+                                    <h3 class="demo-title">Outil de Chiffrage</h3>
+                                    <p class="demo-description">
+                                        Automatisez vos devis avec notre module intelligent de chiffrage
+                                    </p>
+                                    <div class="demo-features">
+                                        <span class="demo-tag">Automatisation</span>
+                                        <span class="demo-tag">Précision</span>
+                                        <span class="demo-tag">Rapidité</span>
                                     </div>
                                 </div>
-                                <div class="demo-preview-content">
-                                    <ul class="demo-features">
-                                        <li><i class="fas fa-check"></i> Calcul automatique des coûts</li>
-                                        <li><i class="fas fa-check"></i> Base de données matériaux</li>
-                                        <li><i class="fas fa-check"></i> Génération de devis PDF</li>
-                                        <li><i class="fas fa-check"></i> Suivi des marges</li>
-                                    </ul>
+                                <div class="demo-actions">
                                     <button class="btn btn-primary client-demo-link" data-demo="chiffrage-demo">
                                         <i class="fas fa-play"></i>
-                                        Tester la démo
+                                        Voir la démo
                                     </button>
                                 </div>
                             </div>
                             
                             <div class="demo-preview-card fade-in-up">
-                                <div class="demo-preview-header">
-                                    <div class="demo-icon">
-                                        <i class="fas fa-cog"></i>
-                                    </div>
-                                    <div class="demo-meta">
-                                        <h3>Interface DSTV</h3>
-                                        <p>Connexion directe avec vos machines CNC</p>
+                                <div class="demo-icon">
+                                    <i class="fas fa-file-code"></i>
+                                </div>
+                                <div class="demo-content">
+                                    <h3 class="demo-title">Interface DSTV</h3>
+                                    <p class="demo-description">
+                                        Connectez vos machines CNC avec nos interfaces standardisées
+                                    </p>
+                                    <div class="demo-features">
+                                        <span class="demo-tag">DSTV</span>
+                                        <span class="demo-tag">CNC</span>
+                                        <span class="demo-tag">Automatisation</span>
                                     </div>
                                 </div>
-                                <div class="demo-preview-content">
-                                    <ul class="demo-features">
-                                        <li><i class="fas fa-check"></i> Import/Export DSTV</li>
-                                        <li><i class="fas fa-check"></i> Validation automatique</li>
-                                        <li><i class="fas fa-check"></i> Interface machine</li>
-                                        <li><i class="fas fa-check"></i> Suivi production</li>
-                                    </ul>
+                                <div class="demo-actions">
                                     <button class="btn btn-primary client-demo-link" data-demo="dstv-demo">
                                         <i class="fas fa-play"></i>
-                                        Tester la démo
+                                        Voir la démo
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="demo-preview-card fade-in-up">
+                                <div class="demo-icon">
+                                    <i class="fas fa-industry"></i>
+                                </div>
+                                <div class="demo-content">
+                                    <h3 class="demo-title">Gestion Production</h3>
+                                    <p class="demo-description">
+                                        Pilotez votre atelier avec des outils de suivi en temps réel
+                                    </p>
+                                    <div class="demo-features">
+                                        <span class="demo-tag">Temps réel</span>
+                                        <span class="demo-tag">Suivi</span>
+                                        <span class="demo-tag">Analytics</span>
+                                    </div>
+                                </div>
+                                <div class="demo-actions">
+                                    <button class="btn btn-outline" disabled>
+                                        <i class="fas fa-clock"></i>
+                                        Bientôt disponible
                                     </button>
                                 </div>
                             </div>
@@ -167,20 +188,25 @@ class HomePage extends BasePage {
                     </div>
                 </section>
                 
-                <!-- CTA Section -->
-                <section class="cta-section">
+                <!-- Contact CTA Section -->
+                <section class="contact-cta">
                     <div class="container">
-                        <div class="cta-content fade-in-up">
-                            <h2>Prêt à transformer votre entreprise ?</h2>
-                            <p>Contactez-nous pour un diagnostic gratuit et personnalisé</p>
-                            <div class="cta-actions">
-                                <button class="btn btn-primary btn-lg" data-page="contact">
-                                    <i class="fas fa-phone"></i>
-                                    Nous contacter
+                        <div class="contact-content">
+                            <h2 class="contact-title fade-in-up">
+                                Prêt à transformer votre entreprise ?
+                            </h2>
+                            <p class="fade-in-up">
+                                Contactez-nous pour un diagnostic gratuit et découvrez 
+                                comment nos solutions peuvent révolutionner votre activité.
+                            </p>
+                            <div class="contact-actions fade-in-up">
+                                <button class="btn btn-primary btn-lg" data-page="services">
+                                    <i class="fas fa-calendar"></i>
+                                    Planifier un entretien
                                 </button>
                                 <button class="btn btn-outline btn-lg" data-page="services">
-                                    <i class="fas fa-info-circle"></i>
-                                    En savoir plus
+                                    <i class="fas fa-download"></i>
+                                    Télécharger la brochure
                                 </button>
                             </div>
                         </div>
@@ -193,9 +219,9 @@ class HomePage extends BasePage {
     bindEvents() {
         super.bindEvents();
         
-        // Navigation vers les pages
-        const pageLinks = document.querySelectorAll('[data-page]');
-        pageLinks.forEach(link => {
+        // Navigation links
+        const navLinks = document.querySelectorAll('[data-page]');
+        navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const page = link.dataset.page;

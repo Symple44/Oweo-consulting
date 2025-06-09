@@ -1,5 +1,5 @@
 // ========================================
-// js/components/footer.js - Footer refactorisé
+// js/components/footer.js - Footer complet
 // ========================================
 
 class OweoFooter extends BaseComponent {
@@ -14,6 +14,7 @@ class OweoFooter extends BaseComponent {
                 <div class="footer-container">
                     <!-- Footer Main -->
                     <div class="footer-main">
+                        <!-- Footer Brand -->
                         <div class="footer-section">
                             <div class="footer-brand">
                                 <div class="footer-logo">
@@ -21,7 +22,9 @@ class OweoFooter extends BaseComponent {
                                     <span class="footer-logo-text">Oweo</span>
                                 </div>
                                 <p class="footer-tagline">
-                                    Expert en transformation digitale pour l'industrie métallique
+                                    Expert en transformation digitale pour l'industrie métallique. 
+                                    Nous accompagnons les entreprises dans leur digitalisation 
+                                    avec des solutions ERP sur mesure.
                                 </p>
                                 <div class="footer-social">
                                     <a href="#" class="social-link" aria-label="LinkedIn">
@@ -30,6 +33,9 @@ class OweoFooter extends BaseComponent {
                                     <a href="#" class="social-link" aria-label="Twitter">
                                         <i class="fab fa-twitter"></i>
                                     </a>
+                                    <a href="#" class="social-link" aria-label="Facebook">
+                                        <i class="fab fa-facebook-f"></i>
+                                    </a>
                                     <a href="#" class="social-link" aria-label="YouTube">
                                         <i class="fab fa-youtube"></i>
                                     </a>
@@ -37,6 +43,7 @@ class OweoFooter extends BaseComponent {
                             </div>
                         </div>
                         
+                        <!-- Services -->
                         <div class="footer-section">
                             <h4 class="footer-section-title">Services</h4>
                             <ul class="footer-links">
@@ -44,25 +51,32 @@ class OweoFooter extends BaseComponent {
                                 <li><a href="#" data-page="services">Conseil Stratégique</a></li>
                                 <li><a href="#" data-page="services">Implémentation ERP</a></li>
                                 <li><a href="#" data-page="services">Développement Sur Mesure</a></li>
+                                <li><a href="#" data-page="services">Formation & Support</a></li>
                             </ul>
                         </div>
                         
+                        <!-- Solutions -->
                         <div class="footer-section">
                             <h4 class="footer-section-title">Solutions</h4>
                             <ul class="footer-links">
                                 <li><a href="#" class="client-demo-link" data-demo="chiffrage-demo">Outil de Chiffrage</a></li>
                                 <li><a href="#" class="client-demo-link" data-demo="dstv-demo">Interface DSTV</a></li>
                                 <li><a href="#" data-page="services">Gestion Production</a></li>
-                                <li><a href="#" data-page="services">Business Intelligence</a></li>
+                                <li><a href="#" data-page="services">Suivi Projets</a></li>
+                                <li><a href="#" data-page="services">Analytics Métier</a></li>
                             </ul>
                         </div>
                         
+                        <!-- Contact -->
                         <div class="footer-section">
                             <h4 class="footer-section-title">Contact</h4>
                             <div class="footer-contact">
                                 <div class="contact-item">
                                     <i class="fas fa-map-marker-alt"></i>
-                                    <span>123 Rue de l'Industrie<br>69000 Lyon, France</span>
+                                    <div>
+                                        <div>123 Rue de l'Industrie</div>
+                                        <div>69000 Lyon, France</div>
+                                    </div>
                                 </div>
                                 <div class="contact-item">
                                     <i class="fas fa-phone"></i>
@@ -71,6 +85,10 @@ class OweoFooter extends BaseComponent {
                                 <div class="contact-item">
                                     <i class="fas fa-envelope"></i>
                                     <a href="mailto:contact@oweo.fr">contact@oweo.fr</a>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-clock"></i>
+                                    <div>Lun-Ven 8h30-18h30</div>
                                 </div>
                             </div>
                         </div>
@@ -83,47 +101,67 @@ class OweoFooter extends BaseComponent {
                                 © ${this.year} Oweo. Tous droits réservés.
                             </p>
                             <div class="footer-legal">
-                                <a href="#" data-page="mentions-legales">Mentions légales</a>
-                                <a href="#" data-page="politique-confidentialite">Politique de confidentialité</a>
-                                <a href="#" data-page="cgv">CGV</a>
+                                <a href="#">Mentions légales</a>
+                                <a href="#">Politique de confidentialité</a>
+                                <a href="#">CGU</a>
+                                <a href="#">Cookies</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </footer>
         `;
+        
+        this.bindEvents();
     }
     
     bindEvents() {
-        // Navigation
-        this.element.addEventListener('click', (e) => {
-            const pageLink = e.target.closest('[data-page]');
-            if (pageLink) {
+        // Navigation links
+        const navLinks = this.element.querySelectorAll('[data-page]');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
                 e.preventDefault();
-                this.handleNavigation(pageLink.dataset.page);
-            }
-            
-            const demoLink = e.target.closest('.client-demo-link');
-            if (demoLink) {
+                const page = link.dataset.page;
+                this.navigateTo(page);
+            });
+        });
+        
+        // Demo links
+        const demoLinks = this.element.querySelectorAll('.client-demo-link');
+        demoLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
                 e.preventDefault();
-                this.handleDemoAccess(demoLink.dataset.demo);
-            }
+                const demoId = link.dataset.demo;
+                this.handleDemoAccess(demoId);
+            });
+        });
+        
+        // Social links tracking
+        const socialLinks = this.element.querySelectorAll('.social-link');
+        socialLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const platform = link.getAttribute('aria-label');
+                console.log(`Social link clicked: ${platform}`);
+                // Analytics tracking here
+            });
         });
     }
     
-    handleNavigation(page) {
-        if (this.eventBus) {
-            this.eventBus.emit('navigate', { page });
+    navigateTo(page) {
+        if (window.app && window.app.router) {
+            window.app.router.navigate(page);
         }
     }
     
     handleDemoAccess(demoId) {
+        // Check client access
         if (window.OweoClientAccess && !window.OweoClientAccess.hasAccess()) {
             window.OweoClientAccess.showAuthModal(demoId);
         } else {
-            if (this.eventBus) {
-                this.eventBus.emit('navigateToDemo', { demoId });
-            }
+            this.navigateTo(demoId);
         }
     }
 }
+
+// Expose the class
+window.OweoFooter = OweoFooter;
