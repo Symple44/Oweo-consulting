@@ -1,0 +1,297 @@
+/* ========================================
+   css/variables.css - Variables CSS globales
+======================================== */
+
+:root {
+    /* =================================
+       COULEURS PRINCIPALES
+    ================================= */
+    
+    /* Couleurs primaires */
+    --primary-color: #00d4ff;
+    --primary-light: #33ddff;
+    --primary-dark: #00a8cc;
+    
+    /* Couleurs secondaires */
+    --secondary-color: #7c3aed;
+    --secondary-light: #a855f7;
+    --secondary-dark: #5b21b6;
+    
+    /* Couleur d'accent */
+    --accent-color: #f59e0b;
+    --accent-light: #fbbf24;
+    --accent-dark: #d97706;
+    
+    /* =================================
+       COULEURS SYSTÈME
+    ================================= */
+    
+    /* Couleurs de statut */
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --error-color: #ef4444;
+    --info-color: #3b82f6;
+    
+    /* Couleurs neutres */
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    
+    /* =================================
+       COULEURS DE FOND
+    ================================= */
+    
+    /* Arrière-plans principaux */
+    --bg-primary: #0f0f23;
+    --bg-secondary: #16213e;
+    --bg-tertiary: #1a1a2e;
+    
+    /* Arrière-plans de cartes */
+    --bg-card: rgba(255, 255, 255, 0.05);
+    --bg-card-hover: rgba(255, 255, 255, 0.08);
+    
+    /* Arrière-plans d'éléments */
+    --bg-input: rgba(255, 255, 255, 0.1);
+    --bg-button: var(--primary-color);
+    --bg-overlay: rgba(0, 0, 0, 0.7);
+    
+    /* =================================
+       COULEURS DE TEXTE
+    ================================= */
+    
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.8);
+    --text-muted: rgba(255, 255, 255, 0.6);
+    --text-disabled: rgba(255, 255, 255, 0.4);
+    
+    /* Texte sur fonds colorés */
+    --text-on-primary: #ffffff;
+    --text-on-secondary: #ffffff;
+    --text-on-accent: #000000;
+    
+    /* =================================
+       BORDURES
+    ================================= */
+    
+    --border-color: rgba(255, 255, 255, 0.1);
+    --border-light: rgba(255, 255, 255, 0.05);
+    --border-strong: rgba(255, 255, 255, 0.2);
+    --border-primary: var(--primary-color);
+    
+    /* =================================
+       OMBRES
+    ================================= */
+    
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.3);
+    --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.4);
+    
+    /* Ombres colorées */
+    --shadow-primary: 0 8px 32px rgba(0, 212, 255, 0.3);
+    --shadow-secondary: 0 8px 32px rgba(124, 58, 237, 0.3);
+    
+    /* =================================
+       TYPOGRAPHIE
+    ================================= */
+    
+    /* Familles de polices */
+    --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    --font-family-mono: 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', 'Source Code Pro', monospace;
+    
+    /* Tailles de police */
+    --font-size-xs: 0.75rem;    /* 12px */
+    --font-size-sm: 0.875rem;   /* 14px */
+    --font-size-base: 1rem;     /* 16px */
+    --font-size-lg: 1.125rem;   /* 18px */
+    --font-size-xl: 1.25rem;    /* 20px */
+    --font-size-2xl: 1.5rem;    /* 24px */
+    --font-size-3xl: 1.875rem;  /* 30px */
+    --font-size-4xl: 2.25rem;   /* 36px */
+    --font-size-5xl: 3rem;      /* 48px */
+    --font-size-6xl: 3.75rem;   /* 60px */
+    
+    /* Poids de police */
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
+    --font-weight-black: 900;
+    
+    /* Hauteurs de ligne */
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.6;
+    --line-height-loose: 2;
+    
+    /* =================================
+       ESPACEMENTS
+    ================================= */
+    
+    --space-1: 0.25rem;   /* 4px */
+    --space-2: 0.5rem;    /* 8px */
+    --space-3: 0.75rem;   /* 12px */
+    --space-4: 1rem;      /* 16px */
+    --space-5: 1.25rem;   /* 20px */
+    --space-6: 1.5rem;    /* 24px */
+    --space-8: 2rem;      /* 32px */
+    --space-10: 2.5rem;   /* 40px */
+    --space-12: 3rem;     /* 48px */
+    --space-16: 4rem;     /* 64px */
+    --space-20: 5rem;     /* 80px */
+    --space-24: 6rem;     /* 96px */
+    --space-32: 8rem;     /* 128px */
+    
+    /* =================================
+       BORDURES ARRONDIES
+    ================================= */
+    
+    --radius-none: 0;
+    --radius-sm: 0.125rem;  /* 2px */
+    --radius-base: 0.25rem; /* 4px */
+    --radius-md: 0.375rem;  /* 6px */
+    --radius-lg: 0.5rem;    /* 8px */
+    --radius-xl: 0.75rem;   /* 12px */
+    --radius-2xl: 1rem;     /* 16px */
+    --radius-3xl: 1.5rem;   /* 24px */
+    --radius-full: 9999px;
+    
+    /* =================================
+       TRANSITIONS
+    ================================= */
+    
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* Propriétés spécifiques */
+    --transition-colors: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    --transition-transform: transform 0.3s ease;
+    --transition-opacity: opacity 0.3s ease;
+    --transition-all: all 0.3s ease;
+    
+    /* =================================
+       LAYOUT
+    ================================= */
+    
+    /* Largeurs de conteneur */
+    --container-sm: 640px;
+    --container-md: 768px;
+    --container-lg: 1024px;
+    --container-xl: 1280px;
+    --container-2xl: 1536px;
+    --container-max-width: 1200px;
+    
+    /* Hauteurs d'éléments */
+    --navbar-height: 70px;
+    --footer-height: auto;
+    --demo-banner-height: 80px;
+    
+    /* Z-index */
+    --z-dropdown: 1000;
+    --z-sticky: 1020;
+    --z-fixed: 1030;
+    --z-modal-backdrop: 1040;
+    --z-modal: 1050;
+    --z-popover: 1060;
+    --z-tooltip: 1070;
+    --z-toast: 1080;
+    
+    /* =================================
+       GRADIENTS
+    ================================= */
+    
+    --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    --gradient-secondary: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+    --gradient-hero: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+    --gradient-card: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+    
+    /* =================================
+       ANIMATIONS
+    ================================= */
+    
+    --animation-duration-fast: 0.15s;
+    --animation-duration-base: 0.3s;
+    --animation-duration-slow: 0.5s;
+    
+    --animation-easing-ease: ease;
+    --animation-easing-ease-in: ease-in;
+    --animation-easing-ease-out: ease-out;
+    --animation-easing-ease-in-out: ease-in-out;
+    
+    /* =================================
+       BREAKPOINTS (pour référence)
+    ================================= */
+    
+    /* xs: 480px */
+    /* sm: 640px */
+    /* md: 768px */
+    /* lg: 1024px */
+    /* xl: 1280px */
+    /* 2xl: 1536px */
+}
+
+/* =================================
+   VARIABLES POUR MODE CLAIR (optionnel)
+================================= */
+
+@media (prefers-color-scheme: light) {
+    :root {
+        /* Override pour le mode clair si nécessaire */
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8fafc;
+        --bg-tertiary: #f1f5f9;
+        
+        --text-primary: #1f2937;
+        --text-secondary: #4b5563;
+        --text-muted: #6b7280;
+        
+        --border-color: rgba(0, 0, 0, 0.1);
+        --border-light: rgba(0, 0, 0, 0.05);
+        --border-strong: rgba(0, 0, 0, 0.2);
+        
+        --bg-card: rgba(255, 255, 255, 0.8);
+        --bg-card-hover: rgba(255, 255, 255, 0.9);
+    }
+}
+
+/* =================================
+   VARIABLES SPÉCIFIQUES DÉMOS
+================================= */
+
+:root {
+    --demo-primary: var(--primary-color);
+    --demo-secondary: var(--secondary-color);
+    --demo-background: var(--bg-card);
+    --demo-border: var(--border-color);
+    --demo-text: var(--text-primary);
+    --demo-shadow: var(--shadow-lg);
+}
+
+/* =================================
+   VARIABLES CUSTOM PROPERTIES
+================================= */
+
+:root {
+    /* Propriétés calculées */
+    --content-width: calc(100vw - 2rem);
+    --content-max-width: min(var(--content-width), var(--container-max-width));
+    
+    /* Responsive spacing */
+    --responsive-space: clamp(1rem, 4vw, 3rem);
+    --responsive-text: clamp(1rem, 2.5vw, 1.5rem);
+    
+    /* Dynamic navbar */
+    --navbar-dynamic-height: var(--navbar-height);
+    --content-top-offset: var(--navbar-dynamic-height);
+}

@@ -64,45 +64,68 @@
     <!-- Modals Container -->
     <div id="modals-container"></div>
     
-    <!-- Scripts - Architecture Modulaire -->
+    <!-- Scripts - Architecture Modulaire (ordre corrigé) -->
     
-    <!-- 1. Core System -->
-    <script src="js/core/app.js"></script>
-    <script src="js/core/router.js"></script>
-    <script src="js/core/component-manager.js"></script>
+    <!-- 1. Core Classes de base (doivent être chargées en premier) -->
     <script src="js/core/event-bus.js"></script>
+    <script src="js/core/component-manager.js"></script>
     
-    <!-- 2. Utilities -->
+    <!-- 2. Utilities (doivent être chargés avant les composants qui les utilisent) -->
     <script src="js/utils/dom-utils.js"></script>
     <script src="js/utils/animation-utils.js"></script>
     <script src="js/utils/client-access.js"></script>
     
-    <!-- 3. Components -->
+    <!-- 3. Base Components (doivent être chargés avant les composants spécialisés) -->
     <script src="js/components/base-component.js"></script>
+    <script src="js/pages/base-page.js"></script>
+    <script src="js/demos/base-demo.js"></script>
+    
+    <!-- 4. Core System -->
+    <script src="js/core/router.js"></script>
+    <script src="js/core/app.js"></script>
+    
+    <!-- 5. Components -->
     <script src="js/components/navbar.js"></script>
     <script src="js/components/footer.js"></script>
     <script src="js/components/demo-search.js"></script>
     <script src="js/components/modal.js"></script>
     
-    <!-- 4. Pages -->
-    <script src="js/pages/base-page.js"></script>
+    <!-- 6. Pages -->
     <script src="js/pages/home.js"></script>
     <script src="js/pages/services.js"></script>
     
-    <!-- 5. Demo Pages -->
-    <script src="js/demos/base-demo.js"></script>
+    <!-- 7. Demo Pages -->
     <script src="js/demos/chiffrage-demo.js"></script>
     <script src="js/demos/dstv-demo.js"></script>
     
-    <!-- 6. Configuration -->
+    <!-- 8. Configuration (doit être chargé après les composants) -->
     <script src="js/config/demo-config.js"></script>
     <script src="js/config/app-config.js"></script>
     
-    <!-- 7. App Initialization -->
+    <!-- 9. App Initialization -->
     <script>
         // Initialisation de l'application
         document.addEventListener('DOMContentLoaded', () => {
             try {
+                console.log('🔍 Checking dependencies...');
+                
+                // Vérifier que toutes les dépendances sont chargées
+                const requiredClasses = [
+                    'EventBus', 'ComponentManager', 'DOMUtils', 'AnimationUtils',
+                    'BaseComponent', 'OweoRouter', 'OweoApp'
+                ];
+                
+                const missingClasses = requiredClasses.filter(className => {
+                    return typeof window[className] === 'undefined';
+                });
+                
+                if (missingClasses.length > 0) {
+                    throw new Error(`Classes manquantes: ${missingClasses.join(', ')}`);
+                }
+                
+                console.log('✅ All dependencies loaded');
+                
+                // Initialiser l'application
                 if (typeof window.OweoApp !== 'undefined') {
                     window.app = new window.OweoApp();
                     window.app.init();
@@ -113,9 +136,64 @@
                 console.error('App initialization failed:', error);
                 document.getElementById('app').innerHTML = `
                     <div class="error-container">
+                        <div class="error-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
                         <h1>Erreur de chargement</h1>
                         <p>Une erreur est survenue lors du chargement de l'application.</p>
+                        <details>
+                            <summary>Détails de l'erreur</summary>
+                            <pre>${error.message}</pre>
+                        </details>
+                        <button onclick="location.reload()" class="btn btn-primary">
+                            Recharger la page
+                        </button>
                     </div>
+                    
+                    <style>
+                    .error-container {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        min-height: 60vh;
+                        text-align: center;
+                        padding: 2rem;
+                    }
+                    
+                    .error-icon {
+                        font-size: 4rem;
+                        color: #ef4444;
+                        margin-bottom: 1rem;
+                    }
+                    
+                    .error-container h1 {
+                        font-size: 2rem;
+                        margin-bottom: 1rem;
+                        color: #1f2937;
+                    }
+                    
+                    .error-container p {
+                        margin-bottom: 2rem;
+                        color: #6b7280;
+                        max-width: 500px;
+                    }
+                    
+                    .btn {
+                        padding: 0.75rem 1.5rem;
+                        border-radius: 8px;
+                        font-weight: 600;
+                        background: #3b82f6;
+                        color: white;
+                        border: none;
+                        cursor: pointer;
+                        transition: all 0.2s;
+                    }
+                    
+                    .btn:hover {
+                        background: #2563eb;
+                    }
+                    </style>
                 `;
             }
         });
