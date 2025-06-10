@@ -1,23 +1,43 @@
 /* ========================================
-   css/demos-page.css - Styles pour la page catalogue des démos
+   css/demos-page.css - Styles pour la page catalogue des démos (CORRIGÉ)
    ======================================== */
 
-/* Header de la page démos */
+/* Reset et correction des espaces */
+.demos-page {
+    margin: 0;
+    padding: 0;
+}
+
+.demos-page .page-container {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+/* Header de la page démos - espacement corrigé */
 .demos-header {
     background: linear-gradient(135deg, 
         rgba(0, 212, 255, 0.05) 0%, 
         rgba(124, 58, 237, 0.05) 100%);
     border-bottom: 1px solid rgba(0, 212, 255, 0.1);
-    padding-top: var(--space-10);
-    padding-bottom: var(--space-10);
+    padding: var(--space-12) 0 var(--space-8) 0; /* Padding uniforme */
+    margin: 0; /* Pas de margin */
+}
+
+.demos-header .container {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-4);
 }
 
 .demos-stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: var(--space-8);
+    gap: var(--space-6);
     margin-top: var(--space-8);
     max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .stat-item {
@@ -43,11 +63,18 @@
     letter-spacing: 0.05em;
 }
 
-/* Filtres et recherche */
+/* Filtres et recherche - espacement corrigé */
 .demos-filters {
     background: var(--bg-secondary);
     border-bottom: 1px solid var(--border-color);
-    padding: var(--space-6) 0;
+    padding: var(--space-6) 0; /* Padding uniforme */
+    margin: 0; /* Pas de margin */
+}
+
+.demos-filters .container {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-4);
 }
 
 .filters-container {
@@ -148,10 +175,17 @@
     font-size: 0.875rem;
 }
 
-/* Notice d'accès */
+/* Notice d'accès - espacement corrigé */
 .access-notice {
-    padding: var(--space-6) 0;
+    padding: var(--space-6) 0; /* Padding réduit */
     background: rgba(59, 130, 246, 0.05);
+    margin: 0; /* Pas de margin */
+}
+
+.access-notice .container {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-4);
 }
 
 .notice-card {
@@ -198,9 +232,16 @@
     flex-shrink: 0;
 }
 
-/* Grille des démos */
+/* Grille des démos - espacement corrigé */
 .demos-grid-section {
-    padding: var(--space-10) 0;
+    padding: var(--space-8) 0; /* Padding réduit */
+    margin: 0; /* Pas de margin */
+}
+
+.demos-grid-section .container {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-4);
 }
 
 .demos-grid {
@@ -358,6 +399,7 @@
     background: var(--bg-secondary);
     border-radius: var(--radius-xl);
     border: 2px dashed var(--border-color);
+    margin: var(--space-8) 0; /* Margin contrôlée */
 }
 
 .no-results-content {
@@ -383,10 +425,17 @@
     line-height: 1.6;
 }
 
-/* Section "À venir" */
+/* Section "À venir" - espacement corrigé */
 .coming-soon-section {
-    padding: var(--space-10) 0;
+    padding: var(--space-8) 0; /* Padding réduit */
     background: var(--bg-secondary);
+    margin: 0; /* Pas de margin */
+}
+
+.coming-soon-section .container {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-4);
 }
 
 .coming-soon-grid {
@@ -452,8 +501,81 @@
     margin-bottom: var(--space-4);
 }
 
-/* Responsive */
+/* CTA final - espacement corrigé */
+.demos-page .section-lg {
+    padding: var(--space-8) 0; /* Padding réduit */
+    margin: 0; /* Pas de margin */
+}
+
+.demos-page .section-lg .container {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+}
+
+.demos-page .contact-cta {
+    background: linear-gradient(135deg, 
+        rgba(0, 212, 255, 0.1) 0%, 
+        rgba(124, 58, 237, 0.1) 100%);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-12);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.demos-page .contact-content {
+    margin-bottom: var(--space-8);
+}
+
+.demos-page .contact-content h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: var(--space-4);
+    color: var(--text-primary);
+}
+
+.demos-page .contact-content p {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.demos-page .contact-actions {
+    display: flex;
+    gap: var(--space-4);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Responsive - espacement cohérent */
 @media (max-width: 768px) {
+    .demos-header {
+        padding: var(--space-8) 0 var(--space-6) 0;
+    }
+    
+    .demos-filters {
+        padding: var(--space-4) 0;
+    }
+    
+    .access-notice {
+        padding: var(--space-4) 0;
+    }
+    
+    .demos-grid-section {
+        padding: var(--space-6) 0;
+    }
+    
+    .coming-soon-section {
+        padding: var(--space-6) 0;
+    }
+    
+    .demos-page .section-lg {
+        padding: var(--space-6) 0;
+    }
+    
     .demos-stats {
         grid-template-columns: repeat(3, 1fr);
         gap: var(--space-4);
@@ -514,9 +636,27 @@
         grid-template-columns: 1fr;
         gap: var(--space-4);
     }
+    
+    .demos-page .contact-cta {
+        padding: var(--space-8);
+    }
+    
+    .demos-page .contact-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .demos-page .contact-actions .btn {
+        width: 100%;
+        max-width: 300px;
+    }
 }
 
 @media (max-width: 480px) {
+    .demos-header {
+        padding: var(--space-6) 0 var(--space-4) 0;
+    }
+    
     .demos-stats {
         grid-template-columns: 1fr;
         gap: var(--space-3);
@@ -541,6 +681,10 @@
     .demo-card-actions .btn {
         padding: var(--space-3) var(--space-4);
         font-size: 0.875rem;
+    }
+    
+    .demos-page .contact-cta {
+        padding: var(--space-6);
     }
 }
 

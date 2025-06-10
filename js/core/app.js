@@ -1,5 +1,5 @@
 // ========================================
-// js/core/app.js - Application principale CORRIGÉE
+// js/core/app.js - Application principale CORRIGÉE avec page contact
 // ========================================
 
 class OweoApp {
@@ -112,9 +112,14 @@ class OweoApp {
             this.router.register('services', new ServicesPage());
         }
         
-        // ⭐ NOUVEAU : Page catalogue des démos
+        // Page catalogue des démos
         if (typeof DemosPage !== 'undefined') {
             this.router.register('demos', new DemosPage());
+        }
+        
+        // ⭐ NOUVEAU : Page de contact
+        if (typeof ContactPage !== 'undefined') {
+            this.router.register('contact', new ContactPage());
         }
         
         // Pages démo individuelles
@@ -132,11 +137,6 @@ class OweoApp {
             this.router.register('privacy', new LegalPage());
             this.router.register('terms', new LegalPage());
             this.router.register('cookies', new LegalPage());
-        }
-        
-        // Page de contact (si elle existe)
-        if (typeof ContactPage !== 'undefined') {
-            this.router.register('contact', new ContactPage());
         }
     }
     
@@ -173,6 +173,7 @@ class OweoApp {
             route: route.path,
             isDemoMode: this.isDemoMode,
             isDemosPage: route.path === 'demos', // Distinguer la page catalogue
+            isContactPage: route.path === 'contact', // ⭐ NOUVEAU
             ...route
         });
     }

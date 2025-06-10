@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="css/home-pages.css">
     <link rel="stylesheet" href="css/services-page.css">
     <link rel="stylesheet" href="css/demos-page.css">
+    <link rel="stylesheet" href="css/contact-page.css">
     <link rel="stylesheet" href="css/error-pages.css">
 
     <!-- Démos -->
@@ -157,6 +158,7 @@
     <script src="js/pages/home.js"></script>
     <script src="js/pages/services.js"></script>
     <script src="js/pages/demos.js"></script>
+    <script src="js/pages/contact.js"></script>
     
     <!-- 7. Demo Pages -->
     <script src="js/demos/chiffrage-demo.js"></script>
@@ -218,7 +220,7 @@
                 console.log('✅ All dependencies loaded');
                 
                 // Vérifier les pages importantes
-                const pageClasses = ['HomePage', 'ServicesPage', 'DemosPage'];
+                const pageClasses = ['HomePage', 'ServicesPage', 'DemosPage', 'ContactPage'];
                 const missingPages = pageClasses.filter(className => {
                     return typeof window[className] === 'undefined';
                 });
