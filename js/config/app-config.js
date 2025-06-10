@@ -1,6 +1,9 @@
 // ========================================
-// js/config/app-config.js - Configuration application complète
+// js/config/app-config.js - Configuration application corrigée
 // ========================================
+
+// Importer les informations centralisées (à charger avant ce fichier)
+// <script src="js/config/company-info.js"></script>
 
 window.AppConfig = {
     // Configuration de base
@@ -8,17 +11,33 @@ window.AppConfig = {
     version: '1.0.0',
     environment: 'production',
     
-    // URLs d'actions
-    calendlyUrl: 'https://calendly.com/nicolas-dubain/30min',
+    // URLs d'actions (utilisation des infos centralisées)
+    get calendlyUrl() {
+        return window.CompanyInfo?.urls.calendly || 'https://calendly.com/nicolas-dubain/30min';
+    },
     brochureUrl: '/assets/docs/Oweo-Solutions-ERP-Metallique.pdf',
     
-    // Configuration de contact
-    contact: {
-        email: 'contact@oweo-consulting.fr',
-        phone: '+33 6 86 76 81 31',
-        address: 'Nantes, France',
-        linkedin: 'https://linkedin.com/company/oweo-consulting',
-        website: 'https://oweo-consulting.fr'
+    // Configuration de contact (référence centralisée)
+    get contact() {
+        if (window.CompanyInfo) {
+            return {
+                email: window.CompanyInfo.contact.email,
+                phone: window.CompanyInfo.contact.phone,
+                phoneFormatted: window.CompanyInfo.contact.phoneFormatted,
+                address: window.CompanyInfo.address.full,
+                linkedin: window.CompanyInfo.social.linkedin,
+                website: window.CompanyInfo.urls.website
+            };
+        }
+        // Fallback si CompanyInfo pas chargé
+        return {
+            email: 'contact@oweo-consulting.fr',
+            phone: '+33 6 86 76 81 31',
+            phoneFormatted: '06 86 76 81 31',
+            address: 'Nantes, France',
+            linkedin: 'https://linkedin.com/company/oweo-consulting',
+            website: 'https://oweo-consulting.fr'
+        };
     },
     
     // Configuration client access
@@ -104,65 +123,20 @@ window.AppConfig = {
     
     // Configuration sécurité
     security: {
-        allowedOrigins: ['https://oweo-consulting.fr', 'https://www.oweo-consulting.fr'],
+        get allowedOrigins() {
+            const website = window.CompanyInfo?.urls.website || 'https://oweo-consulting.fr';
+            return [website, `www.${website.replace('https://', '')}`];
+        },
         csrfProtection: true,
         maxFileSize: 10485760, // 10MB
         allowedFileTypes: ['.pdf', '.dxf', '.dwg', '.nc1']
-    },
-    
-    // Configuration des modals
-    modals: {
-        closeOnBackdropClick: true,
-        closeOnEscape: true,
-        animationDuration: 300,
-        backdrop: 'blur'
-    },
-    
-    // Configuration du routeur
-    router: {
-        basePath: '/',
-        hashMode: false,
-        scrollToTop: true,
-        transitionDuration: 250
-    },
-    
-    // Configuration UI/UX
-    ui: {
-        theme: 'dark',
-        primaryColor: '#00d4ff',
-        secondaryColor: '#7c3aed',
-        borderRadius: '12px',
-        fontFamily: 'Inter, system-ui, sans-serif',
-        animations: {
-            stagger: 100,
-            duration: 300
-        }
-    },
-    
-    // Configuration responsive
-    breakpoints: {
-        mobile: 480,
-        tablet: 768,
-        desktop: 1024,
-        large: 1200,
-        xlarge: 1400
-    },
-    
-    // Configuration des formulaires
-    forms: {
-        validation: {
-            email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            phone: /^[\+]?[(]?[\d\s\-\(\)]{10,}$/,
-            required: true
-        },
-        submitTimeout: 30000
     },
     
     // Messages utilisateur
     messages: {
         // Succès
         brochureDownloadSuccess: 'Téléchargement de la brochure démarré',
-        calendlyOpenSuccess: 'Ouverture de la page de rendez-vous',
+        calendlyOpenSuccess: 'Ouverture de la planification de rendez-vous',
         demoAccessGranted: 'Accès aux démos autorisé',
         formSubmitSuccess: 'Votre message a été envoyé avec succès',
         
@@ -185,19 +159,24 @@ window.AppConfig = {
         browserCompatibility: 'Votre navigateur pourrait ne pas supporter toutes les fonctionnalités'
     },
     
-    // Configuration des actions
+    // Configuration des actions (utilisation des infos centralisées)
     actions: {
         // Action pour télécharger la brochure
         downloadBrochure: {
             url: '/assets/docs/Oweo-Solutions-ERP-Metallique.pdf',
             filename: 'Oweo-Solutions-ERP-Metallique.pdf',
             trackingEvent: 'brochure_downloaded',
-            fallbackUrl: 'mailto:contact@oweo.fr?subject=Demande de brochure'
+            get fallbackUrl() {
+                const email = window.CompanyInfo?.contact.email || 'contact@oweo-consulting.fr';
+                return `mailto:${email}?subject=Demande de brochure`;
+            }
         },
         
         // Action pour ouvrir Calendly
         scheduleInterview: {
-            url: 'https://calendly.com/nicolas-dubain/30min',
+            get url() {
+                return window.CompanyInfo?.urls.calendly || 'https://calendly.com/nicolas-dubain/30min';
+            },
             widgetOptions: {
                 color: '#00d4ff',
                 textColor: '#ffffff',
@@ -208,57 +187,36 @@ window.AppConfig = {
         
         // Action pour contacter
         contact: {
-            email: 'contact@oweo-consulting.fr',
+            get email() {
+                return window.CompanyInfo?.contact.email || 'contact@oweo-consulting.fr';
+            },
             subject: 'Demande d\'information - Site web',
             trackingEvent: 'contact_clicked',
-            phoneNumber: '+33686768131'
-        }
-    },
-    
-    // Configuration des démos avancée
-    demoSettings: {
-        autoSave: true,
-        saveInterval: 30000, // 30 secondes
-        maxHistory: 10,
-        allowExport: true,
-        watermark: true,
-        sessionDuration: 1800000, // 30 minutes
-        resetOnExpire: true
-    },
-    
-    // Configuration cache
-    cache: {
-        enabled: true,
-        duration: 300000, // 5 minutes
-        maxSize: 50, // 50 éléments
-        strategies: {
-            api: 'network-first',
-            assets: 'cache-first',
-            pages: 'stale-while-revalidate'
-        }
-    },
-    
-    // Configuration des services externes
-    external: {
-        calendly: {
-            css: 'https://assets.calendly.com/assets/external/widget.css',
-            js: 'https://assets.calendly.com/assets/external/widget.js',
-            enabled: true
-        },
-        analytics: {
-            google: {
-                enabled: false,
-                measurementId: null
-            },
-            mixpanel: {
-                enabled: false,
-                token: null
+            get phoneNumber() {
+                return window.CompanyInfo?.contact.phone || '+33686768131';
             }
-        },
-        maps: {
-            enabled: false,
-            apiKey: null
         }
+    },
+    
+    // URLs et liens externes (référence centralisée)
+    get externalLinks() {
+        if (window.CompanyInfo) {
+            return {
+                linkedin: window.CompanyInfo.social.linkedin,
+                website: window.CompanyInfo.urls.website,
+                support: `mailto:${window.CompanyInfo.contact.email}`,
+                documentation: window.CompanyInfo.urls.docs,
+                blog: window.CompanyInfo.urls.blog
+            };
+        }
+        // Fallback
+        return {
+            linkedin: 'https://linkedin.com/company/oweo-consulting',
+            website: 'https://oweo-consulting.fr',
+            support: 'mailto:contact@oweo-consulting.fr',
+            documentation: 'https://docs.oweo-consulting.fr',
+            blog: 'https://blog.oweo-consulting.fr'
+        };
     },
     
     // Configuration développement
@@ -270,45 +228,21 @@ window.AppConfig = {
         sourceMap: false
     },
     
-    // Configuration performance
-    performance: {
-        lazyLoading: true,
-        imageOptimization: true,
-        bundleSplitting: true,
-        prefetchLinks: true,
-        serviceWorker: false
-    },
-    
-    // Configuration accessibilité
-    accessibility: {
-        announcements: true,
-        highContrast: false,
-        reducedMotion: 'respect-user-preference',
-        focusManagement: true,
-        skipLinks: true
-    },
-    
-    // URLs et liens externes
-    externalLinks: {
-        linkedin: 'https://linkedin.com/company/oweo-consulting',
-        website: 'https://oweo-consulting.fr',
-        support: 'mailto:contact@oweo.fr',
-        documentation: 'https://docs.oweo.fr',
-        blog: 'https://blog.oweo.fr',
-        github: 'https://github.com/oweo'
-    },
-    
-    // Configuration des erreurs
-    errorHandling: {
-        showStackTrace: false,
-        logToConsole: true,
-        reportToService: false,
-        userFriendlyMessages: true,
-        fallbackPages: {
-            404: '/404.html',
-            500: '/500.html',
-            offline: '/offline.html'
+    // Méthode pour valider la cohérence avec CompanyInfo
+    validateCompanyInfo() {
+        if (!window.CompanyInfo) {
+            console.warn('⚠️ CompanyInfo non chargé, utilisation des valeurs fallback');
+            return false;
         }
+        
+        const validation = window.CompanyInfo.validate();
+        if (!validation.valid) {
+            console.error('❌ Configuration société invalide:', validation.issues);
+            return false;
+        }
+        
+        console.log('✅ Configuration société cohérente');
+        return true;
     }
 };
 
@@ -326,29 +260,20 @@ window.AppConfig = {
         window.AppConfig.development.debug = true;
         window.AppConfig.development.logLevel = 'debug';
         window.AppConfig.analytics.enabled = false;
-        window.AppConfig.errorHandling.showStackTrace = true;
-        
-        // URLs de développement avec fallbacks
-        window.AppConfig.calendlyUrl = 'https://calendly.com/nicolas-dubain/30min';
-        window.AppConfig.brochureUrl = 'data:application/pdf;base64,JVBERi0xLjQKJdPr6eEKMSAwIG9iago8PAovVGl0bGUgKE93ZW8gU29sdXRpb25zIEVSUCkKL0NyZWF0b3IgKERlbW8pCi9Qcm9kdWNlciAoT3dlbyBEZW1vKQovQ3JlYXRpb25EYXRlIChEOjIwMjQwMTAxMDAwMDAwKQo+PgplbmRvYmoKMiAwIG9iago8PAovVHlwZSAvQ2F0YWxvZwovUGFnZXMgMyAwIFIKPj4KZW5kb2JqCjMgMCBvYmoKPDwKL1R5cGUgL1BhZ2VzCi9Db3VudCAxCi9LaWRzIFs0IDAgUl0KPj4KZW5kb2JqCjQgMCBvYmoKPDwKL1R5cGUgL1BhZ2UKL1BhcmVudCAzIDAgUgovTWVkaWFCb3ggWzAgMCA2MTIgNzkyXQovQ29udGVudHMgNSAwIFIKPj4KZW5kb2JqCjUgMCBvYmoKPDwKL0xlbmd0aCAzOAo+PgpzdHJlYW0KQlQKL0YxIDEyIFRmCjEwMCA3MDAgVGQKKE93ZW8gLSBTb2x1dGlvbnMgRVJQKSBUagpFVApzdHJlYW0KZW5kb2JqCnhyZWYKMCA2CjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDAwOSAwMDAwMCBuIAowMDAwMDAwMTM5IDAwMDAwIG4gCjAwMDAwMDAxODYgMDAwMDAgbiAKMDAwMDAwMDI0MyAwMDAwMCBuIAowMDAwMDAwMzQzIDAwMDAwIG4gCnRyYWlsZXIKPDwKL1NpemUgNgovUm9vdCAyIDAgUgo+PgpzdGFydHhyZWYKNDMwCiUlRU9GCg==';
         
         console.log('🔧 Development mode detected');
     } else {
         // Configuration production
         window.AppConfig.development.debug = false;
         window.AppConfig.analytics.enabled = true;
-        window.AppConfig.errorHandling.reportToService = true;
         
         console.log('🚀 Production mode active');
     }
     
-    // Validation de la configuration
-    const requiredFields = ['appName', 'version', 'calendlyUrl'];
-    const missingFields = requiredFields.filter(field => !window.AppConfig[field]);
-    
-    if (missingFields.length > 0) {
-        console.warn('⚠️ Configuration incomplète:', missingFields);
-    }
+    // Valider la cohérence des informations société
+    setTimeout(() => {
+        window.AppConfig.validateCompanyInfo();
+    }, 100);
     
     console.log('✅ App Config loaded:', window.AppConfig.appName, 'v' + window.AppConfig.version);
 })();

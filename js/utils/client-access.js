@@ -1,5 +1,5 @@
 // ========================================
-// js/utils/client-access.js - Système d'accès client
+// js/utils/client-access.js - Système d'accès client corrigé
 // ========================================
 
 class OweoClientAccess {
@@ -104,6 +104,17 @@ class OweoClientAccess {
     createAuthModal(targetDemo) {
         const modal = document.createElement('div');
         modal.className = 'client-auth-modal';
+        modal.dataset.targetDemo = targetDemo || '';
+        
+        // Récupérer les informations de contact centralisées
+        const contactInfo = window.CompanyInfo || {
+            contact: {
+                email: 'contact@oweo-consulting.fr',
+                phone: '+33 6 86 76 81 31',
+                phoneFormatted: '06 86 76 81 31'
+            }
+        };
+        
         modal.innerHTML = `
             <div class="modal-backdrop"></div>
             <div class="modal-container">
@@ -159,13 +170,13 @@ class OweoClientAccess {
                             <h5>Besoin d'un accès ?</h5>
                             <p>Contactez-nous pour obtenir vos codes d'accès personnalisés :</p>
                             <div class="contact-methods">
-                                <a href="tel:+33123456789" class="contact-method">
+                                <a href="tel:${contactInfo.contact.phone}" class="contact-method">
                                     <i class="fas fa-phone"></i>
-                                    01 23 45 67 89
+                                    ${contactInfo.contact.phoneFormatted}
                                 </a>
-                                <a href="mailto:contact@oweo.fr" class="contact-method">
+                                <a href="mailto:${contactInfo.contact.email}" class="contact-method">
                                     <i class="fas fa-envelope"></i>
-                                    contact@oweo.fr
+                                    ${contactInfo.contact.email}
                                 </a>
                             </div>
                         </div>
@@ -180,30 +191,43 @@ class OweoClientAccess {
         const submitBtn = modal.querySelector('#auth-submit');
         const errorDiv = modal.querySelector('#auth-error');
         
-        form.addEventListener('submit', (e) => {
+        // Event handlers
+        const handleSubmit = (e) => {
             e.preventDefault();
             this.handleAuthSubmit(input.value, modal, targetDemo, errorDiv, submitBtn);
-        });
+        };
         
-        input.addEventListener('keydown', (e) => {
+        const handleKeydown = (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
-                this.handleAuthSubmit(input.value, modal, targetDemo, errorDiv, submitBtn);
+                handleSubmit(e);
             }
-        });
+        };
+        
+        form.addEventListener('submit', handleSubmit);
+        input.addEventListener('keydown', handleKeydown);
         
         // Fermer en cliquant sur le backdrop
         modal.querySelector('.modal-backdrop').addEventListener('click', () => {
-            modal.remove();
+            this.closeModal(modal);
         });
+        
+        // Stocker les références pour le nettoyage
+        modal._cleanup = () => {
+            form.removeEventListener('submit', handleSubmit);
+            input.removeEventListener('keydown', handleKeydown);
+        };
         
         return modal;
     }
     
     /**
-     * Gérer la soumission d'authentification
+     * Gérer la soumission d'authentification - VERSION CORRIGÉE
      */
     handleAuthSubmit(code, modal, targetDemo, errorDiv, submitBtn) {
+        // Prévenir les soumissions multiples
+        if (submitBtn.disabled) return;
+        
         // UI de chargement
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Vérification...';
@@ -212,25 +236,30 @@ class OweoClientAccess {
         // Simuler un délai de vérification
         setTimeout(() => {
             if (this.authenticate(code)) {
-                // Succès
+                // ✅ SUCCÈS - Animation de confirmation
                 submitBtn.innerHTML = '<i class="fas fa-check"></i> Accès autorisé';
                 submitBtn.classList.remove('btn-primary');
                 submitBtn.classList.add('btn-success');
                 
+                // Notification de succès
+                this.showSuccessNotification();
+                
+                // ⭐ CORRECTION : Fermer la modal après un délai plus court
                 setTimeout(() => {
-                    modal.remove();
+                    // Fermer proprement la modal
+                    this.closeModal(modal);
                     
-                    // Naviguer vers la démo si spécifiée
+                    // Naviguer vers la démo après fermeture
                     if (targetDemo) {
-                        this.navigateToDemo(targetDemo);
+                        // Petit délai pour que la fermeture soit visible
+                        setTimeout(() => {
+                            this.navigateToDemo(targetDemo);
+                        }, 100);
                     }
-                    
-                    // Notification de succès
-                    this.showSuccessNotification();
-                }, 1000);
+                }, 800); // Réduit de 1000ms à 800ms
                 
             } else {
-                // Échec
+                // ❌ ÉCHEC
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-unlock"></i> Accéder';
                 errorDiv.style.display = 'flex';
@@ -240,16 +269,62 @@ class OweoClientAccess {
                 setTimeout(() => {
                     modal.querySelector('.modal-container').classList.remove('shake');
                 }, 600);
+                
+                // Refocus sur l'input
+                const input = modal.querySelector('#client-code-input');
+                if (input) {
+                    input.focus();
+                    input.select();
+                }
             }
-        }, 1500);
+        }, 1200); // Réduit de 1500ms à 1200ms
+    }
+    
+    /**
+     * NOUVELLE MÉTHODE : Fermeture propre de la modal
+     */
+    closeModal(modal) {
+        if (!modal || !modal.parentNode) return;
+        
+        // Nettoyer les event listeners
+        if (modal._cleanup) {
+            modal._cleanup();
+        }
+        
+        // Animation de fermeture
+        modal.classList.remove('show');
+        modal.classList.add('closing');
+        
+        // Supprimer après l'animation
+        setTimeout(() => {
+            if (modal.parentNode) {
+                modal.parentNode.removeChild(modal);
+            }
+        }, 300);
+        
+        // Restaurer le scroll du body si nécessaire
+        document.body.style.overflow = '';
+        
+        console.log('🗙 Modal d\'authentification fermée');
     }
     
     /**
      * Naviguer vers une démo
      */
     navigateToDemo(demoId) {
+        console.log(`🎯 Navigation vers la démo: ${demoId}`);
+        
         if (window.app && window.app.router) {
             window.app.router.navigate(demoId);
+        }
+        
+        // Analytics
+        if (window.AppConfig?.analytics?.enabled && typeof gtag !== 'undefined') {
+            gtag('event', 'demo_access_granted', {
+                event_category: 'authentication',
+                event_label: demoId,
+                value: 1
+            });
         }
     }
     
@@ -257,11 +332,28 @@ class OweoClientAccess {
      * Afficher une notification de succès
      */
     showSuccessNotification() {
+        const message = 'Accès client autorisé ! Bienvenue dans l\'espace démo.';
+        
         if (window.notifications) {
-            window.notifications.success('Accès client autorisé ! Bienvenue dans l\'espace démo.');
+            window.notifications.success(message);
+        } else if (window.modalSystem) {
+            // Fallback avec le système de modal
+            window.modalSystem.alert({
+                title: 'Accès autorisé',
+                message: message,
+                type: 'success'
+            });
         } else {
-            // Fallback simple
-            console.log('✅ Accès autorisé');
+            // Fallback console
+            console.log('✅ ' + message);
+            
+            // Notification native du navigateur en dernier recours
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification('Oweo - Accès autorisé', {
+                    body: message,
+                    icon: '/favicon.ico'
+                });
+            }
         }
     }
     
@@ -326,6 +418,8 @@ class OweoClientAccess {
                 // Vérifier que la session est encore valide
                 if (!this.isSessionValid()) {
                     this.clearSession();
+                } else {
+                    console.log('✅ Session client restaurée');
                 }
             }
             

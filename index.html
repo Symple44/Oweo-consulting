@@ -85,6 +85,9 @@
     <div id="modals-container"></div>
     
     <!-- Scripts - Architecture Modulaire (ordre corrigé) -->
+
+    <!-- 0. Configuration société (EN PREMIER) -->
+    <script src="js/config/company-info.js"></script>
     
     <!-- 1. Core Classes de base -->
     <script src="js/core/event-bus.js"></script>
@@ -133,6 +136,28 @@
             try {
                 console.log('🔍 Checking dependencies...');
                 
+                // Vérifier que les configurations sont cohérentes
+                if (window.CompanyInfo) {
+                    const validation = window.CompanyInfo.validate();
+                    if (!validation.valid) {
+                        console.error('❌ Configuration société invalide:', validation.issues);
+                    } else {
+                        console.log('✅ Company info validated');
+                    }
+                } else {
+                    console.warn('⚠️ CompanyInfo not loaded');
+                }
+                
+                // Vérifier AppConfig
+                if (window.AppConfig) {
+                    if (typeof window.AppConfig.validateCompanyInfo === 'function') {
+                        window.AppConfig.validateCompanyInfo();
+                    }
+                    console.log('✅ App config loaded');
+                } else {
+                    console.warn('⚠️ AppConfig not loaded');
+                }
+                
                 // Vérifier que toutes les dépendances sont chargées
                 const requiredClasses = [
                     'EventBus', 'ComponentManager', 'DOMUtils', 'AnimationUtils',
@@ -169,6 +194,7 @@
                 } else {
                     console.error('OweoApp not found');
                 }
+                
             } catch (error) {
                 console.error('App initialization failed:', error);
                 document.getElementById('app').innerHTML = `
@@ -264,6 +290,19 @@
             
             waitForCalendly();
         });
+        // Validation périodique de cohérence (développement uniquement)
+        if (window.location.hostname === 'localhost') {
+            setInterval(() => {
+                if (window.CompanyInfo && window.AppConfig) {
+                    const contactEmail1 = window.CompanyInfo.contact.email;
+                    const contactEmail2 = window.AppConfig.contact.email;
+                    
+                    if (contactEmail1 !== contactEmail2) {
+                        console.warn('⚠️ Incohérence détectée dans les emails de contact');
+                    }
+                }
+            }, 10000); // Vérification toutes les 10 secondes
+        }
     </script>
 </body>
 </html>
