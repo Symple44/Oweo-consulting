@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="css/pages.css">
     <link rel="stylesheet" href="css/home-pages.css">
     <link rel="stylesheet" href="css/services-page.css">
+    <link rel="stylesheet" href="css/demos-page.css">
     <link rel="stylesheet" href="css/error-pages.css">
 
     <!-- Démos -->
@@ -49,22 +50,60 @@
                     <span>Navigation Démos</span>
                 </div>
                 <div class="demo-search-input-container">
-                    <input 
-                        type="text" 
-                        id="demo-search-input" 
-                        class="demo-search-input" 
-                        placeholder="Rechercher une démo ou fonctionnalité... (ex: 'chiffrage', 'DSTV', 'métrage')"
-                        autocomplete="off"
-                    >
-                    <div id="demo-search-results" class="demo-search-results"></div>
+                    <div class="search-input-wrapper">
+                        <input 
+                            type="text" 
+                            id="demo-search-input" 
+                            class="demo-search-input" 
+                            placeholder="Rechercher une démo ou fonctionnalité... (ex: 'chiffrage', 'DSTV', 'métrage')"
+                            autocomplete="off"
+                            spellcheck="false"
+                        >
+                        <div class="search-input-actions">
+                            <button class="search-clear-btn" id="search-clear" style="display: none;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <div class="search-loading" id="search-loading" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Résultats de recherche -->
+                    <div id="demo-search-results" class="demo-search-results">
+                        <div class="search-empty-state">
+                            <i class="fas fa-search"></i>
+                            <p>Tapez pour rechercher parmi les démonstrations disponibles</p>
+                            <div class="search-suggestions">
+                                <span class="suggestion-label">Suggestions :</span>
+                                <button class="suggestion-pill" data-query="chiffrage">Chiffrage</button>
+                                <button class="suggestion-pill" data-query="dstv">DSTV</button>
+                                <button class="suggestion-pill" data-query="stock">Stock</button>
+                                <button class="suggestion-pill" data-query="planning">Planning</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                
                 <div class="demo-search-actions">
-                    <button id="demo-search-help" class="demo-search-help-btn" title="Aide">
+                    <button id="demo-search-help" class="demo-search-help-btn" title="Aide et raccourcis">
                         <i class="fas fa-question-circle"></i>
                     </button>
-                    <button id="demo-search-close" class="demo-search-close-btn" title="Fermer">
+                    <button id="demo-search-close" class="demo-search-close-btn" title="Fermer (Échap)">
                         <i class="fas fa-times"></i>
                     </button>
+                </div>
+            </div>
+            
+            <!-- Barre de statut -->
+            <div class="demo-search-status" id="demo-search-status" style="display: none;">
+                <div class="status-content">
+                    <span class="status-text"></span>
+                    <div class="status-shortcuts">
+                        <kbd>↑↓</kbd> naviguer
+                        <kbd>↵</kbd> sélectionner
+                        <kbd>Échap</kbd> fermer
+                    </div>
                 </div>
             </div>
         </div>
@@ -84,8 +123,8 @@
     <!-- Modals Container -->
     <div id="modals-container"></div>
     
-    <!-- Scripts - Architecture Modulaire (ordre corrigé) -->
-
+    <!-- Scripts - Architecture Modulaire avec ORDRE CORRIGÉ -->
+    
     <!-- 0. Configuration société (EN PREMIER) -->
     <script src="js/config/company-info.js"></script>
     
@@ -97,6 +136,7 @@
     <script src="js/utils/dom-utils.js"></script>
     <script src="js/utils/animation-utils.js"></script>
     <script src="js/utils/client-access.js"></script>
+    <script src="js/utils/notifications.js"></script>
     
     <!-- 3. Base Components -->
     <script src="js/components/base-component.js"></script>
@@ -116,20 +156,23 @@
     <!-- 6. Pages -->
     <script src="js/pages/home.js"></script>
     <script src="js/pages/services.js"></script>
+    <script src="js/pages/demos.js"></script>
     
     <!-- 7. Demo Pages -->
     <script src="js/demos/chiffrage-demo.js"></script>
     <script src="js/demos/dstv-demo.js"></script>
     
-    <!-- 8. Configuration -->
+    <!-- 8. Configuration APRÈS CompanyInfo -->
     <script src="js/config/demo-config.js"></script>
     <script src="js/config/app-config.js"></script>
     
-    <!-- 9. Services externes -->
-    <!-- Widget Calendly - Chargé de manière asynchrone -->
+    <!-- 9. Tools (développement uniquement) -->
+    <script src="js/tools/consistency-checker.js"></script>
+    
+    <!-- 10. Services externes -->
     <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
     
-    <!-- 10. App Initialization -->
+    <!-- 11. App Initialization -->
     <script>
         // Initialisation de l'application
         document.addEventListener('DOMContentLoaded', () => {
@@ -174,18 +217,17 @@
                 
                 console.log('✅ All dependencies loaded');
                 
-                // Vérifier le chargement de Calendly (non bloquant)
-                const checkCalendly = () => {
-                    if (typeof window.Calendly !== 'undefined') {
-                        console.log('✅ Calendly widget loaded');
-                    } else {
-                        console.warn('⚠️ Calendly widget not loaded yet (fallback available)');
-                    }
-                };
+                // Vérifier les pages importantes
+                const pageClasses = ['HomePage', 'ServicesPage', 'DemosPage'];
+                const missingPages = pageClasses.filter(className => {
+                    return typeof window[className] === 'undefined';
+                });
                 
-                // Vérifier immédiatement et après un délai
-                checkCalendly();
-                setTimeout(checkCalendly, 2000);
+                if (missingPages.length > 0) {
+                    console.warn('⚠️ Pages manquantes:', missingPages.join(', '));
+                } else {
+                    console.log('✅ All pages loaded');
+                }
                 
                 // Initialiser l'application
                 if (typeof window.OweoApp !== 'undefined') {
@@ -261,48 +303,40 @@
             }
         });
         
-        // Gestionnaire global pour les erreurs Calendly
-        window.addEventListener('error', (event) => {
-            if (event.filename && event.filename.includes('calendly')) {
-                console.warn('Calendly script error (non-critical):', event.message);
-                // Ne pas bloquer l'application pour les erreurs Calendly
-                event.preventDefault();
-            }
-        });
-        
-        // Configuration Calendly une fois chargé
-        window.addEventListener('load', () => {
-            // Attendre que Calendly soit disponible
-            const waitForCalendly = (retries = 10) => {
-                if (typeof window.Calendly !== 'undefined') {
-                    console.log('🗓️ Calendly widget ready');
-                    
-                    // Configuration optionnelle du widget
-                    if (window.AppConfig && window.AppConfig.external && window.AppConfig.external.calendly) {
-                        window.AppConfig.external.calendly.loaded = true;
-                    }
-                } else if (retries > 0) {
-                    setTimeout(() => waitForCalendly(retries - 1), 500);
-                } else {
-                    console.warn('⚠️ Calendly widget could not be loaded, fallback will be used');
-                }
-            };
-            
-            waitForCalendly();
-        });
         // Validation périodique de cohérence (développement uniquement)
         if (window.location.hostname === 'localhost') {
-            setInterval(() => {
-                if (window.CompanyInfo && window.AppConfig) {
-                    const contactEmail1 = window.CompanyInfo.contact.email;
-                    const contactEmail2 = window.AppConfig.contact.email;
+            setTimeout(() => {
+                if (window.ConsistencyChecker) {
+                    console.log('🔍 Lancement de la vérification de cohérence...');
+                    window.checkConsistency = () => new window.ConsistencyChecker().checkAll();
+                    window.startMonitoring = () => new window.ConsistencyChecker().startMonitoring();
                     
-                    if (contactEmail1 !== contactEmail2) {
-                        console.warn('⚠️ Incohérence détectée dans les emails de contact');
-                    }
+                    // Vérification initiale
+                    window.checkConsistency();
+                    
+                    console.log('💡 Commandes disponibles en dev:');
+                    console.log('  - checkConsistency() : Vérifier la cohérence');
+                    console.log('  - startMonitoring() : Surveillance continue');
                 }
-            }, 10000); // Vérification toutes les 10 secondes
+            }, 3000);
         }
+        
+        // Gestion des erreurs JavaScript globales
+        window.addEventListener('error', (event) => {
+            // Ne pas traiter les erreurs Calendly
+            if (event.filename && event.filename.includes('calendly')) {
+                console.warn('Calendly script error (non-critical):', event.message);
+                event.preventDefault();
+                return;
+            }
+            
+            console.error('Erreur JavaScript:', event.error);
+        });
+        
+        // Gestion des promesses rejetées
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('Promise rejetée:', event.reason);
+        });
     </script>
 </body>
 </html>
