@@ -1,5 +1,5 @@
 // ========================================
-// js/pages/home.js - Page d'accueil corrigée
+// js/pages/home.js - Page d'accueil avec animations dynamiques
 // ========================================
 
 class HomePage extends BasePage {
@@ -390,77 +390,13 @@ class HomePage extends BasePage {
             }, (index + 1) * 200);
         });
         
-        // Animation de survol pour toute la zone de texte hero avec icônes métalliques
-        const heroText = document.querySelector('.hero-text');
-        if (heroText) {
-            let animationVariant = 0; // Pour alterner entre différents effets
-            
-            heroText.addEventListener('mouseenter', () => {
-                // Retirer les classes précédentes
-                heroText.classList.remove('hover-effect', 'hover-particles', 'metal-theme', 'multi-icons', 'unicode-metal', 'rotating-icons', 'metal-rain');
-                
-                // Ajouter l'effet de base
-                heroText.classList.add('hover-effect');
-                
-                // Alterner entre différents styles d'animation
-                switch(animationVariant % 4) {
-                    case 0:
-                        // Animation basique avec icônes métalliques
-                        heroText.classList.add('metal-theme');
-                        break;
-                    case 1:
-                        // Icônes multiples avec délais
-                        heroText.classList.add('multi-icons');
-                        break;
-                    case 2:
-                        // Icônes avec rotation
-                        heroText.classList.add('rotating-icons');
-                        break;
-                    case 3:
-                        // Pluie d'icônes métalliques
-                        heroText.classList.add('hover-particles', 'metal-rain');
-                        break;
-                }
-                
-                animationVariant++;
-            });
-            
-            heroText.addEventListener('mouseleave', () => {
-                // Retirer toutes les classes d'animation
-                heroText.classList.remove('hover-effect', 'hover-particles', 'metal-theme', 'multi-icons', 'unicode-metal', 'rotating-icons', 'metal-rain');
-            });
-            
-            // Effet tactile pour mobile avec animation aléatoire
-            heroText.addEventListener('touchstart', () => {
-                const randomVariant = Math.floor(Math.random() * 4);
-                
-                heroText.classList.remove('hover-effect', 'hover-particles', 'metal-theme', 'multi-icons', 'unicode-metal', 'rotating-icons', 'metal-rain');
-                heroText.classList.add('hover-effect');
-                
-                switch(randomVariant) {
-                    case 0:
-                        heroText.classList.add('metal-theme');
-                        break;
-                    case 1:
-                        heroText.classList.add('multi-icons');
-                        break;
-                    case 2:
-                        heroText.classList.add('rotating-icons');
-                        break;
-                    case 3:
-                        heroText.classList.add('hover-particles', 'metal-rain');
-                        break;
-                }
-                
-                // Retirer l'effet après 3 secondes sur mobile
-                setTimeout(() => {
-                    heroText.classList.remove('hover-effect', 'hover-particles', 'metal-theme', 'multi-icons', 'unicode-metal', 'rotating-icons', 'metal-rain');
-                }, 3000);
-            });
-        }
+        // NOUVEAU SYSTÈME D'ICÔNES DYNAMIQUES
+        this.setupDynamicHeroAnimation();
         
-        // Animation des icônes en réaction au survol du texte
+        // Animation des icônes en réaction au survol du texte (simplifiée)
         const heroVisual = document.querySelector('.hero-visual');
+        const heroText = document.querySelector('.hero-text');
+        
         if (heroText && heroVisual) {
             heroText.addEventListener('mouseenter', () => {
                 heroVisual.classList.add('text-hovered');
@@ -470,16 +406,170 @@ class HomePage extends BasePage {
                 heroVisual.classList.remove('text-hovered');
             });
         }
+    }
+    
+    /**
+     * Nouveau système d'animation avec icônes dynamiques
+     */
+    setupDynamicHeroAnimation() {
+        const heroText = document.querySelector('.hero-text');
+        if (!heroText) return;
         
-        // Effet de démonstration au chargement de la page (une seule fois)
+        // Configuration des icônes métalliques
+        const metalIcons = [
+            '⚙️', '🔧', '🔨', '⚒️', '🔩', '🏗️', 
+            '🛠️', '⚡', '🔥', '💎', '🚀', '⭐'
+        ];
+        
+        // Créer le container pour les icônes
+        let iconsContainer = heroText.querySelector('.hero-icons-container');
+        if (!iconsContainer) {
+            iconsContainer = document.createElement('div');
+            iconsContainer.className = 'hero-icons-container';
+            heroText.appendChild(iconsContainer);
+        }
+        
+        // Variables pour gérer les animations
+        let isAnimating = false;
+        let animationTimeout;
+        let currentIcons = [];
+        
+        /**
+         * Créer une icône animée
+         */
+        const createAnimatedIcon = (icon, animationClass, delay = 0) => {
+            const iconElement = document.createElement('div');
+            iconElement.className = `hero-dynamic-icon ${animationClass}`;
+            iconElement.textContent = icon;
+            iconElement.style.animationDelay = `${delay}ms`;
+            
+            iconsContainer.appendChild(iconElement);
+            currentIcons.push(iconElement);
+            
+            // Supprimer l'icône après l'animation
+            const animationDuration = this.getAnimationDuration(animationClass);
+            setTimeout(() => {
+                if (iconElement.parentNode) {
+                    iconElement.parentNode.removeChild(iconElement);
+                }
+                const index = currentIcons.indexOf(iconElement);
+                if (index > -1) {
+                    currentIcons.splice(index, 1);
+                }
+            }, animationDuration + delay);
+        };
+        
+        /**
+         * Obtenir la durée d'animation en ms
+         */
+        this.getAnimationDuration = (animationClass) => {
+            const durations = {
+                'anim-1': 4000,
+                'anim-2': 3500,
+                'anim-3': 4200,
+                'anim-4': 3800,
+                'anim-5': 4500,
+                'anim-6': 3200
+            };
+            return durations[animationClass] || 4000;
+        };
+        
+        /**
+         * Lancer une séquence d'animations
+         */
+        const startAnimationSequence = () => {
+            if (isAnimating) return;
+            
+            isAnimating = true;
+            
+            // Nettoyer les icônes existantes
+            currentIcons.forEach(icon => {
+                if (icon.parentNode) {
+                    icon.parentNode.removeChild(icon);
+                }
+            });
+            currentIcons = [];
+            
+            // Sélectionner 6 icônes aléatoires
+            const selectedIcons = [];
+            for (let i = 0; i < 6; i++) {
+                const randomIcon = metalIcons[Math.floor(Math.random() * metalIcons.length)];
+                selectedIcons.push(randomIcon);
+            }
+            
+            // Créer les 6 icônes avec leurs animations respectives
+            selectedIcons.forEach((icon, index) => {
+                const animationClass = `anim-${index + 1}`;
+                const delay = index * 100; // Délai échelonné
+                createAnimatedIcon(icon, animationClass, delay);
+            });
+            
+            // Marquer la fin de l'animation
+            setTimeout(() => {
+                isAnimating = false;
+            }, 5000); // Temps total maximum
+        };
+        
+        /**
+         * Gestionnaire de survol - ENTREE
+         */
+        const handleMouseEnter = () => {
+            // Annuler tout timeout précédent
+            if (animationTimeout) {
+                clearTimeout(animationTimeout);
+            }
+            
+            // Démarrer immédiatement si pas en cours
+            if (!isAnimating) {
+                startAnimationSequence();
+            }
+        };
+        
+        /**
+         * Gestionnaire de survol - SORTIE
+         */
+        const handleMouseLeave = () => {
+            // Laisser l'animation en cours se terminer naturellement
+            // Pas d'arrêt brutal pour une meilleure expérience
+        };
+        
+        /**
+         * Gestionnaire tactile pour mobile
+         */
+        const handleTouchStart = () => {
+            if (!isAnimating) {
+                startAnimationSequence();
+            }
+        };
+        
+        // Attacher les événements
+        heroText.addEventListener('mouseenter', handleMouseEnter);
+        heroText.addEventListener('mouseleave', handleMouseLeave);
+        heroText.addEventListener('touchstart', handleTouchStart);
+        
+        // Animation de démonstration au chargement (une fois)
         setTimeout(() => {
-            if (heroText && !heroText.classList.contains('demo-shown')) {
-                heroText.classList.add('hover-effect', 'unicode-metal', 'demo-shown');
-                setTimeout(() => {
-                    heroText.classList.remove('hover-effect', 'unicode-metal');
-                }, 4000);
+            if (!heroText.classList.contains('demo-shown')) {
+                heroText.classList.add('demo-shown');
+                startAnimationSequence();
             }
         }, 2000);
+        
+        // Stockage des références pour cleanup éventuel
+        heroText._iconAnimationCleanup = () => {
+            currentIcons.forEach(icon => {
+                if (icon.parentNode) {
+                    icon.parentNode.removeChild(icon);
+                }
+            });
+            currentIcons = [];
+            if (animationTimeout) {
+                clearTimeout(animationTimeout);
+            }
+            heroText.removeEventListener('mouseenter', handleMouseEnter);
+            heroText.removeEventListener('mouseleave', handleMouseLeave);
+            heroText.removeEventListener('touchstart', handleTouchStart);
+        };
     }
     
     // Prévenir les recharges de page accidentelles
@@ -501,6 +591,20 @@ class HomePage extends BasePage {
                 e.preventDefault();
             });
         });
+    }
+    
+    /**
+     * Méthode de nettoyage lors du démontage de la page
+     */
+    unmount() {
+        // Nettoyer les animations hero si elles existent
+        const heroText = document.querySelector('.hero-text');
+        if (heroText && heroText._iconAnimationCleanup) {
+            heroText._iconAnimationCleanup();
+        }
+        
+        // Appeler le unmount parent
+        super.unmount();
     }
 }
 
