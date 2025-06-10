@@ -7,6 +7,12 @@
     --form-primary: var(--primary-color);
     --form-secondary: var(--secondary-color);
     --form-border: var(--border-color);
+    scroll-behavior: smooth;
+}
+
+/* Empêcher le focus de faire défiler la page */
+.contact-page * {
+    scroll-margin-top: var(--navbar-height);
 }
 
 /* Header de la page - Structure alignée avec services-page */
@@ -155,16 +161,51 @@
     font-size: 0.9rem;
 }
 
+/* Correction supplémentaire pour Firefox et autres navigateurs */
 .form-control {
     width: 100%;
     padding: var(--space-4);
     border: 2px solid var(--border-color);
     border-radius: var(--radius-lg);
-    background: var(--bg-input);
+    background-color: var(--bg-input); /* Ajout explicite de background-color */
     color: var(--text-primary);
     font-size: 1rem;
     transition: all 0.3s ease;
     font-family: inherit;
+}
+
+/* Force le background sombre pour tous les navigateurs */
+input.form-control,
+textarea.form-control,
+select.form-control {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Correction spécifique pour les selects */
+select.form-control {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+/* Forcer le style sombre pour les selects sur tous les navigateurs */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    select.form-control {
+        background-color: rgba(22, 33, 62, 0.95) !important;
+    }
+}
+
+/* Fix supplémentaire pour éviter les backgrounds blancs */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus,
+select:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px rgba(22, 33, 62, 0.95) inset !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
 }
 
 .form-control:focus {
@@ -193,11 +234,24 @@ textarea.form-control {
 /* Select */
 select.form-control {
     appearance: none;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-color: var(--bg-input);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23999999' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
     background-position: right 0.75rem center;
     background-repeat: no-repeat;
     background-size: 1.5em 1.5em;
     padding-right: 2.5rem;
+    color: var(--text-primary);
+}
+
+/* Fix pour les options du select */
+select.form-control option {
+    background-color: #1a1a2e;
+    color: #ffffff;
+}
+
+/* Fix pour le select au focus */
+select.form-control:focus {
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 /* Erreurs */
@@ -493,6 +547,8 @@ select.form-control {
     color: var(--text-primary);
     text-align: left;
     transition: all 0.3s ease;
+    font-family: inherit;
+    font-size: inherit;
 }
 
 .faq-question:hover {

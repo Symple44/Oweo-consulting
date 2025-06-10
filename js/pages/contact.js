@@ -73,7 +73,7 @@ class ContactPage extends BasePage {
                                 <i class="fas fa-calendar"></i>
                                 Planifier un appel
                             </button>
-                            <a href="tel:${this.contactInfo.contact.phone}" class="btn btn-outline btn-lg">
+                            <a href="tel:${this.contactInfo.contact.phone}" class="btn btn-outline btn-lg" onclick="event.stopPropagation();">
                                 <i class="fas fa-phone"></i>
                                 ${this.contactInfo.contact.phoneFormatted}
                             </a>
@@ -240,7 +240,7 @@ class ContactPage extends BasePage {
                                             </div>
                                             <div class="method-content">
                                                 <div class="method-label">Email</div>
-                                                <a href="mailto:${this.contactInfo.contact.email}" class="method-value">
+                                                <a href="mailto:${this.contactInfo.contact.email}" class="method-value" onclick="event.stopPropagation();">
                                                     ${this.contactInfo.contact.email}
                                                 </a>
                                             </div>
@@ -252,7 +252,7 @@ class ContactPage extends BasePage {
                                             </div>
                                             <div class="method-content">
                                                 <div class="method-label">Téléphone</div>
-                                                <a href="tel:${this.contactInfo.contact.phone}" class="method-value">
+                                                <a href="tel:${this.contactInfo.contact.phone}" class="method-value" onclick="event.stopPropagation();">
                                                     ${this.contactInfo.contact.phoneFormatted}
                                                 </a>
                                             </div>
@@ -289,7 +289,8 @@ class ContactPage extends BasePage {
                                                class="social-link" 
                                                target="_blank" 
                                                rel="noopener"
-                                               title="LinkedIn">
+                                               title="LinkedIn"
+                                               onclick="event.stopPropagation();">
                                                 <i class="fab fa-linkedin-in"></i>
                                             </a>
                                         </div>
@@ -340,7 +341,7 @@ class ContactPage extends BasePage {
                                         </div>
                                     </div>
                                     
-                                    <button class="btn btn-primary btn-block" onclick="contactPageInstance.requestDiagnostic()">
+                                    <button class="btn btn-primary btn-block" onclick="event.preventDefault(); contactPageInstance.requestDiagnostic()">
                                         <i class="fas fa-play"></i>
                                         Demander un diagnostic
                                     </button>
@@ -399,10 +400,10 @@ class ContactPage extends BasePage {
         
         return faqs.map((faq, index) => `
             <div class="faq-item fade-in-up">
-                <div class="faq-question" onclick="contactPageInstance.toggleFAQ(${index})">
+                <button class="faq-question" onclick="event.preventDefault(); contactPageInstance.toggleFAQ(${index})">
                     <span>${faq.question}</span>
                     <i class="fas fa-chevron-down"></i>
-                </div>
+                </button>
                 <div class="faq-answer" id="faq-answer-${index}">
                     <p>${faq.answer}</p>
                 </div>
@@ -413,11 +414,12 @@ class ContactPage extends BasePage {
     bindEvents() {
         super.bindEvents();
         
-        // Navigation
+        // Navigation - Éviter le scroll automatique
         const pageLinks = document.querySelectorAll('[data-page]');
         pageLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 const page = link.dataset.page;
                 this.navigateTo(page);
             });
@@ -439,16 +441,33 @@ class ContactPage extends BasePage {
         // Boutons d'action
         const scheduleCallBtn = document.getElementById('schedule-call-btn');
         if (scheduleCallBtn) {
-            scheduleCallBtn.addEventListener('click', () => this.openCalendly());
+            scheduleCallBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.openCalendly();
+            });
         }
         
         const calendlyBtn = document.getElementById('calendly-btn');
         if (calendlyBtn) {
-            calendlyBtn.addEventListener('click', () => this.openCalendly());
+            calendlyBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.openCalendly();
+            });
         }
         
         // Analytics pour les liens de contact
         this.trackContactLinks();
+        
+        // Empêcher les liens vides de faire remonter la page
+        const emptyLinks = document.querySelectorAll('a[href="#"], a[href=""]');
+        emptyLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+        });
     }
     
     handleFormSubmit(e) {
@@ -682,7 +701,9 @@ class ContactPage extends BasePage {
         // Focus sur le nom
         const nameInput = document.getElementById('contact-name');
         if (nameInput) {
-            setTimeout(() => nameInput.focus(), 500);
+            setTimeout(() => {
+                nameInput.focus({ preventScroll: true });
+            }, 500);
         }
     }
     
@@ -756,6 +777,8 @@ class ContactPage extends BasePage {
     
     navigateTo(page) {
         if (window.app && window.app.router) {
+            // Empêcher le scroll automatique
+            window.scrollTo({ top: 0, behavior: 'auto' });
             window.app.router.navigate(page);
         }
     }
@@ -768,6 +791,13 @@ class ContactPage extends BasePage {
         
         // Pré-remplir depuis les paramètres URL
         this.prefillFromURL();
+        
+        // Empêcher le comportement par défaut des ancres vides
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A' && (e.target.getAttribute('href') === '#' || e.target.getAttribute('href') === '')) {
+                e.preventDefault();
+            }
+        });
     }
     
     prefillFromURL() {
