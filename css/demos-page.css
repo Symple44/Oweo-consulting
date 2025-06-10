@@ -1,5 +1,5 @@
 /* ========================================
-   css/demos-page.css - Styles pour la page catalogue des démos (CORRIGÉ)
+   css/demos-page.css - Styles pour la page catalogue des démos (ESPACES CORRIGÉS)
    ======================================== */
 
 /* Reset et correction des espaces */
@@ -14,14 +14,14 @@
     width: 100%;
 }
 
-/* Header de la page démos - espacement corrigé */
+/* Header de la page démos - ESPACES RÉDUITS */
 .demos-header {
     background: linear-gradient(135deg, 
         rgba(0, 212, 255, 0.05) 0%, 
         rgba(124, 58, 237, 0.05) 100%);
     border-bottom: 1px solid rgba(0, 212, 255, 0.1);
-    padding: var(--space-12) 0 var(--space-8) 0; /* Padding uniforme */
-    margin: 0; /* Pas de margin */
+    padding: var(--space-8) 0; /* Réduit de space-12/space-8 à space-8 uniforme */
+    margin: 0;
 }
 
 .demos-header .container {
@@ -43,10 +43,10 @@
 .stat-item {
     text-align: center;
     padding: var(--space-4);
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.05);
     border-radius: var(--radius-lg);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .stat-number {
@@ -63,12 +63,12 @@
     letter-spacing: 0.05em;
 }
 
-/* Filtres et recherche - espacement corrigé */
+/* Filtres et recherche - ESPACES RÉDUITS */
 .demos-filters {
     background: var(--bg-secondary);
     border-bottom: 1px solid var(--border-color);
-    padding: var(--space-6) 0; /* Padding uniforme */
-    margin: 0; /* Pas de margin */
+    padding: var(--space-4) 0; /* Réduit de space-6 à space-4 */
+    margin: 0;
 }
 
 .demos-filters .container {
@@ -80,7 +80,7 @@
 .filters-container {
     display: flex;
     flex-direction: column;
-    gap: var(--space-6);
+    gap: var(--space-4); /* Réduit de space-6 à space-4 */
 }
 
 .search-container {
@@ -107,6 +107,7 @@
     border: 2px solid var(--border-color);
     border-radius: var(--radius-full);
     background: var(--bg-card);
+    color: var(--text-primary);
     font-size: 1rem;
     transition: all 0.2s;
 }
@@ -115,6 +116,10 @@
     border-color: var(--primary-color);
     outline: none;
     box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+}
+
+.search-input::placeholder {
+    color: var(--text-muted);
 }
 
 .search-clear {
@@ -130,7 +135,7 @@
 }
 
 .search-clear:hover {
-    background: var(--bg-hover);
+    background: var(--bg-secondary);
     color: var(--text-primary);
 }
 
@@ -175,11 +180,11 @@
     font-size: 0.875rem;
 }
 
-/* Notice d'accès - espacement corrigé */
+/* Notice d'accès - ESPACES RÉDUITS */
 .access-notice {
-    padding: var(--space-6) 0; /* Padding réduit */
-    background: rgba(59, 130, 246, 0.05);
-    margin: 0; /* Pas de margin */
+    padding: var(--space-4) 0; /* Réduit de space-6 à space-4 */
+    background: rgba(59, 130, 246, 0.03);
+    margin: 0;
 }
 
 .access-notice .container {
@@ -192,24 +197,24 @@
     display: flex;
     align-items: center;
     gap: var(--space-4);
-    padding: var(--space-6);
+    padding: var(--space-4); /* Réduit de space-6 à space-4 */
     background: var(--bg-card);
     border: 1px solid rgba(59, 130, 246, 0.2);
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-lg);
     max-width: 800px;
     margin: 0 auto;
 }
 
 .notice-icon {
-    width: 50px;
-    height: 50px;
+    width: 40px; /* Réduit de 50px à 40px */
+    height: 40px;
     border-radius: var(--radius-lg);
     background: rgba(59, 130, 246, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
     color: #3b82f6;
-    font-size: 1.25rem;
+    font-size: 1rem; /* Réduit de 1.25rem à 1rem */
     flex-shrink: 0;
 }
 
@@ -221,21 +226,23 @@
     margin-bottom: var(--space-2);
     color: var(--text-primary);
     font-weight: 600;
+    font-size: 1rem;
 }
 
 .notice-content p {
     color: var(--text-secondary);
     margin: 0;
+    font-size: 0.9rem;
 }
 
 .notice-actions {
     flex-shrink: 0;
 }
 
-/* Grille des démos - espacement corrigé */
+/* Grille des démos - ESPACES RÉDUITS */
 .demos-grid-section {
-    padding: var(--space-8) 0; /* Padding réduit */
-    margin: 0; /* Pas de margin */
+    padding: var(--space-6) 0; /* Réduit de space-8 à space-6 */
+    margin: 0;
 }
 
 .demos-grid-section .container {
@@ -247,8 +254,8 @@
 .demos-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: var(--space-8);
-    margin-bottom: var(--space-8);
+    gap: var(--space-6); /* Réduit de space-8 à space-6 */
+    margin-bottom: var(--space-6); /* Réduit de space-8 à space-6 */
 }
 
 .demo-card {
@@ -350,6 +357,8 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
+    padding: 0;
+    margin: 0;
 }
 
 .features-list li {
@@ -395,11 +404,11 @@
 /* État sans résultats */
 .no-results {
     text-align: center;
-    padding: var(--space-12) var(--space-4);
+    padding: var(--space-8) var(--space-4); /* Réduit de space-12 à space-8 */
     background: var(--bg-secondary);
     border-radius: var(--radius-xl);
     border: 2px dashed var(--border-color);
-    margin: var(--space-8) 0; /* Margin contrôlée */
+    margin: var(--space-6) 0; /* Réduit de space-8 à space-6 */
 }
 
 .no-results-content {
@@ -408,13 +417,13 @@
 }
 
 .no-results i {
-    font-size: 4rem;
+    font-size: 3rem; /* Réduit de 4rem à 3rem */
     color: var(--text-muted);
     margin-bottom: var(--space-4);
 }
 
 .no-results h3 {
-    font-size: 1.5rem;
+    font-size: 1.25rem; /* Réduit de 1.5rem à 1.25rem */
     color: var(--text-primary);
     margin-bottom: var(--space-3);
 }
@@ -425,11 +434,11 @@
     line-height: 1.6;
 }
 
-/* Section "À venir" - espacement corrigé */
+/* Section "À venir" - ESPACES RÉDUITS */
 .coming-soon-section {
-    padding: var(--space-8) 0; /* Padding réduit */
+    padding: var(--space-6) 0; /* Réduit de space-8 à space-6 */
     background: var(--bg-secondary);
-    margin: 0; /* Pas de margin */
+    margin: 0;
 }
 
 .coming-soon-section .container {
@@ -442,6 +451,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: var(--space-6);
+    margin-top: var(--space-6); /* Réduit par rapport au default */
 }
 
 .coming-soon-card {
@@ -501,10 +511,10 @@
     margin-bottom: var(--space-4);
 }
 
-/* CTA final - espacement corrigé */
+/* CTA final - ESPACES RÉDUITS */
 .demos-page .section-lg {
-    padding: var(--space-8) 0; /* Padding réduit */
-    margin: 0; /* Pas de margin */
+    padding: var(--space-6) 0; /* Réduit de space-8 à space-6 */
+    margin: 0;
 }
 
 .demos-page .section-lg .container {
@@ -519,25 +529,25 @@
         rgba(124, 58, 237, 0.1) 100%);
     border: 1px solid rgba(0, 212, 255, 0.2);
     border-radius: var(--radius-2xl);
-    padding: var(--space-12);
+    padding: var(--space-8); /* Réduit de space-12 à space-8 */
     text-align: center;
     position: relative;
     overflow: hidden;
 }
 
 .demos-page .contact-content {
-    margin-bottom: var(--space-8);
+    margin-bottom: var(--space-6); /* Réduit de space-8 à space-6 */
 }
 
 .demos-page .contact-content h2 {
-    font-size: 2rem;
+    font-size: 1.75rem; /* Réduit de 2rem à 1.75rem */
     font-weight: 800;
     margin-bottom: var(--space-4);
     color: var(--text-primary);
 }
 
 .demos-page .contact-content p {
-    font-size: 1.125rem;
+    font-size: 1rem; /* Réduit de 1.125rem à 1rem */
     color: var(--text-secondary);
     max-width: 500px;
     margin: 0 auto;
@@ -553,32 +563,32 @@
 /* Responsive - espacement cohérent */
 @media (max-width: 768px) {
     .demos-header {
-        padding: var(--space-8) 0 var(--space-6) 0;
+        padding: var(--space-6) 0; /* Encore plus réduit sur mobile */
     }
     
     .demos-filters {
-        padding: var(--space-4) 0;
+        padding: var(--space-3) 0; /* Encore plus réduit sur mobile */
     }
     
     .access-notice {
-        padding: var(--space-4) 0;
+        padding: var(--space-3) 0; /* Encore plus réduit sur mobile */
     }
     
     .demos-grid-section {
-        padding: var(--space-6) 0;
+        padding: var(--space-4) 0; /* Encore plus réduit sur mobile */
     }
     
     .coming-soon-section {
-        padding: var(--space-6) 0;
+        padding: var(--space-4) 0; /* Encore plus réduit sur mobile */
     }
     
     .demos-page .section-lg {
-        padding: var(--space-6) 0;
+        padding: var(--space-4) 0; /* Encore plus réduit sur mobile */
     }
     
     .demos-stats {
         grid-template-columns: repeat(3, 1fr);
-        gap: var(--space-4);
+        gap: var(--space-3); /* Réduit pour mobile */
     }
     
     .stat-item {
@@ -590,7 +600,7 @@
     }
     
     .filters-container {
-        gap: var(--space-4);
+        gap: var(--space-3); /* Réduit pour mobile */
     }
     
     .category-filters {
@@ -608,17 +618,18 @@
     
     .demos-grid {
         grid-template-columns: 1fr;
-        gap: var(--space-6);
+        gap: var(--space-4); /* Réduit pour mobile */
     }
     
     .notice-card {
         flex-direction: column;
         text-align: center;
-        gap: var(--space-4);
+        gap: var(--space-3); /* Réduit pour mobile */
+        padding: var(--space-3); /* Réduit pour mobile */
     }
     
     .demo-card {
-        padding: var(--space-5);
+        padding: var(--space-4); /* Réduit pour mobile */
     }
     
     .demo-icon {
@@ -638,7 +649,7 @@
     }
     
     .demos-page .contact-cta {
-        padding: var(--space-8);
+        padding: var(--space-6); /* Réduit pour mobile */
     }
     
     .demos-page .contact-actions {
@@ -654,12 +665,32 @@
 
 @media (max-width: 480px) {
     .demos-header {
-        padding: var(--space-6) 0 var(--space-4) 0;
+        padding: var(--space-4) 0; /* Minimal sur très petit écran */
+    }
+    
+    .demos-filters {
+        padding: var(--space-2) 0; /* Minimal sur très petit écran */
+    }
+    
+    .access-notice {
+        padding: var(--space-2) 0; /* Minimal sur très petit écran */
+    }
+    
+    .demos-grid-section {
+        padding: var(--space-3) 0; /* Minimal sur très petit écran */
+    }
+    
+    .coming-soon-section {
+        padding: var(--space-3) 0; /* Minimal sur très petit écran */
+    }
+    
+    .demos-page .section-lg {
+        padding: var(--space-3) 0; /* Minimal sur très petit écran */
     }
     
     .demos-stats {
         grid-template-columns: 1fr;
-        gap: var(--space-3);
+        gap: var(--space-2);
     }
     
     .search-input {
@@ -684,7 +715,11 @@
     }
     
     .demos-page .contact-cta {
-        padding: var(--space-6);
+        padding: var(--space-4); /* Minimal pour très petit écran */
+    }
+    
+    .demos-page .contact-content h2 {
+        font-size: 1.5rem;
     }
 }
 
