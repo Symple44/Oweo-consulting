@@ -309,7 +309,8 @@ class HomePage extends BasePage {
         if (demoSearch) {
             demoSearch.show();
         } else {
-            // Fallback - naviguer vers la page démos
+            // ✅ CORRECTION : Naviguer vers la page catalogue des démos
+            console.log('🎯 DemoSearch component not available, redirecting to demos page');
             this.navigateTo('demos');
         }
     }
