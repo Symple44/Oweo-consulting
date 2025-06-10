@@ -558,6 +558,7 @@
    ANIMATIONS - Effet de survol pour toute la zone hero
 ================================= */
 
+/* Classes de base pour les animations d'entrée */
 .fade-in-up {
     opacity: 0;
     transform: translateY(30px);
@@ -575,7 +576,11 @@
 .fade-in-up:nth-child(3) { transition-delay: 0.3s; }
 .fade-in-up:nth-child(4) { transition-delay: 0.4s; }
 
-/* Effet de survol pour toute la zone de texte hero */
+/* =================================
+   EFFET DE SURVOL ZONE TEXTE HERO
+================================= */
+
+/* Zone de texte hero - Effet de base */
 .hero-text {
     position: relative;
     cursor: pointer;
@@ -611,224 +616,690 @@
     transform: translateY(-3px);
 }
 
-/* Effet d'icônes métalliques qui traversent la zone */
+/* =================================
+   SYSTÈME D'ICÔNES INDIVIDUELLES
+================================= */
+
+/* Animation de base - 2 icônes individuelles avec ::before et ::after */
 .hero-text.hover-effect::after {
-    content: '⚙️ 🔧 ⚡ 🏗️ 🔩';
-    position: absolute;
-    top: 50%;
-    left: -150px;
-    transform: translateY(-50%);
-    font-size: 1.2rem;
-    opacity: 0.7;
-    white-space: nowrap;
-    letter-spacing: 40px;
-    color: var(--primary-color);
-    filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.3));
-    animation: metaliconsTraverse 3s ease-in-out;
-    pointer-events: none;
-    z-index: 1;
-}
-
-@keyframes metaliconsTraverse {
-    0% { 
-        left: -150px; 
-        opacity: 0;
-        transform: translateY(-50%) scale(0.5);
-    }
-    15% {
-        opacity: 0.7;
-        transform: translateY(-50%) scale(1);
-    }
-    85% {
-        opacity: 0.7;
-        transform: translateY(-50%) scale(1);
-    }
-    100% { 
-        left: calc(100% + 50px); 
-        opacity: 0;
-        transform: translateY(-50%) scale(0.5);
-    }
-}
-
-/* Version alternative avec des symboles plus spécifiques à la métallurgie */
-.hero-text.hover-effect.metal-theme::after {
-    content: '🏗️ ⚙️ 🔧 🏭 🔩 ⚡';
-    font-size: 1.4rem;
-    letter-spacing: 35px;
-    animation: metaliconsTraverse 3.5s ease-in-out;
-}
-
-/* Effet de particules métalliques secondaires */
-.hero-text.hover-effect::before {
-    content: '';
-    position: absolute;
-    top: 30%;
-    left: -100px;
-    width: 20px;
-    height: 20px;
-    background: radial-gradient(circle, rgba(0, 212, 255, 0.4) 0%, transparent 70%);
-    border-radius: 50%;
-    opacity: 0;
-    animation: sparkleTraverse 2.8s ease-in-out 0.3s;
-    pointer-events: none;
-    z-index: 2;
-}
-
-@keyframes sparkleTraverse {
-    0% { 
-        left: -100px; 
-        opacity: 0;
-        transform: scale(0.3);
-    }
-    20% {
-        opacity: 0.6;
-        transform: scale(1);
-    }
-    80% {
-        opacity: 0.6;
-        transform: scale(1);
-    }
-    100% { 
-        left: calc(100% + 50px); 
-        opacity: 0;
-        transform: scale(0.3);
-    }
-}
-
-/* Effet de multiple petites icônes avec délais */
-.hero-text.hover-effect.multi-icons::after {
-    content: '🔧';
-    font-size: 1rem;
-    animation: metaliconsTraverse 2s ease-in-out;
-}
-
-.hero-text.hover-effect.multi-icons::before {
     content: '⚙️';
     position: absolute;
     top: 25%;
-    left: -80px;
-    font-size: 0.9rem;
-    color: var(--secondary-color);
-    filter: drop-shadow(0 0 6px rgba(124, 58, 237, 0.3));
-    animation: metaliconsTraverse 2.2s ease-in-out 0.4s;
+    left: -60px;
+    font-size: 1.4rem;
+    opacity: 0;
+    color: var(--primary-color);
+    filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.3));
+    animation: metalIcon1 3.2s ease-in-out;
     pointer-events: none;
-    z-index: 1;
+    z-index: 10;
 }
 
-/* Animation avec pseudo-element pour une troisième icône */
-.hero-text.hover-effect.multi-icons {
-    position: relative;
-}
-
-.hero-text.hover-effect.multi-icons:hover::after {
-    content: '🏗️';
-    position: absolute;
-    top: 75%;
-    left: -70px;
-    font-size: 1.1rem;
-    color: var(--accent-color);
-    filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.3));
-    animation: metaliconsTraverse 2.5s ease-in-out 0.8s;
-    pointer-events: none;
-    z-index: 1;
-}
-
-/* Version avec des caractères Unicode métalliques */
-.hero-text.hover-effect.unicode-metal::after {
-    content: '⚒️ 🔨 ⚙️ 🏗️ 🔩 ⚡ 🏭';
-    font-size: 1.3rem;
-    letter-spacing: 30px;
-    animation: metaliconsTraverse 4s ease-in-out;
-}
-
-/* Animation avec effet de rotation des icônes */
-@keyframes metaliconsRotateTraverse {
-    0% { 
-        left: -150px; 
-        opacity: 0;
-        transform: translateY(-50%) rotate(0deg) scale(0.5);
-    }
-    15% {
-        opacity: 0.8;
-        transform: translateY(-50%) rotate(180deg) scale(1);
-    }
-    85% {
-        opacity: 0.8;
-        transform: translateY(-50%) rotate(540deg) scale(1);
-    }
-    100% { 
-        left: calc(100% + 50px); 
-        opacity: 0;
-        transform: translateY(-50%) rotate(720deg) scale(0.5);
-    }
-}
-
-.hero-text.hover-effect.rotating-icons::after {
-    content: '⚙️ 🔧 🏗️ 🔩';
-    animation: metaliconsRotateTraverse 3.5s ease-in-out;
-}
-
-/* Effet de pluie d'icônes métalliques */
-.hero-text.hover-particles.metal-rain::before {
+.hero-text.hover-effect::before {
     content: '🔧';
     position: absolute;
-    top: 10%;
-    left: -50px;
-    font-size: 0.8rem;
-    color: var(--primary-color);
-    opacity: 0;
-    animation: metalRain1 2.5s ease-in-out;
-}
-
-.hero-text.hover-particles.metal-rain::after {
-    content: '⚙️ 🔩 ⚡';
-    position: absolute;
-    top: 60%;
+    top: 65%;
     left: -80px;
-    font-size: 1rem;
-    letter-spacing: 20px;
-    color: var(--secondary-color);
+    font-size: 1.1rem;
     opacity: 0;
-    animation: metalRain2 3s ease-in-out 0.5s;
+    color: var(--secondary-color);
+    filter: drop-shadow(0 0 6px rgba(124, 58, 237, 0.3));
+    animation: metalIcon2 2.8s ease-in-out 0.3s;
+    pointer-events: none;
+    z-index: 10;
 }
 
-@keyframes metalRain1 {
+/* Animations individuelles pour icônes de base */
+@keyframes metalIcon1 {
     0% { 
-        left: -50px; 
+        left: -60px; 
+        top: 25%;
         opacity: 0;
-        transform: translateY(0) rotate(0deg);
+        transform: scale(0.3) rotate(0deg);
     }
-    20% {
-        opacity: 0.6;
+    15% {
+        opacity: 0.9;
+        transform: scale(1.3) rotate(120deg);
+        top: 50%;
+        left: 20%;
     }
-    80% {
-        opacity: 0.6;
+    35% {
+        top: 10%;
+        left: 45%;
+        transform: scale(0.7) rotate(240deg);
     }
-    100% { 
-        left: calc(100% + 30px); 
-        opacity: 0;
-        transform: translateY(10px) rotate(360deg);
+    60% {
+        top: 70%;
+        left: 70%;
+        transform: scale(1.1) rotate(360deg);
     }
-}
-
-@keyframes metalRain2 {
-    0% { 
-        left: -80px; 
-        opacity: 0;
-        transform: translateY(0);
-    }
-    25% {
-        opacity: 0.7;
-    }
-    75% {
-        opacity: 0.7;
+    85% {
+        top: 35%;
+        left: 90%;
+        transform: scale(0.8) rotate(480deg);
     }
     100% { 
         left: calc(100% + 40px); 
+        top: 60%;
         opacity: 0;
-        transform: translateY(-5px);
+        transform: scale(0.4) rotate(600deg);
     }
 }
+
+@keyframes metalIcon2 {
+    0% { 
+        left: -80px; 
+        top: 65%;
+        opacity: 0;
+        transform: scale(0.4) rotate(0deg);
+    }
+    20% {
+        opacity: 0.8;
+        transform: scale(1.2) rotate(-90deg);
+        top: 35%;
+        left: 15%;
+    }
+    45% {
+        top: 80%;
+        left: 40%;
+        transform: scale(0.6) rotate(-180deg);
+    }
+    70% {
+        top: 15%;
+        left: 65%;
+        transform: scale(1) rotate(-270deg);
+    }
+    90% {
+        top: 55%;
+        left: 85%;
+        transform: scale(0.9) rotate(-360deg);
+    }
+    100% { 
+        left: calc(100% + 35px); 
+        top: 25%;
+        opacity: 0;
+        transform: scale(0.3) rotate(-450deg);
+    }
+}
+
+/* =================================
+   VARIANTE THÈME MÉTALLIQUE
+================================= */
+
+.hero-text.hover-effect.metal-theme::after {
+    content: '🏗️';
+    position: absolute;
+    top: 30%;
+    left: -70px;
+    font-size: 1.6rem;
+    opacity: 0;
+    color: var(--accent-color);
+    filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.4));
+    animation: metalThemeIcon1 4s ease-in-out;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.hero-text.hover-effect.metal-theme::before {
+    content: '🔩';
+    position: absolute;
+    top: 60%;
+    left: -90px;
+    font-size: 1rem;
+    opacity: 0;
+    color: var(--primary-color);
+    filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.3));
+    animation: metalThemeIcon2 3.5s ease-in-out 0.5s;
+    pointer-events: none;
+    z-index: 10;
+}
+
+@keyframes metalThemeIcon1 {
+    0% { 
+        left: -70px; 
+        top: 30%;
+        opacity: 0;
+        transform: scale(0.2) rotate(0deg);
+    }
+    8% {
+        opacity: 0.9;
+        transform: scale(1.4) rotate(45deg);
+        top: 55%;
+        left: 12%;
+    }
+    25% {
+        top: 10%;
+        left: 30%;
+        transform: scale(0.7) rotate(135deg);
+    }
+    45% {
+        top: 80%;
+        left: 50%;
+        transform: scale(1.2) rotate(225deg);
+    }
+    65% {
+        top: 20%;
+        left: 75%;
+        transform: scale(0.8) rotate(315deg);
+    }
+    85% {
+        top: 70%;
+        left: 90%;
+        transform: scale(1) rotate(405deg);
+    }
+    100% { 
+        left: calc(100% + 50px); 
+        top: 35%;
+        opacity: 0;
+        transform: scale(0.3) rotate(540deg);
+    }
+}
+
+@keyframes metalThemeIcon2 {
+    0% { 
+        left: -90px; 
+        top: 60%;
+        opacity: 0;
+        transform: scale(0.3) rotate(0deg);
+    }
+    10% {
+        opacity: 0.8;
+        transform: scale(1.1) rotate(-30deg);
+        top: 40%;
+        left: 18%;
+    }
+    28% {
+        top: 85%;
+        left: 25%;
+        transform: scale(1.3) rotate(-90deg);
+    }
+    50% {
+        top: 5%;
+        left: 55%;
+        transform: scale(0.6) rotate(-180deg);
+    }
+    72% {
+        top: 75%;
+        left: 80%;
+        transform: scale(1) rotate(-270deg);
+    }
+    90% {
+        top: 25%;
+        left: 95%;
+        transform: scale(0.9) rotate(-360deg);
+    }
+    100% { 
+        left: calc(100% + 40px); 
+        top: 65%;
+        opacity: 0;
+        transform: scale(0.4) rotate(-450deg);
+    }
+}
+
+/* =================================
+   VARIANTE MULTI-ICÔNES
+================================= */
+
+.hero-text.hover-effect.multi-icons::after {
+    content: '⚙️';
+    position: absolute;
+    top: 35%;
+    left: -65px;
+    font-size: 1.2rem;
+    opacity: 0;
+    color: var(--primary-color);
+    filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.3));
+    animation: multiIcon1 2.8s ease-in-out;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.hero-text.hover-effect.multi-icons::before {
+    content: '🔧';
+    position: absolute;
+    top: 55%;
+    left: -85px;
+    font-size: 1rem;
+    opacity: 0;
+    color: var(--secondary-color);
+    filter: drop-shadow(0 0 6px rgba(124, 58, 237, 0.3));
+    animation: multiIcon2 3.2s ease-in-out 0.4s;
+    pointer-events: none;
+    z-index: 10;
+}
+
+@keyframes multiIcon1 {
+    0% { 
+        left: -65px; 
+        top: 35%;
+        opacity: 0;
+        transform: scale(0.4) rotate(0deg);
+    }
+    18% {
+        opacity: 0.8;
+        transform: scale(1.2) rotate(90deg);
+        top: 60%;
+        left: 20%;
+    }
+    40% {
+        top: 10%;
+        left: 45%;
+        transform: scale(0.7) rotate(200deg);
+    }
+    65% {
+        top: 75%;
+        left: 70%;
+        transform: scale(1) rotate(320deg);
+    }
+    85% {
+        top: 25%;
+        left: 90%;
+        transform: scale(0.8) rotate(450deg);
+    }
+    100% { 
+        left: calc(100% + 30px); 
+        top: 50%;
+        opacity: 0;
+        transform: scale(0.3) rotate(540deg);
+    }
+}
+
+@keyframes multiIcon2 {
+    0% { 
+        left: -85px; 
+        top: 55%;
+        opacity: 0;
+        transform: scale(0.3) rotate(0deg);
+    }
+    22% {
+        opacity: 0.7;
+        transform: scale(1.3) rotate(-60deg);
+        top: 25%;
+        left: 15%;
+    }
+    48% {
+        top: 80%;
+        left: 40%;
+        transform: scale(0.6) rotate(-150deg);
+    }
+    70% {
+        top: 5%;
+        left: 65%;
+        transform: scale(1.1) rotate(-240deg);
+    }
+    90% {
+        top: 65%;
+        left: 85%;
+        transform: scale(0.9) rotate(-330deg);
+    }
+    100% { 
+        left: calc(100% + 40px); 
+        top: 35%;
+        opacity: 0;
+        transform: scale(0.4) rotate(-420deg);
+    }
+}
+
+/* =================================
+   VARIANTE ICÔNES ROTATIVES
+================================= */
+
+.hero-text.hover-effect.rotating-icons::after {
+    content: '⚙️';
+    position: absolute;
+    top: 40%;
+    left: -75px;
+    font-size: 1.4rem;
+    opacity: 0;
+    color: var(--primary-color);
+    filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.3));
+    animation: rotatingIcon1 4.2s ease-in-out;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.hero-text.hover-effect.rotating-icons::before {
+    content: '🔧';
+    position: absolute;
+    top: 20%;
+    left: -60px;
+    font-size: 1.1rem;
+    opacity: 0;
+    color: var(--secondary-color);
+    filter: drop-shadow(0 0 6px rgba(124, 58, 237, 0.3));
+    animation: rotatingIcon2 3.8s ease-in-out 0.6s;
+    pointer-events: none;
+    z-index: 10;
+}
+
+@keyframes rotatingIcon1 {
+    0% { 
+        left: -75px; 
+        top: 40%;
+        opacity: 0;
+        transform: scale(0.3) rotate(0deg);
+    }
+    12% {
+        opacity: 0.9;
+        transform: scale(1.3) rotate(180deg);
+        top: 15%;
+        left: 15%;
+    }
+    28% {
+        top: 70%;
+        left: 35%;
+        transform: scale(0.7) rotate(360deg);
+    }
+    48% {
+        top: 25%;
+        left: 60%;
+        transform: scale(1.1) rotate(540deg);
+    }
+    68% {
+        top: 80%;
+        left: 80%;
+        transform: scale(0.8) rotate(720deg);
+    }
+    88% {
+        top: 45%;
+        left: 95%;
+        transform: scale(1) rotate(900deg);
+    }
+    100% { 
+        left: calc(100% + 55px); 
+        top: 60%;
+        opacity: 0;
+        transform: scale(0.4) rotate(1080deg);
+    }
+}
+
+@keyframes rotatingIcon2 {
+    0% { 
+        left: -60px; 
+        top: 20%;
+        opacity: 0;
+        transform: scale(0.4) rotate(0deg);
+    }
+    15% {
+        opacity: 0.8;
+        transform: scale(1.2) rotate(-120deg);
+        top: 55%;
+        left: 20%;
+    }
+    35% {
+        top: 85%;
+        left: 45%;
+        transform: scale(0.6) rotate(-300deg);
+    }
+    55% {
+        top: 10%;
+        left: 70%;
+        transform: scale(1) rotate(-480deg);
+    }
+    75% {
+        top: 65%;
+        left: 90%;
+        transform: scale(0.9) rotate(-660deg);
+    }
+    95% {
+        top: 35%;
+        left: 98%;
+        transform: scale(0.8) rotate(-840deg);
+    }
+    100% { 
+        left: calc(100% + 45px); 
+        top: 75%;
+        opacity: 0;
+        transform: scale(0.3) rotate(-1020deg);
+    }
+}
+
+/* =================================
+   VARIANTE UNICODE MÉTALLIQUE
+================================= */
+
+.hero-text.hover-effect.unicode-metal::after {
+    content: '⚒️';
+    position: absolute;
+    top: 35%;
+    left: -65px;
+    font-size: 1.5rem;
+    opacity: 0;
+    color: var(--primary-color);
+    filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.3));
+    animation: unicodeIcon1 4.5s ease-in-out;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.hero-text.hover-effect.unicode-metal::before {
+    content: '🔨';
+    position: absolute;
+    top: 55%;
+    left: -80px;
+    font-size: 1.3rem;
+    opacity: 0;
+    color: var(--secondary-color);
+    filter: drop-shadow(0 0 7px rgba(124, 58, 237, 0.3));
+    animation: unicodeIcon2 4s ease-in-out 0.4s;
+    pointer-events: none;
+    z-index: 10;
+}
+
+@keyframes unicodeIcon1 {
+    0% { 
+        left: -65px; 
+        top: 35%;
+        opacity: 0;
+        transform: scale(0.3) rotate(0deg);
+    }
+    8% {
+        opacity: 0.9;
+        transform: scale(1.4) rotate(30deg);
+        top: 60%;
+        left: 8%;
+    }
+    20% {
+        top: 10%;
+        left: 25%;
+        transform: scale(0.7) rotate(90deg);
+    }
+    35% {
+        top: 75%;
+        left: 45%;
+        transform: scale(1.2) rotate(180deg);
+    }
+    55% {
+        top: 25%;
+        left: 65%;
+        transform: scale(0.8) rotate(300deg);
+    }
+    75% {
+        top: 80%;
+        left: 85%;
+        transform: scale(1.1) rotate(450deg);
+    }
+    90% {
+        top: 40%;
+        left: 95%;
+        transform: scale(0.9) rotate(540deg);
+    }
+    100% { 
+        left: calc(100% + 50px); 
+        top: 65%;
+        opacity: 0;
+        transform: scale(0.4) rotate(630deg);
+    }
+}
+
+@keyframes unicodeIcon2 {
+    0% { 
+        left: -80px; 
+        top: 55%;
+        opacity: 0;
+        transform: scale(0.4) rotate(0deg);
+    }
+    10% {
+        opacity: 0.85;
+        transform: scale(1.3) rotate(-45deg);
+        top: 30%;
+        left: 15%;
+    }
+    25% {
+        top: 85%;
+        left: 30%;
+        transform: scale(0.6) rotate(-120deg);
+    }
+    45% {
+        top: 5%;
+        left: 50%;
+        transform: scale(1.1) rotate(-225deg);
+    }
+    65% {
+        top: 70%;
+        left: 70%;
+        transform: scale(0.8) rotate(-330deg);
+    }
+    85% {
+        top: 20%;
+        left: 90%;
+        transform: scale(1) rotate(-450deg);
+    }
+    100% { 
+        left: calc(100% + 60px); 
+        top: 50%;
+        opacity: 0;
+        transform: scale(0.3) rotate(-540deg);
+    }
+}
+
+/* =================================
+   VARIANTE PLUIE MÉTALLIQUE
+================================= */
+
+.hero-text.hover-particles.metal-rain::after {
+    content: '🔧';
+    position: absolute;
+    top: -10%;
+    left: -60px;
+    font-size: 1rem;
+    opacity: 0;
+    color: var(--primary-color);
+    filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.3));
+    animation: rainIcon1 4s ease-in-out;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.hero-text.hover-particles.metal-rain::before {
+    content: '⚙️';
+    position: absolute;
+    top: -15%;
+    left: -40px;
+    font-size: 1.2rem;
+    opacity: 0;
+    color: var(--secondary-color);
+    filter: drop-shadow(0 0 7px rgba(124, 58, 237, 0.3));
+    animation: rainIcon2 3.5s ease-in-out 0.5s;
+    pointer-events: none;
+    z-index: 10;
+}
+
+@keyframes rainIcon1 {
+    0% { 
+        left: -60px; 
+        top: -10%;
+        opacity: 0;
+        transform: scale(0.4) rotate(0deg);
+    }
+    8% {
+        opacity: 0.8;
+        transform: scale(1.1) rotate(45deg);
+        top: 15%;
+        left: 10%;
+    }
+    20% {
+        top: 35%;
+        left: 25%;
+        transform: scale(0.7) rotate(120deg);
+    }
+    35% {
+        top: 55%;
+        left: 15%;
+        transform: scale(1.2) rotate(200deg);
+    }
+    50% {
+        top: 75%;
+        left: 35%;
+        transform: scale(0.8) rotate(290deg);
+    }
+    68% {
+        top: 92%;
+        left: 55%;
+        transform: scale(1) rotate(380deg);
+    }
+    85% {
+        top: 108%;
+        left: 75%;
+        transform: scale(0.9) rotate(450deg);
+    }
+    100% { 
+        left: calc(100% + 30px); 
+        top: 125%;
+        opacity: 0;
+        transform: scale(0.3) rotate(540deg);
+    }
+}
+
+@keyframes rainIcon2 {
+    0% { 
+        left: -40px; 
+        top: -15%;
+        opacity: 0;
+        transform: scale(0.3) rotate(0deg);
+    }
+    10% {
+        opacity: 0.9;
+        transform: scale(1.3) rotate(-30deg);
+        top: 20%;
+        left: 30%;
+    }
+    25% {
+        top: 40%;
+        left: 20%;
+        transform: scale(0.6) rotate(-90deg);
+    }
+    42% {
+        top: 60%;
+        left: 45%;
+        transform: scale(1.1) rotate(-150deg);
+    }
+    60% {
+        top: 80%;
+        left: 30%;
+        transform: scale(0.8) rotate(-240deg);
+    }
+    78% {
+        top: 98%;
+        left: 60%;
+        transform: scale(1) rotate(-330deg);
+    }
+    95% {
+        top: 115%;
+        left: 85%;
+        transform: scale(0.7) rotate(-420deg);
+    }
+    100% { 
+        left: calc(100% + 50px); 
+        top: 130%;
+        opacity: 0;
+        transform: scale(0.4) rotate(-480deg);
+    }
+}
+
+/* =================================
+   EFFETS SUR LES ÉLÉMENTS ENFANTS
+================================= */
 
 /* Animation pour les éléments enfants au survol */
 .hero-text:hover .hero-title {
@@ -862,7 +1333,10 @@
     border-color: var(--primary-light);
 }
 
-/* Effet de particules subtiles au survol (optionnel) */
+/* =================================
+   EFFET DE PARTICULES SUBTILES
+================================= */
+
 .hero-text.hover-particles::before {
     background: 
         radial-gradient(circle at 20% 30%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
@@ -880,6 +1354,10 @@
         transform: scale(1.02) translateY(-2px);
     }
 }
+
+/* =================================
+   INTERACTION AVEC ICÔNES ARRIÈRE-PLAN
+================================= */
 
 /* Animation d'interaction avec les icônes en arrière-plan */
 .hero-text:hover ~ .hero-visual .graphic-element,
@@ -928,6 +1406,61 @@
     50% {
         transform: scale(1.02);
     }
+}
+
+/* =================================
+   ACCESSIBILITÉ
+================================= */
+
+/* Modes d'accessibilité - Réduction de mouvement */
+@media (prefers-reduced-motion: reduce) {
+    .fade-in-up,
+    .graphic-element,
+    .hero-text.hover-effect::after,
+    .hero-text.hover-effect::before {
+        opacity: 1;
+        transform: none;
+        transition: none;
+        animation: none;
+    }
+    
+    /* Simplifier les effets de survol pour les utilisateurs sensibles au mouvement */
+    .hero-text:hover {
+        transform: none;
+    }
+    
+    .hero-text::before {
+        transform: none;
+    }
+    
+    .hero-text:hover::before {
+        transform: none;
+    }
+    
+    .hero-text:hover .hero-actions .btn {
+        transform: none;
+    }
+    
+    .hero-visual.text-hovered .graphic-element {
+        transform: none;
+        animation: none;
+    }
+    
+    .hero-visual.text-hovered .hero-graphic {
+        animation: none;
+    }
+}
+
+/* Mode focus pour l'accessibilité clavier */
+.hero-text:focus-within {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 4px;
+    border-radius: var(--radius-lg);
+}
+
+.hero-text:focus-within::before {
+    opacity: 0.7;
+    transform: scale(1);
 }
 
 /* =================================
