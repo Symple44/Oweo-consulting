@@ -54,7 +54,7 @@ class ContactPage extends BasePage {
         return `
             <div class="page-container contact-page">
                 <!-- Page Header -->
-                <section class="page-header contact-header">
+                <section class="page-header">
                     <div class="container">
                         <div class="page-breadcrumb">
                             <a href="#" data-page="home">Accueil</a>
@@ -82,7 +82,7 @@ class ContactPage extends BasePage {
                 </section>
                 
                 <!-- Contact Main -->
-                <section class="contact-main">
+                <section class="section">
                     <div class="container">
                         <div class="contact-grid">
                             <!-- Formulaire de contact -->
@@ -193,7 +193,7 @@ class ContactPage extends BasePage {
                                                        name="consent"
                                                        required>
                                                 <span class="checkmark"></span>
-                                                J'accepte d'être contacté par Oweo concernant ma demande *
+                                                <span>J'accepte d'être contacté par Oweo concernant ma demande *</span>
                                             </label>
                                             <div class="field-error" id="consent-error"></div>
                                         </div>
@@ -204,14 +204,14 @@ class ContactPage extends BasePage {
                                                        id="contact-newsletter" 
                                                        name="newsletter">
                                                 <span class="checkmark"></span>
-                                                Je souhaite recevoir les actualités et conseils d'Oweo
+                                                <span>Je souhaite recevoir les actualités et conseils d'Oweo</span>
                                             </label>
                                         </div>
                                     </div>
                                     
                                     <div class="form-actions">
                                         <button type="submit" 
-                                                class="btn btn-primary btn-lg btn-block" 
+                                                class="btn btn-primary btn-lg" 
                                                 id="contact-submit">
                                             <i class="fas fa-paper-plane"></i>
                                             Envoyer le message
@@ -288,9 +288,9 @@ class ContactPage extends BasePage {
                                             <a href="${this.contactInfo.urls.linkedin}" 
                                                class="social-link" 
                                                target="_blank" 
-                                               rel="noopener">
+                                               rel="noopener"
+                                               title="LinkedIn">
                                                 <i class="fab fa-linkedin-in"></i>
-                                                <span>LinkedIn</span>
                                             </a>
                                         </div>
                                     ` : ''}
@@ -300,7 +300,7 @@ class ContactPage extends BasePage {
                                     <h3>Rendez-vous en ligne</h3>
                                     <p>Planifiez directement un créneau pour échanger avec nos experts.</p>
                                     
-                                    <button class="btn btn-outline btn-block" id="calendly-btn">
+                                    <button class="btn btn-primary btn-block" id="calendly-btn">
                                         <i class="fas fa-calendar-alt"></i>
                                         Réserver un créneau
                                     </button>
@@ -331,7 +331,7 @@ class ContactPage extends BasePage {
                                             <span>Analyse de l'existant</span>
                                         </div>
                                         <div class="feature-item">
-                                            <i class="fas fa-target"></i>
+                                            <i class="fas fa-bullseye"></i>
                                             <span>Identification des gains</span>
                                         </div>
                                         <div class="feature-item">
@@ -351,7 +351,7 @@ class ContactPage extends BasePage {
                 </section>
                 
                 <!-- FAQ Section -->
-                <section class="contact-faq">
+                <section class="section section-sm">
                     <div class="container">
                         <div class="section-header">
                             <h2 class="section-title fade-in-up">Questions fréquentes</h2>
@@ -414,10 +414,13 @@ class ContactPage extends BasePage {
         super.bindEvents();
         
         // Navigation
-        this.addDelegatedHandler('[data-page]', 'click', (e) => {
-            e.preventDefault();
-            const page = e.target.closest('[data-page]').dataset.page;
-            this.navigateTo(page);
+        const pageLinks = document.querySelectorAll('[data-page]');
+        pageLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = link.dataset.page;
+                this.navigateTo(page);
+            });
         });
         
         // Formulaire de contact
@@ -587,6 +590,7 @@ class ContactPage extends BasePage {
         
         // UI de chargement
         submitBtn.disabled = true;
+        submitBtn.classList.add('loading');
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
         
         try {
@@ -615,6 +619,7 @@ class ContactPage extends BasePage {
             
             // Erreur
             submitBtn.disabled = false;
+            submitBtn.classList.remove('loading');
             submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer le message';
             
             if (window.notifications) {
