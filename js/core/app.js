@@ -1,5 +1,5 @@
 // ========================================
-// js/core/app.js - Application principale 
+// js/core/app.js - Application principale CORRIGÉE
 // ========================================
 
 class OweoApp {
@@ -112,13 +112,31 @@ class OweoApp {
             this.router.register('services', new ServicesPage());
         }
         
-        // Pages démo
+        // ⭐ NOUVEAU : Page catalogue des démos
+        if (typeof DemosPage !== 'undefined') {
+            this.router.register('demos', new DemosPage());
+        }
+        
+        // Pages démo individuelles
         if (typeof ChiffrageDemo !== 'undefined') {
             this.router.register('chiffrage-demo', new ChiffrageDemo());
         }
         
         if (typeof DSTVDemo !== 'undefined') {
             this.router.register('dstv-demo', new DSTVDemo());
+        }
+        
+        // Pages légales (si elles existent)
+        if (typeof LegalPage !== 'undefined') {
+            this.router.register('legal', new LegalPage());
+            this.router.register('privacy', new LegalPage());
+            this.router.register('terms', new LegalPage());
+            this.router.register('cookies', new LegalPage());
+        }
+        
+        // Page de contact (si elle existe)
+        if (typeof ContactPage !== 'undefined') {
+            this.router.register('contact', new ContactPage());
         }
     }
     
@@ -142,7 +160,7 @@ class OweoApp {
     handleRouteChange(route) {
         this.currentPage = route.path;
         
-        // Vérifier si c'est une démo
+        // Vérifier si c'est une démo individuelle (pas la page catalogue)
         const isDemoPage = route.path.includes('-demo');
         
         if (isDemoPage !== this.isDemoMode) {
@@ -154,6 +172,7 @@ class OweoApp {
         this.eventBus.emit('routeChanged', {
             route: route.path,
             isDemoMode: this.isDemoMode,
+            isDemosPage: route.path === 'demos', // Distinguer la page catalogue
             ...route
         });
     }
