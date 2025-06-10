@@ -41,28 +41,6 @@
     pointer-events: none;
 }
 
-.contact-page .page-breadcrumb {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-2);
-    margin-bottom: var(--space-6);
-    font-size: 0.875rem;
-    color: var(--text-muted);
-    position: relative;
-    z-index: 2;
-}
-
-.contact-page .page-breadcrumb a {
-    color: var(--primary-color);
-    text-decoration: none;
-    transition: color var(--transition-base);
-}
-
-.contact-page .page-breadcrumb a:hover {
-    color: var(--primary-light);
-    text-decoration: underline;
-}
 
 .contact-page .page-title {
     font-size: clamp(2.5rem, 5vw, 3.5rem);

@@ -1,5 +1,5 @@
 // ========================================
-// js/pages/contact.js - Page de contact
+// js/pages/contact.js - Page de contact (CORRIGÉE)
 // ========================================
 
 class ContactPage extends BasePage {
@@ -37,6 +37,7 @@ class ContactPage extends BasePage {
                 phoneFormatted: '06 86 76 81 31'
             },
             address: {
+                city: 'Nantes',
                 full: 'Nantes, France'
             },
             businessHours: {
@@ -46,7 +47,15 @@ class ContactPage extends BasePage {
             urls: {
                 calendly: 'https://calendly.com/nicolas-dubain/30min',
                 linkedin: 'https://linkedin.com/company/oweo-consulting'
-            }
+            },
+            social: {
+                linkedin: 'https://linkedin.com/company/oweo-consulting'
+            },
+            // Méthodes utilitaires fallback
+            getFormattedPhone: function() { return this.contact.phoneFormatted; },
+            getContactEmail: function() { return this.contact.email; },
+            getCalendlyUrl: function() { return this.urls.calendly; },
+            getFullAddress: function() { return this.address.full; }
         };
     }
     
@@ -69,13 +78,13 @@ class ContactPage extends BasePage {
                         </p>
                         
                         <div class="contact-quick-actions fade-in-up">
-                            <button class="btn btn-primary btn-lg" id="schedule-call-btn">
+                            <button type="button" class="btn btn-primary btn-lg" id="schedule-call-btn">
                                 <i class="fas fa-calendar"></i>
                                 Planifier un appel
                             </button>
-                            <a href="tel:${this.contactInfo.contact.phone}" class="btn btn-outline btn-lg" onclick="event.stopPropagation();">
+                            <a href="tel:${this.contactInfo.contact.phone}" class="btn btn-outline btn-lg" id="phone-link">
                                 <i class="fas fa-phone"></i>
-                                ${this.contactInfo.contact.phoneFormatted}
+                                ${this.contactInfo.getFormattedPhone ? this.contactInfo.getFormattedPhone() : this.contactInfo.contact.phoneFormatted}
                             </a>
                         </div>
                     </div>
@@ -240,8 +249,8 @@ class ContactPage extends BasePage {
                                             </div>
                                             <div class="method-content">
                                                 <div class="method-label">Email</div>
-                                                <a href="mailto:${this.contactInfo.contact.email}" class="method-value" onclick="event.stopPropagation();">
-                                                    ${this.contactInfo.contact.email}
+                                                <a href="mailto:${this.contactInfo.getContactEmail ? this.contactInfo.getContactEmail() : this.contactInfo.contact.email}" class="method-value email-link">
+                                                    ${this.contactInfo.getContactEmail ? this.contactInfo.getContactEmail() : this.contactInfo.contact.email}
                                                 </a>
                                             </div>
                                         </div>
@@ -252,8 +261,8 @@ class ContactPage extends BasePage {
                                             </div>
                                             <div class="method-content">
                                                 <div class="method-label">Téléphone</div>
-                                                <a href="tel:${this.contactInfo.contact.phone}" class="method-value" onclick="event.stopPropagation();">
-                                                    ${this.contactInfo.contact.phoneFormatted}
+                                                <a href="tel:${this.contactInfo.contact.phone}" class="method-value phone-link">
+                                                    ${this.contactInfo.getFormattedPhone ? this.contactInfo.getFormattedPhone() : this.contactInfo.contact.phoneFormatted}
                                                 </a>
                                             </div>
                                         </div>
@@ -264,7 +273,7 @@ class ContactPage extends BasePage {
                                             </div>
                                             <div class="method-content">
                                                 <div class="method-label">Localisation</div>
-                                                <div class="method-value">${this.contactInfo.address.full}</div>
+                                                <div class="method-value">${this.contactInfo.getFullAddress ? this.contactInfo.getFullAddress() : this.contactInfo.address.full}</div>
                                             </div>
                                         </div>
                                         
@@ -282,69 +291,19 @@ class ContactPage extends BasePage {
                                         </div>
                                     </div>
                                     
-                                    ${this.contactInfo.urls.linkedin ? `
+                                    ${(this.contactInfo.social?.linkedin || this.contactInfo.urls?.linkedin) ? `
                                         <div class="social-links">
                                             <h4>Suivez-nous</h4>
-                                            <a href="${this.contactInfo.urls.linkedin}" 
+                                            <a href="${this.contactInfo.social?.linkedin || this.contactInfo.urls.linkedin}" 
                                                class="social-link" 
                                                target="_blank" 
                                                rel="noopener"
                                                title="LinkedIn"
-                                               onclick="event.stopPropagation();">
+                                               id="linkedin-link">
                                                 <i class="fab fa-linkedin-in"></i>
                                             </a>
                                         </div>
                                     ` : ''}
-                                </div>
-                                
-                                <div class="contact-card">
-                                    <h3>Rendez-vous en ligne</h3>
-                                    <p>Planifiez directement un créneau pour échanger avec nos experts.</p>
-                                    
-                                    <button class="btn btn-primary btn-block" id="calendly-btn">
-                                        <i class="fas fa-calendar-alt"></i>
-                                        Réserver un créneau
-                                    </button>
-                                    
-                                    <div class="calendly-info">
-                                        <div class="info-item">
-                                            <i class="fas fa-clock"></i>
-                                            <span>30 minutes</span>
-                                        </div>
-                                        <div class="info-item">
-                                            <i class="fas fa-video"></i>
-                                            <span>Visioconférence</span>
-                                        </div>
-                                        <div class="info-item">
-                                            <i class="fas fa-gift"></i>
-                                            <span>Gratuit</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="contact-card">
-                                    <h3>Diagnostic gratuit</h3>
-                                    <p>Bénéficiez d'un audit gratuit de vos processus actuels.</p>
-                                    
-                                    <div class="diagnostic-features">
-                                        <div class="feature-item">
-                                            <i class="fas fa-search"></i>
-                                            <span>Analyse de l'existant</span>
-                                        </div>
-                                        <div class="feature-item">
-                                            <i class="fas fa-bullseye"></i>
-                                            <span>Identification des gains</span>
-                                        </div>
-                                        <div class="feature-item">
-                                            <i class="fas fa-map"></i>
-                                            <span>Roadmap personnalisée</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <button class="btn btn-primary btn-block" onclick="event.preventDefault(); contactPageInstance.requestDiagnostic()">
-                                        <i class="fas fa-play"></i>
-                                        Demander un diagnostic
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -389,18 +348,18 @@ class ContactPage extends BasePage {
                 answer: "Absolument ! Nos solutions s'adaptent aux entreprises de toutes tailles, de la PME à la grande entreprise."
             },
             {
-                question: "Puis-je tester vos solutions ?",
-                answer: "Oui, utilisez le code DEMO-CLIENT pour accéder à nos démonstrations interactives."
+                question: "Comment prendre rendez-vous ?",
+                answer: `Vous pouvez planifier un rendez-vous directement via notre calendrier en ligne ou nous appeler au ${this.contactInfo.contact.phoneFormatted}. Nous sommes disponibles ${this.contactInfo.businessHours.days} de ${this.contactInfo.businessHours.hours}.`
             },
             {
-                question: "Offrez-vous un support technique ?",
-                answer: "Nous proposons plusieurs niveaux de support, du support de base au support premium 24h/24."
+                question: "Intervenez-vous dans toute la France ?",
+                answer: `Basés à ${this.contactInfo.address.city}, nous intervenons sur toute la France métropolitaine. Nos solutions peuvent être déployées à distance et nos équipes se déplacent selon les besoins du projet.`
             }
         ];
         
         return faqs.map((faq, index) => `
             <div class="faq-item fade-in-up">
-                <button class="faq-question" onclick="event.preventDefault(); contactPageInstance.toggleFAQ(${index})">
+                <button type="button" class="faq-question" data-faq-index="${index}">
                     <span>${faq.question}</span>
                     <i class="fas fa-chevron-down"></i>
                 </button>
@@ -414,7 +373,10 @@ class ContactPage extends BasePage {
     bindEvents() {
         super.bindEvents();
         
-        // Navigation - Éviter le scroll automatique
+        // CORRECTION PRINCIPALE : Empêcher le scroll automatique sur focus des inputs
+        this.preventAutoScroll();
+        
+        // Navigation
         const pageLinks = document.querySelectorAll('[data-page]');
         pageLinks.forEach(link => {
             link.addEventListener('click', (e) => {
@@ -448,21 +410,44 @@ class ContactPage extends BasePage {
             });
         }
         
-        const calendlyBtn = document.getElementById('calendly-btn');
-        if (calendlyBtn) {
-            calendlyBtn.addEventListener('click', (e) => {
-                e.preventDefault();
+        // Liens de contact
+        const phoneLinks = document.querySelectorAll('.phone-link, #phone-link');
+        phoneLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
                 e.stopPropagation();
-                this.openCalendly();
+                this.trackPhoneClick();
+            });
+        });
+        
+        const emailLinks = document.querySelectorAll('.email-link');
+        emailLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.trackEmailClick();
+            });
+        });
+        
+        // LinkedIn
+        const linkedinLink = document.getElementById('linkedin-link');
+        if (linkedinLink) {
+            linkedinLink.addEventListener('click', (e) => {
+                e.stopPropagation();
             });
         }
         
-        // Analytics pour les liens de contact
-        this.trackContactLinks();
+        // FAQ
+        const faqButtons = document.querySelectorAll('.faq-question');
+        faqButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const index = button.dataset.faqIndex;
+                this.toggleFAQ(index);
+            });
+        });
         
-        // Empêcher les liens vides de faire remonter la page
-        const emptyLinks = document.querySelectorAll('a[href="#"], a[href=""]');
-        emptyLinks.forEach(link => {
+        // Empêcher tous les liens vides de faire remonter la page
+        document.querySelectorAll('a[href="#"], a[href=""]').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -470,13 +455,72 @@ class ContactPage extends BasePage {
         });
     }
     
+    // NOUVELLE MÉTHODE : Empêcher le scroll automatique sur focus
+    preventAutoScroll() {
+        // Sauvegarder la position actuelle avant le focus
+        let scrollPosition = 0;
+        
+        // Pour tous les éléments de formulaire
+        const formElements = document.querySelectorAll(
+            'input, textarea, select, button:not([type="submit"])'
+        );
+        
+        formElements.forEach(element => {
+            // Avant le focus, sauvegarder la position
+            element.addEventListener('focus', (e) => {
+                scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+                
+                // Empêcher le comportement par défaut pour les select
+                if (element.tagName === 'SELECT') {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            
+            // Après le focus, restaurer la position
+            element.addEventListener('focus', () => {
+                // Utiliser requestAnimationFrame pour s'assurer que c'est après le scroll automatique
+                requestAnimationFrame(() => {
+                    window.scrollTo({
+                        top: scrollPosition,
+                        behavior: 'instant'
+                    });
+                });
+            });
+            
+            // Pour les select, gérer aussi le changement
+            if (element.tagName === 'SELECT') {
+                element.addEventListener('mousedown', (e) => {
+                    scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+                });
+                
+                element.addEventListener('change', () => {
+                    requestAnimationFrame(() => {
+                        window.scrollTo({
+                            top: scrollPosition,
+                            behavior: 'instant'
+                        });
+                    });
+                });
+            }
+        });
+    }
+    
     handleFormSubmit(e) {
         e.preventDefault();
+        e.stopPropagation();
         
         if (this.formState.isSubmitting) return;
         
+        // Sauvegarder la position actuelle
+        const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        
         // Validation complète
         if (!this.validateForm()) {
+            // Restaurer la position après validation
+            window.scrollTo({
+                top: currentScroll,
+                behavior: 'instant'
+            });
             return;
         }
         
@@ -605,6 +649,9 @@ class ContactPage extends BasePage {
         const form = document.getElementById('contact-form');
         const successDiv = document.getElementById('form-success');
         
+        // Sauvegarder la position actuelle
+        const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        
         this.formState.isSubmitting = true;
         
         // UI de chargement
@@ -630,8 +677,10 @@ class ContactPage extends BasePage {
             // Analytics
             this.trackFormSubmission();
             
-            // Scroll vers le succès
-            successDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // Scroll vers le succès de manière contrôlée
+            setTimeout(() => {
+                successDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
             
         } catch (error) {
             console.error('Erreur envoi formulaire:', error);
@@ -644,6 +693,12 @@ class ContactPage extends BasePage {
             if (window.notifications) {
                 window.notifications.error('Erreur lors de l\'envoi. Veuillez réessayer.');
             }
+            
+            // Restaurer la position
+            window.scrollTo({
+                top: currentScroll,
+                behavior: 'instant'
+            });
             
         } finally {
             this.formState.isSubmitting = false;
@@ -661,7 +716,7 @@ class ContactPage extends BasePage {
     }
     
     openCalendly() {
-        const calendlyUrl = this.contactInfo.urls?.calendly || 'https://calendly.com/nicolas-dubain/30min';
+        const calendlyUrl = this.contactInfo.getCalendlyUrl ? this.contactInfo.getCalendlyUrl() : (this.contactInfo.urls?.calendly || 'https://calendly.com/nicolas-dubain/30min');
         
         if (typeof window.Calendly !== 'undefined') {
             window.Calendly.initPopupWidget({
@@ -679,40 +734,15 @@ class ContactPage extends BasePage {
         this.trackCalendlyOpen();
     }
     
-    requestDiagnostic() {
-        // Pré-remplir le formulaire pour un diagnostic
-        const subjectSelect = document.getElementById('contact-subject');
-        const messageTextarea = document.getElementById('contact-message');
-        
-        if (subjectSelect) {
-            subjectSelect.value = 'diagnostic';
-        }
-        
-        if (messageTextarea && !messageTextarea.value.trim()) {
-            messageTextarea.value = 'Je souhaite bénéficier du diagnostic gratuit pour analyser mes processus actuels et identifier les axes d\'amélioration.';
-        }
-        
-        // Scroll vers le formulaire
-        const form = document.getElementById('contact-form');
-        if (form) {
-            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-        
-        // Focus sur le nom
-        const nameInput = document.getElementById('contact-name');
-        if (nameInput) {
-            setTimeout(() => {
-                nameInput.focus({ preventScroll: true });
-            }, 500);
-        }
-    }
-    
     toggleFAQ(index) {
         const answer = document.getElementById(`faq-answer-${index}`);
-        const question = answer.previousElementSibling;
-        const icon = question.querySelector('i');
+        const button = document.querySelector(`[data-faq-index="${index}"]`);
+        const icon = button.querySelector('i');
         
         const isOpen = answer.classList.contains('open');
+        
+        // Sauvegarder la position actuelle
+        const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
         
         // Fermer toutes les autres FAQ
         document.querySelectorAll('.faq-answer').forEach(el => {
@@ -726,34 +756,30 @@ class ContactPage extends BasePage {
             answer.classList.add('open');
             icon.classList.add('rotate');
         }
+        
+        // Restaurer la position
+        window.scrollTo({
+            top: currentScroll,
+            behavior: 'instant'
+        });
     }
     
-    trackContactLinks() {
-        // Track email clicks
-        const emailLinks = document.querySelectorAll('a[href^="mailto:"]');
-        emailLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.AppConfig?.analytics?.enabled && typeof gtag !== 'undefined') {
-                    gtag('event', 'contact_email_clicked', {
-                        event_category: 'contact',
-                        event_label: 'contact_page'
-                    });
-                }
+    trackPhoneClick() {
+        if (window.AppConfig?.analytics?.enabled && typeof gtag !== 'undefined') {
+            gtag('event', 'contact_phone_clicked', {
+                event_category: 'contact',
+                event_label: 'contact_page'
             });
-        });
-        
-        // Track phone clicks
-        const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
-        phoneLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.AppConfig?.analytics?.enabled && typeof gtag !== 'undefined') {
-                    gtag('event', 'contact_phone_clicked', {
-                        event_category: 'contact',
-                        event_label: 'contact_page'
-                    });
-                }
+        }
+    }
+    
+    trackEmailClick() {
+        if (window.AppConfig?.analytics?.enabled && typeof gtag !== 'undefined') {
+            gtag('event', 'contact_email_clicked', {
+                event_category: 'contact',
+                event_label: 'contact_page'
             });
-        });
+        }
     }
     
     trackFormSubmission() {
@@ -777,7 +803,6 @@ class ContactPage extends BasePage {
     
     navigateTo(page) {
         if (window.app && window.app.router) {
-            // Empêcher le scroll automatique
             window.scrollTo({ top: 0, behavior: 'auto' });
             window.app.router.navigate(page);
         }
@@ -791,13 +816,6 @@ class ContactPage extends BasePage {
         
         // Pré-remplir depuis les paramètres URL
         this.prefillFromURL();
-        
-        // Empêcher le comportement par défaut des ancres vides
-        document.addEventListener('click', (e) => {
-            if (e.target.tagName === 'A' && (e.target.getAttribute('href') === '#' || e.target.getAttribute('href') === '')) {
-                e.preventDefault();
-            }
-        });
     }
     
     prefillFromURL() {
