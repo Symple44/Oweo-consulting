@@ -32,6 +32,9 @@
 
     <!-- Icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Widget Calendly -->
+    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
 </head>
 <body>
     <!-- Navigation -->
@@ -119,7 +122,11 @@
     <script src="js/config/demo-config.js"></script>
     <script src="js/config/app-config.js"></script>
     
-    <!-- 9. App Initialization -->
+    <!-- 9. Services externes -->
+    <!-- Widget Calendly - Chargé de manière asynchrone -->
+    <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+    
+    <!-- 10. App Initialization -->
     <script>
         // Initialisation de l'application
         document.addEventListener('DOMContentLoaded', () => {
@@ -141,6 +148,19 @@
                 }
                 
                 console.log('✅ All dependencies loaded');
+                
+                // Vérifier le chargement de Calendly (non bloquant)
+                const checkCalendly = () => {
+                    if (typeof window.Calendly !== 'undefined') {
+                        console.log('✅ Calendly widget loaded');
+                    } else {
+                        console.warn('⚠️ Calendly widget not loaded yet (fallback available)');
+                    }
+                };
+                
+                // Vérifier immédiatement et après un délai
+                checkCalendly();
+                setTimeout(checkCalendly, 2000);
                 
                 // Initialiser l'application
                 if (typeof window.OweoApp !== 'undefined') {
@@ -213,6 +233,36 @@
                     </style>
                 `;
             }
+        });
+        
+        // Gestionnaire global pour les erreurs Calendly
+        window.addEventListener('error', (event) => {
+            if (event.filename && event.filename.includes('calendly')) {
+                console.warn('Calendly script error (non-critical):', event.message);
+                // Ne pas bloquer l'application pour les erreurs Calendly
+                event.preventDefault();
+            }
+        });
+        
+        // Configuration Calendly une fois chargé
+        window.addEventListener('load', () => {
+            // Attendre que Calendly soit disponible
+            const waitForCalendly = (retries = 10) => {
+                if (typeof window.Calendly !== 'undefined') {
+                    console.log('🗓️ Calendly widget ready');
+                    
+                    // Configuration optionnelle du widget
+                    if (window.AppConfig && window.AppConfig.external && window.AppConfig.external.calendly) {
+                        window.AppConfig.external.calendly.loaded = true;
+                    }
+                } else if (retries > 0) {
+                    setTimeout(() => waitForCalendly(retries - 1), 500);
+                } else {
+                    console.warn('⚠️ Calendly widget could not be loaded, fallback will be used');
+                }
+            };
+            
+            waitForCalendly();
         });
     </script>
 </body>
