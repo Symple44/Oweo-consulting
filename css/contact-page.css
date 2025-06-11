@@ -1,5 +1,5 @@
 /* ========================================
-   css/contact-page.css - Styles pour la page de contact
+   css/contact-page.css - Styles pour la page de contact (HARMONISÉ)
    ======================================== */
 
 /* Container principal */
@@ -41,7 +41,6 @@
     pointer-events: none;
 }
 
-
 .contact-page .page-title {
     font-size: clamp(2.5rem, 5vw, 3.5rem);
     font-weight: var(--font-weight-black);
@@ -79,12 +78,15 @@
     align-items: start;
 }
 
-/* Section formulaire */
+/* ========================================
+   SECTION FORMULAIRE - Style harmonisé avec service-card
+   ======================================== */
 .contact-form-section {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-xl);
     padding: var(--space-8);
+    transition: all var(--transition-base);
     position: relative;
     overflow: hidden;
 }
@@ -97,8 +99,21 @@
     right: 0;
     height: 4px;
     background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    transform: scaleX(0);
+    transition: transform var(--transition-base);
 }
 
+.contact-form-section:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary-color);
+}
+
+.contact-form-section:hover::before {
+    transform: scaleX(1);
+}
+
+/* Header du formulaire */
 .form-header {
     text-align: center;
     margin-bottom: var(--space-8);
@@ -139,51 +154,24 @@
     font-size: 0.9rem;
 }
 
-/* Correction supplémentaire pour Firefox et autres navigateurs */
+/* Contrôles de formulaire */
 .form-control {
     width: 100%;
     padding: var(--space-4);
     border: 2px solid var(--border-color);
     border-radius: var(--radius-lg);
-    background-color: var(--bg-input); /* Ajout explicite de background-color */
+    background-color: var(--bg-input);
     color: var(--text-primary);
     font-size: 1rem;
     transition: all 0.3s ease;
     font-family: inherit;
 }
 
-/* Force le background sombre pour tous les navigateurs */
 input.form-control,
 textarea.form-control,
 select.form-control {
     background-color: rgba(255, 255, 255, 0.1) !important;
     color: var(--text-primary) !important;
-}
-
-/* Correction spécifique pour les selects */
-select.form-control {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-}
-
-/* Forcer le style sombre pour les selects sur tous les navigateurs */
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-    select.form-control {
-        background-color: rgba(22, 33, 62, 0.95) !important;
-    }
-}
-
-/* Fix supplémentaire pour éviter les backgrounds blancs */
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active,
-select:-webkit-autofill,
-select:-webkit-autofill:hover,
-select:-webkit-autofill:focus,
-select:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px rgba(22, 33, 62, 0.95) inset !important;
-    -webkit-text-fill-color: var(--text-primary) !important;
 }
 
 .form-control:focus {
@@ -221,15 +209,26 @@ select.form-control {
     color: var(--text-primary);
 }
 
-/* Fix pour les options du select */
 select.form-control option {
     background-color: #1a1a2e;
     color: #ffffff;
 }
 
-/* Fix pour le select au focus */
 select.form-control:focus {
     background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Autofill fixes */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus,
+select:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px rgba(22, 33, 62, 0.95) inset !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
 }
 
 /* Erreurs */
@@ -258,10 +257,6 @@ select.form-control:focus {
     cursor: pointer;
     accent-color: var(--primary-color);
     flex-shrink: 0;
-}
-
-.checkmark {
-    display: none; /* Simplification - utilisation du checkbox natif avec accent-color */
 }
 
 /* Actions du formulaire */
@@ -309,7 +304,9 @@ select.form-control:focus {
     margin: 0;
 }
 
-/* Section informations */
+/* ========================================
+   SECTION INFORMATIONS - Style harmonisé avec service-card
+   ======================================== */
 .contact-info-section {
     display: flex;
     flex-direction: column;
@@ -321,6 +318,7 @@ select.form-control:focus {
     border: 1px solid var(--border-color);
     border-radius: var(--radius-xl);
     padding: var(--space-8);
+    transition: all var(--transition-base);
     position: relative;
     overflow: hidden;
 }
@@ -333,6 +331,18 @@ select.form-control:focus {
     right: 0;
     height: 4px;
     background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+    transform: scaleX(0);
+    transition: transform var(--transition-base);
+}
+
+.contact-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--secondary-color);
+}
+
+.contact-card:hover::before {
+    transform: scaleX(1);
 }
 
 .contact-card h3 {
@@ -446,50 +456,6 @@ select.form-control:focus {
     transform: translateY(-2px);
 }
 
-/* Info Calendly */
-.calendly-info {
-    display: flex;
-    justify-content: space-between;
-    margin-top: var(--space-4);
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--border-light);
-}
-
-.info-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-1);
-    font-size: 0.875rem;
-    color: var(--text-muted);
-}
-
-.info-item i {
-    color: var(--primary-color);
-}
-
-/* Fonctionnalités diagnostic */
-.diagnostic-features {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    margin-bottom: var(--space-6);
-}
-
-.feature-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-}
-
-.feature-item i {
-    color: var(--success-color);
-    width: 20px;
-    text-align: center;
-}
-
 /* Section FAQ */
 .faq-grid {
     display: grid;
@@ -600,6 +566,12 @@ select.form-control:focus {
         padding: var(--space-6);
     }
     
+    /* Désactiver l'effet de hover sur mobile */
+    .contact-form-section:hover,
+    .contact-card:hover {
+        transform: none;
+    }
+    
     .form-grid {
         grid-template-columns: 1fr;
         gap: var(--space-3);
@@ -662,5 +634,322 @@ select.form-control:focus {
     
     .faq-answer.open {
         padding: var(--space-3);
+    }
+}
+
+/* ========================================
+   Améliorations CSS supplémentaires pour contact-page.css
+   ======================================== */
+
+/* Effet de brillance sur les cartes (comme dans services) */
+.contact-form-section::after,
+.contact-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.05),
+        transparent
+    );
+    transition: left 0.6s ease;
+    pointer-events: none;
+}
+
+.contact-form-section:hover::after,
+.contact-card:hover::after {
+    left: 100%;
+}
+
+/* Amélioration des icônes de méthode de contact */
+.method-icon {
+    position: relative;
+    overflow: hidden;
+}
+
+.method-icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+.contact-method:hover .method-icon::after {
+    width: 100px;
+    height: 100px;
+}
+
+/* Amélioration des boutons du formulaire */
+#contact-submit {
+    position: relative;
+    overflow: hidden;
+}
+
+#contact-submit::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+#contact-submit:hover::before {
+    left: 100%;
+}
+
+/* Amélioration de l'animation des FAQ */
+.faq-item {
+    position: relative;
+}
+
+.faq-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--primary-color);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.faq-item:hover::before {
+    transform: scaleY(1);
+}
+
+/* Animation de pulsation pour les éléments importants */
+@keyframes pulse-glow {
+    0% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(0, 212, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0); }
+}
+
+.contact-quick-actions .btn-primary {
+    animation: pulse-glow 2s infinite;
+}
+
+/* Amélioration de la transition des champs de formulaire */
+.form-control {
+    position: relative;
+}
+
+.form-control:focus {
+    transform: translateY(-2px);
+}
+
+/* Indicateur visuel pour les champs requis */
+.form-group label:has(+ [required])::after {
+    content: ' *';
+    color: var(--error-color);
+}
+
+/* Style amélioré pour le message de succès */
+.form-success {
+    position: relative;
+    overflow: hidden;
+}
+
+.form-success::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+    animation: rotate 10s linear infinite;
+}
+
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Amélioration de l'accessibilité */
+.contact-page *:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+/* État de chargement amélioré */
+.btn.loading {
+    position: relative;
+}
+
+.btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+    to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   Statut ouvert/fermé pour la page contact
+   ======================================== */
+
+/* Conteneur du statut */
+.business-status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* Indicateur de statut */
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulse 2s infinite;
+}
+
+/* Statut ouvert */
+.business-status.open {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    color: #10b981;
+}
+
+.business-status.open .status-indicator {
+    background: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+/* Statut fermé */
+.business-status.closed {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+
+.business-status.closed .status-indicator {
+    background: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+    animation: none;
+}
+
+/* Animation de pulsation pour le statut ouvert */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
+
+/* Message de statut */
+.status-message {
+    display: block;
+    margin-top: var(--space-2);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* Ajustement pour la méthode de contact avec statut */
+.contact-method .business-status {
+    margin-left: 0;
+    display: flex;
+}
+
+/* Tooltip optionnel pour plus d'infos */
+.business-status[data-tooltip] {
+    position: relative;
+    cursor: help;
+}
+
+.business-status[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    font-size: 0.75rem;
+    white-space: nowrap;
+    z-index: 1000;
+    margin-bottom: var(--space-2);
+    box-shadow: var(--shadow-lg);
+    animation: fadeIn 0.2s ease-out;
+}
+
+/* Version alternative avec badge */
+.status-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-card);
+    z-index: 10;
+}
+
+.status-badge.open {
+    background: #10b981;
+    animation: pulse 2s infinite;
+}
+
+.status-badge.closed {
+    background: #ef4444;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .business-status {
+        font-size: 0.8rem;
+        padding: var(--space-1) var(--space-2);
+    }
+    
+    .status-indicator {
+        width: 6px;
+        height: 6px;
+    }
+}
+
+/* Mode impression - masquer le statut */
+@media print {
+    .business-status {
+        display: none;
     }
 }

@@ -1,5 +1,5 @@
 // ========================================
-// js/config/company-info.js - Informations centralisées de l'entreprise
+// js/config/company-info.js - Informations centralisées de l'entreprise 
 // ========================================
 
 /**
@@ -17,16 +17,33 @@ window.CompanyInfo = {
         email: 'contact@oweo-consulting.fr',
         phone: '+33 6 86 76 81 31',
         phoneFormatted: '06 86 76 81 31',
-        phoneDisplay: '06 86 76 81 31'
+        phoneDisplay: '06 86 76 81 31',
+        phoneInternational: '+33686768131'
+    },
+    
+    // Contact commercial
+    sales: {
+        email: 'commercial@oweo-consulting.fr',
+        phone: '+33 6 86 76 81 31',
+        phoneFormatted: '06 86 76 81 31'
+    },
+    
+    // Support technique
+    support: {
+        email: 'support@oweo-consulting.fr',
+        phone: '+33 6 86 76 81 31',
+        phoneFormatted: '06 86 76 81 31'
     },
     
     // Adresse
     address: {
-        street: null, // À définir si nécessaire
+        street: '10 Rue du sous bois',
         city: 'Nantes',
-        postalCode: null,
+        postalCode: '44700',
         country: 'France',
-        full: 'Nantes, France'
+        region: 'Pays de la Loire',
+        full: 'Nantes, France',
+        complete: '10 Rue du sous bois, 44700 Orvault, France'
     },
     
     // URLs et liens
@@ -35,32 +52,85 @@ window.CompanyInfo = {
         calendly: 'https://calendly.com/nicolas-dubain/30min',
         linkedin: 'https://linkedin.com/company/oweo-consulting',
         
-        // Sous-domaines (si utilisés)
+        // Sous-domaines
         support: 'https://support.oweo-consulting.fr',
         docs: 'https://docs.oweo-consulting.fr',
-        blog: 'https://blog.oweo-consulting.fr'
+        blog: 'https://blog.oweo-consulting.fr',
+        
+        // Liens de téléchargement
+        brochure: '/assets/docs/Oweo-Solutions-ERP-Metallique.pdf',
+        
+        // Politique et légal
+        privacy: '/privacy',
+        terms: '/terms',
+        legal: '/legal',
+        cookies: '/cookies'
     },
     
-    // Horaires
+    // Horaires d'ouverture
     businessHours: {
         days: 'Lundi - Vendredi',
         hours: '8h30 - 18h30',
-        timezone: 'Europe/Paris'
+        timezone: 'Europe/Paris',
+        
+        // Détail par jour
+        schedule: {
+            monday: { open: '08:30', close: '18:30' },
+            tuesday: { open: '08:30', close: '18:30' },
+            wednesday: { open: '08:30', close: '18:30' },
+            thursday: { open: '08:30', close: '18:30' },
+            friday: { open: '08:30', close: '18:30' },
+            saturday: { closed: true },
+            sunday: { closed: true }
+        },
+        
+        // Messages
+        closedMessage: 'Nous sommes actuellement fermés. Laissez-nous un message et nous vous recontacterons dès notre réouverture.',
+        holidayMessage: 'Nos bureaux sont fermés pour les vacances. Nous reprendrons contact avec vous à notre retour.'
     },
     
     // Réseaux sociaux
     social: {
         linkedin: 'https://linkedin.com/company/oweo-consulting',
-        twitter: null, // À définir si existant
-        facebook: null, // À définir si existant
-        youtube: null // À définir si existant
+        twitter: 'https://twitter.com/oweo_consulting',
+        facebook: 'https://facebook.com/oweoconsulting',
+        youtube: 'https://youtube.com/c/oweoconsulting',
+        github: 'https://github.com/oweo-consulting'
     },
     
     // Informations légales
     legal: {
-        siret: '94502819900012', // À remplir si nécessaire
-        tva: 'FR37945028199', // À remplir si nécessaire
-        rcs: 'RCS Nantes' // À remplir si nécessaire
+        siret: '94502819900012',
+        siren: '945028199',
+        tva: 'FR37945028199',
+        rcs: 'RCS Nantes B 945 028 199',
+        ape: '6202A',
+        capital: '500 €',
+        forme: 'SARL'
+    },
+    
+    // Informations bancaires (pour affichage uniquement)
+    bank: {
+        name: 'Crédit Mutuel',
+        iban: 'FR76 XXXX XXXX XXXX XXXX XXXX XXX',
+        bic: 'CMCIFRXX'
+    },
+    
+    // Équipe dirigeante
+    team: {
+        ceo: {
+            name: 'Nicolas Dubain',
+            title: 'Fondateur & CEO',
+            email: 'nicolas.dubain@oweo-consulting.fr',
+            linkedin: 'https://linkedin.com/in/nicolas-dubain'
+        }
+    },
+    
+    // Messages et textes récurrents
+    messages: {
+        welcome: 'Bienvenue chez Oweo, votre partenaire pour la transformation digitale de l\'industrie métallique',
+        mission: 'Notre mission est d\'accompagner les entreprises de la métallurgie dans leur transformation numérique avec des solutions sur mesure et innovantes.',
+        values: 'Innovation, Excellence, Proximité'
     },
     
     // Méthodes utilitaires
@@ -78,6 +148,37 @@ window.CompanyInfo = {
     
     getFullAddress() {
         return this.address.full;
+    },
+    
+    getCompleteAddress() {
+        return this.address.complete;
+    },
+    
+    getSocialLinks() {
+        return Object.entries(this.social)
+            .filter(([key, value]) => value !== null)
+            .map(([network, url]) => ({ network, url }));
+    },
+    
+    isOpenNow() {
+        const now = new Date();
+        const day = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][now.getDay()];
+        const schedule = this.businessHours.schedule[day];
+        
+        if (schedule.closed) return false;
+        
+        const currentTime = now.getHours() * 60 + now.getMinutes();
+        const [openHour, openMin] = schedule.open.split(':').map(Number);
+        const [closeHour, closeMin] = schedule.close.split(':').map(Number);
+        
+        const openTime = openHour * 60 + openMin;
+        const closeTime = closeHour * 60 + closeMin;
+        
+        return currentTime >= openTime && currentTime < closeTime;
+    },
+    
+    getBusinessStatus() {
+        return this.isOpenNow() ? 'Ouvert' : 'Fermé';
     },
     
     // Validation de cohérence
@@ -100,6 +201,10 @@ window.CompanyInfo = {
             issues.push('URL Calendly invalide');
         }
         
+        if (!this.legal.siret || this.legal.siret.length !== 14) {
+            issues.push('SIRET invalide');
+        }
+        
         return {
             valid: issues.length === 0,
             issues
@@ -114,5 +219,6 @@ window.CompanyInfo = {
         console.warn('⚠️ Configuration société invalide:', validation.issues);
     } else {
         console.log('✅ Configuration société validée');
+        console.log('📍 Statut:', window.CompanyInfo.getBusinessStatus());
     }
 })();

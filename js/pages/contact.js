@@ -1,5 +1,5 @@
 // ========================================
-// js/pages/contact.js - Page de contact (CORRIGÉE)
+// js/pages/contact.js - Page de contact (VERSION COMPLÈTE FINALE)
 // ========================================
 
 class ContactPage extends BasePage {
@@ -26,10 +26,79 @@ class ContactPage extends BasePage {
         };
         
         // Informations de contact centralisées
-        this.contactInfo = window.CompanyInfo || this.getFallbackContactInfo();
+        this.contactInfo = this.getContactInfo();
+    }
+    
+    getContactInfo() {
+        // Priorité 1 : CompanyInfo (configuration centralisée)
+        if (window.CompanyInfo) {
+            // S'assurer que toutes les méthodes utilitaires existent
+            if (!window.CompanyInfo.getFormattedPhone) {
+                window.CompanyInfo.getFormattedPhone = function() { 
+                    return this.contact.phoneFormatted; 
+                };
+            }
+            if (!window.CompanyInfo.getContactEmail) {
+                window.CompanyInfo.getContactEmail = function() { 
+                    return this.contact.email; 
+                };
+            }
+            if (!window.CompanyInfo.getCalendlyUrl) {
+                window.CompanyInfo.getCalendlyUrl = function() { 
+                    return this.urls.calendly; 
+                };
+            }
+            if (!window.CompanyInfo.getFullAddress) {
+                window.CompanyInfo.getFullAddress = function() { 
+                    return this.address.full; 
+                };
+            }
+            return window.CompanyInfo;
+        }
+        
+        // Priorité 2 : AppConfig avec adaptation
+        if (window.AppConfig && window.AppConfig.contact) {
+            return this.getFallbackContactInfo();
+        }
+        
+        // Priorité 3 : Valeurs par défaut
+        return this.getFallbackContactInfo();
     }
     
     getFallbackContactInfo() {
+        // Si AppConfig existe, utiliser ses valeurs
+        if (window.AppConfig && window.AppConfig.contact) {
+            const appContact = window.AppConfig.contact;
+            return {
+                contact: {
+                    email: appContact.email,
+                    phone: appContact.phone,
+                    phoneFormatted: appContact.phoneFormatted
+                },
+                address: {
+                    city: appContact.address?.split(',')[0]?.trim() || 'Nantes',
+                    full: appContact.address
+                },
+                businessHours: {
+                    days: 'Lundi - Vendredi',
+                    hours: '8h30 - 18h30'
+                },
+                urls: {
+                    calendly: window.AppConfig.calendlyUrl,
+                    linkedin: appContact.linkedin,
+                    website: appContact.website
+                },
+                social: {
+                    linkedin: appContact.linkedin
+                },
+                getFormattedPhone: function() { return this.contact.phoneFormatted; },
+                getContactEmail: function() { return this.contact.email; },
+                getCalendlyUrl: function() { return this.urls.calendly; },
+                getFullAddress: function() { return this.address.full; }
+            };
+        }
+        
+        // Fallback par défaut si aucune config n'est disponible
         return {
             contact: {
                 email: 'contact@oweo-consulting.fr',
@@ -51,12 +120,31 @@ class ContactPage extends BasePage {
             social: {
                 linkedin: 'https://linkedin.com/company/oweo-consulting'
             },
-            // Méthodes utilitaires fallback
             getFormattedPhone: function() { return this.contact.phoneFormatted; },
             getContactEmail: function() { return this.contact.email; },
             getCalendlyUrl: function() { return this.urls.calendly; },
             getFullAddress: function() { return this.address.full; }
         };
+    }
+    
+    getBusinessStatusHTML() {
+        if (!this.contactInfo.isOpenNow || !this.contactInfo.getBusinessStatus) {
+            return ''; // Pas de statut si les méthodes n'existent pas
+        }
+        
+        const isOpen = this.contactInfo.isOpenNow();
+        const status = this.contactInfo.getBusinessStatus();
+        
+        return `
+            <div class="business-status ${isOpen ? 'open' : 'closed'}">
+                <span class="status-indicator"></span>
+                <span class="status-text">${status}</span>
+                ${!isOpen && this.contactInfo.businessHours.closedMessage ? 
+                    `<p class="status-message">${this.contactInfo.businessHours.closedMessage}</p>` : 
+                    ''
+                }
+            </div>
+        `;
     }
     
     getTemplate() {
@@ -66,7 +154,7 @@ class ContactPage extends BasePage {
                 <section class="page-header">
                     <div class="container">
                         <div class="page-breadcrumb">
-                            <a href="#" data-page="home">Accueil</a>
+                            <a href="javascript:void(0)" onclick="contactPageInstance.navigateTo('home')">Accueil</a>
                             <i class="fas fa-chevron-right"></i>
                             <span>Contact</span>
                         </div>
@@ -78,11 +166,11 @@ class ContactPage extends BasePage {
                         </p>
                         
                         <div class="contact-quick-actions fade-in-up">
-                            <button type="button" class="btn btn-primary btn-lg" id="schedule-call-btn">
+                            <button type="button" class="btn btn-primary btn-lg" onclick="contactPageInstance.openCalendly()">
                                 <i class="fas fa-calendar"></i>
                                 Planifier un appel
                             </button>
-                            <a href="tel:${this.contactInfo.contact.phone}" class="btn btn-outline btn-lg" id="phone-link">
+                            <a href="tel:${this.contactInfo.contact.phone}" class="btn btn-outline btn-lg">
                                 <i class="fas fa-phone"></i>
                                 ${this.contactInfo.getFormattedPhone ? this.contactInfo.getFormattedPhone() : this.contactInfo.contact.phoneFormatted}
                             </a>
@@ -101,7 +189,7 @@ class ContactPage extends BasePage {
                                     <p>Décrivez-nous votre projet et nous vous recontacterons rapidement.</p>
                                 </div>
                                 
-                                <form id="contact-form" class="contact-form" novalidate>
+                                <form id="contact-form" class="contact-form" onsubmit="return false;" novalidate>
                                     <div class="form-grid">
                                         <div class="form-group">
                                             <label for="contact-name">Nom complet *</label>
@@ -201,7 +289,6 @@ class ContactPage extends BasePage {
                                                        id="contact-consent" 
                                                        name="consent"
                                                        required>
-                                                <span class="checkmark"></span>
                                                 <span>J'accepte d'être contacté par Oweo concernant ma demande *</span>
                                             </label>
                                             <div class="field-error" id="consent-error"></div>
@@ -212,16 +299,16 @@ class ContactPage extends BasePage {
                                                 <input type="checkbox" 
                                                        id="contact-newsletter" 
                                                        name="newsletter">
-                                                <span class="checkmark"></span>
                                                 <span>Je souhaite recevoir les actualités et conseils d'Oweo</span>
                                             </label>
                                         </div>
                                     </div>
                                     
                                     <div class="form-actions">
-                                        <button type="submit" 
+                                        <button type="button" 
                                                 class="btn btn-primary btn-lg" 
-                                                id="contact-submit">
+                                                id="contact-submit"
+                                                onclick="contactPageInstance.handleFormSubmit(event)">
                                             <i class="fas fa-paper-plane"></i>
                                             Envoyer le message
                                         </button>
@@ -286,24 +373,13 @@ class ContactPage extends BasePage {
                                                 <div class="method-value">
                                                     ${this.contactInfo.businessHours.days}<br>
                                                     ${this.contactInfo.businessHours.hours}
+                                                    ${this.getBusinessStatusHTML()}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     
-                                    ${(this.contactInfo.social?.linkedin || this.contactInfo.urls?.linkedin) ? `
-                                        <div class="social-links">
-                                            <h4>Suivez-nous</h4>
-                                            <a href="${this.contactInfo.social?.linkedin || this.contactInfo.urls.linkedin}" 
-                                               class="social-link" 
-                                               target="_blank" 
-                                               rel="noopener"
-                                               title="LinkedIn"
-                                               id="linkedin-link">
-                                                <i class="fab fa-linkedin-in"></i>
-                                            </a>
-                                        </div>
-                                    ` : ''}
+                                    ${this.renderSocialLinks()}
                                 </div>
                             </div>
                         </div>
@@ -327,6 +403,51 @@ class ContactPage extends BasePage {
                 </section>
             </div>
         `;
+    }
+    
+    renderSocialLinks() {
+        // Si CompanyInfo a une méthode getSocialLinks
+        if (this.contactInfo.getSocialLinks) {
+            const socialLinks = this.contactInfo.getSocialLinks();
+            if (socialLinks && socialLinks.length > 0) {
+                const linksHTML = socialLinks.map(({network, url}) => `
+                    <a href="${url}" 
+                       class="social-link" 
+                       target="_blank" 
+                       rel="noopener"
+                       title="${network.charAt(0).toUpperCase() + network.slice(1)}">
+                        <i class="fab fa-${network}"></i>
+                    </a>
+                `).join('');
+                
+                return `
+                    <div class="social-links">
+                        <h4>Suivez-nous</h4>
+                        <div class="social-links-container">
+                            ${linksHTML}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        // Fallback : juste LinkedIn si disponible
+        if (this.contactInfo.social?.linkedin || this.contactInfo.urls?.linkedin) {
+            return `
+                <div class="social-links">
+                    <h4>Suivez-nous</h4>
+                    <a href="${this.contactInfo.social?.linkedin || this.contactInfo.urls.linkedin}" 
+                       class="social-link" 
+                       target="_blank" 
+                       rel="noopener"
+                       title="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                </div>
+            `;
+        }
+        
+        return '';
     }
     
     renderFAQ() {
@@ -359,7 +480,7 @@ class ContactPage extends BasePage {
         
         return faqs.map((faq, index) => `
             <div class="faq-item fade-in-up">
-                <button type="button" class="faq-question" data-faq-index="${index}">
+                <button type="button" class="faq-question" onclick="contactPageInstance.toggleFAQ(${index}); return false;">
                     <span>${faq.question}</span>
                     <i class="fas fa-chevron-down"></i>
                 </button>
@@ -370,165 +491,73 @@ class ContactPage extends BasePage {
         `).join('');
     }
     
+    async onMount() {
+        // Appelé par BasePage après que le DOM soit inséré
+        await super.onMount(); // Appelle bindEvents() et setupAnimations()
+        
+        // Exposer l'instance pour les événements onclick
+        window.contactPageInstance = this;
+        
+        // Pré-remplir depuis les paramètres URL
+        this.prefillFromURL();
+        
+        // Mettre à jour le statut toutes les minutes si disponible
+        if (this.contactInfo.isOpenNow) {
+            this.statusInterval = setInterval(() => {
+                this.updateBusinessStatus();
+            }, 60000); // 60 secondes
+        }
+    }
+    
     bindEvents() {
-        super.bindEvents();
+        // Cette méthode est appelée automatiquement par BasePage.onMount()
+        console.log('📋 Contact page: binding events');
         
-        // CORRECTION PRINCIPALE : Empêcher le scroll automatique sur focus des inputs
-        this.preventAutoScroll();
-        
-        // Navigation
-        const pageLinks = document.querySelectorAll('[data-page]');
-        pageLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const page = link.dataset.page;
-                this.navigateTo(page);
-            });
-        });
-        
-        // Formulaire de contact
+        // Validation en temps réel pour le formulaire
         const form = document.getElementById('contact-form');
         if (form) {
-            form.addEventListener('submit', (e) => this.handleFormSubmit(e));
-            
-            // Validation en temps réel
             const inputs = form.querySelectorAll('input, textarea, select');
             inputs.forEach(input => {
                 input.addEventListener('blur', () => this.validateField(input));
                 input.addEventListener('input', () => this.clearFieldError(input));
             });
         }
-        
-        // Boutons d'action
-        const scheduleCallBtn = document.getElementById('schedule-call-btn');
-        if (scheduleCallBtn) {
-            scheduleCallBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                this.openCalendly();
-            });
-        }
-        
-        // Liens de contact
-        const phoneLinks = document.querySelectorAll('.phone-link, #phone-link');
-        phoneLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.trackPhoneClick();
-            });
-        });
-        
-        const emailLinks = document.querySelectorAll('.email-link');
-        emailLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.trackEmailClick();
-            });
-        });
-        
-        // LinkedIn
-        const linkedinLink = document.getElementById('linkedin-link');
-        if (linkedinLink) {
-            linkedinLink.addEventListener('click', (e) => {
-                e.stopPropagation();
-            });
-        }
-        
-        // FAQ
-        const faqButtons = document.querySelectorAll('.faq-question');
-        faqButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const index = button.dataset.faqIndex;
-                this.toggleFAQ(index);
-            });
-        });
-        
-        // Empêcher tous les liens vides de faire remonter la page
-        document.querySelectorAll('a[href="#"], a[href=""]').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-            });
-        });
     }
     
-    // NOUVELLE MÉTHODE : Empêcher le scroll automatique sur focus
-    preventAutoScroll() {
-        // Sauvegarder la position actuelle avant le focus
-        let scrollPosition = 0;
+    updateBusinessStatus() {
+        const statusElements = document.querySelectorAll('.business-status');
+        if (!statusElements.length || !this.contactInfo.isOpenNow) return;
         
-        // Pour tous les éléments de formulaire
-        const formElements = document.querySelectorAll(
-            'input, textarea, select, button:not([type="submit"])'
-        );
+        const isOpen = this.contactInfo.isOpenNow();
+        const status = this.contactInfo.getBusinessStatus();
         
-        formElements.forEach(element => {
-            // Avant le focus, sauvegarder la position
-            element.addEventListener('focus', (e) => {
-                scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-                
-                // Empêcher le comportement par défaut pour les select
-                if (element.tagName === 'SELECT') {
-                    e.preventDefault();
-                }
-            }, { passive: false });
-            
-            // Après le focus, restaurer la position
-            element.addEventListener('focus', () => {
-                // Utiliser requestAnimationFrame pour s'assurer que c'est après le scroll automatique
-                requestAnimationFrame(() => {
-                    window.scrollTo({
-                        top: scrollPosition,
-                        behavior: 'instant'
-                    });
-                });
-            });
-            
-            // Pour les select, gérer aussi le changement
-            if (element.tagName === 'SELECT') {
-                element.addEventListener('mousedown', (e) => {
-                    scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-                });
-                
-                element.addEventListener('change', () => {
-                    requestAnimationFrame(() => {
-                        window.scrollTo({
-                            top: scrollPosition,
-                            behavior: 'instant'
-                        });
-                    });
-                });
+        statusElements.forEach(element => {
+            element.className = `business-status ${isOpen ? 'open' : 'closed'}`;
+            const statusText = element.querySelector('.status-text');
+            if (statusText) {
+                statusText.textContent = status;
             }
         });
     }
     
     handleFormSubmit(e) {
-        e.preventDefault();
-        e.stopPropagation();
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
         
         if (this.formState.isSubmitting) return;
         
-        // Sauvegarder la position actuelle
-        const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        const form = document.getElementById('contact-form');
+        if (!form) return;
         
-        // Validation complète
         if (!this.validateForm()) {
-            // Restaurer la position après validation
-            window.scrollTo({
-                top: currentScroll,
-                behavior: 'instant'
-            });
             return;
         }
         
-        // Collecter les données
-        const formData = new FormData(e.target);
+        const formData = new FormData(form);
         this.formState.data = Object.fromEntries(formData);
         
-        // Soumettre
         this.submitForm();
     }
     
@@ -537,11 +566,9 @@ class ContactPage extends BasePage {
         const formData = new FormData(form);
         let isValid = true;
         
-        // Reset des erreurs
         this.formState.errors = {};
         this.clearAllErrors();
         
-        // Validation des champs requis
         this.validation.required.forEach(field => {
             const value = formData.get(field);
             if (!value || value.trim() === '') {
@@ -551,7 +578,6 @@ class ContactPage extends BasePage {
             }
         });
         
-        // Validation email
         const email = formData.get('email');
         if (email && !this.validation.email.test(email)) {
             this.formState.errors.email = 'Format d\'email invalide';
@@ -559,15 +585,13 @@ class ContactPage extends BasePage {
             isValid = false;
         }
         
-        // Validation téléphone (optionnel mais si rempli)
         const phone = formData.get('phone');
-        if (phone && !this.validation.phone.test(phone)) {
+        if (phone && phone.trim() && !this.validation.phone.test(phone)) {
             this.formState.errors.phone = 'Format de téléphone invalide';
             this.showFieldError('phone', this.formState.errors.phone);
             isValid = false;
         }
         
-        // Validation consentement
         const consent = formData.get('consent');
         if (!consent) {
             this.formState.errors.consent = 'Vous devez accepter d\'être contacté';
@@ -582,26 +606,22 @@ class ContactPage extends BasePage {
         const value = field.value.trim();
         const name = field.name;
         
-        // Champs requis
         if (this.validation.required.includes(name) && !value) {
             this.showFieldError(name, 'Ce champ est requis');
             return false;
         }
         
-        // Email
         if (name === 'email' && value && !this.validation.email.test(value)) {
             this.showFieldError(name, 'Format d\'email invalide');
             return false;
         }
         
-        // Téléphone
         if (name === 'phone' && value && !this.validation.phone.test(value)) {
             this.showFieldError(name, 'Format de téléphone invalide');
             return false;
         }
         
-        // Consentement
-        if (name === 'consent' && !field.checked) {
+        if (name === 'consent' && field.type === 'checkbox' && !field.checked) {
             this.showFieldError(name, 'Vous devez accepter d\'être contacté');
             return false;
         }
@@ -637,6 +657,8 @@ class ContactPage extends BasePage {
     
     clearAllErrors() {
         const form = document.getElementById('contact-form');
+        if (!form) return;
+        
         const fields = form.querySelectorAll('.form-control');
         const errors = form.querySelectorAll('.field-error');
         
@@ -649,43 +671,29 @@ class ContactPage extends BasePage {
         const form = document.getElementById('contact-form');
         const successDiv = document.getElementById('form-success');
         
-        // Sauvegarder la position actuelle
-        const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-        
         this.formState.isSubmitting = true;
         
-        // UI de chargement
         submitBtn.disabled = true;
         submitBtn.classList.add('loading');
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
         
         try {
-            // Simuler l'envoi (dans un vrai projet, appel API)
             await this.simulateFormSubmission();
             
-            // Succès
             form.style.display = 'none';
             successDiv.style.display = 'block';
             
             this.formState.hasSubmitted = true;
             
-            // Notification
             if (window.notifications) {
                 window.notifications.success('Votre message a été envoyé avec succès !');
             }
             
-            // Analytics
             this.trackFormSubmission();
-            
-            // Scroll vers le succès de manière contrôlée
-            setTimeout(() => {
-                successDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 100);
             
         } catch (error) {
             console.error('Erreur envoi formulaire:', error);
             
-            // Erreur
             submitBtn.disabled = false;
             submitBtn.classList.remove('loading');
             submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer le message';
@@ -694,19 +702,12 @@ class ContactPage extends BasePage {
                 window.notifications.error('Erreur lors de l\'envoi. Veuillez réessayer.');
             }
             
-            // Restaurer la position
-            window.scrollTo({
-                top: currentScroll,
-                behavior: 'instant'
-            });
-            
         } finally {
             this.formState.isSubmitting = false;
         }
     }
     
     async simulateFormSubmission() {
-        // Simuler un délai d'envoi
         return new Promise((resolve) => {
             setTimeout(() => {
                 console.log('📧 Message de contact envoyé:', this.formState.data);
@@ -730,19 +731,18 @@ class ContactPage extends BasePage {
             window.open(calendlyUrl, '_blank', 'width=800,height=700,scrollbars=yes,resizable=yes');
         }
         
-        // Analytics
         this.trackCalendlyOpen();
+        return false; // Empêcher toute propagation
     }
     
     toggleFAQ(index) {
         const answer = document.getElementById(`faq-answer-${index}`);
-        const button = document.querySelector(`[data-faq-index="${index}"]`);
-        const icon = button.querySelector('i');
+        const button = event ? event.currentTarget : null;
+        const icon = button ? button.querySelector('i') : null;
+        
+        if (!answer) return;
         
         const isOpen = answer.classList.contains('open');
-        
-        // Sauvegarder la position actuelle
-        const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
         
         // Fermer toutes les autres FAQ
         document.querySelectorAll('.faq-answer').forEach(el => {
@@ -754,14 +754,10 @@ class ContactPage extends BasePage {
         
         if (!isOpen) {
             answer.classList.add('open');
-            icon.classList.add('rotate');
+            if (icon) icon.classList.add('rotate');
         }
         
-        // Restaurer la position
-        window.scrollTo({
-            top: currentScroll,
-            behavior: 'instant'
-        });
+        return false; // Empêcher toute propagation
     }
     
     trackPhoneClick() {
@@ -803,19 +799,9 @@ class ContactPage extends BasePage {
     
     navigateTo(page) {
         if (window.app && window.app.router) {
-            window.scrollTo({ top: 0, behavior: 'auto' });
             window.app.router.navigate(page);
         }
-    }
-    
-    onMount() {
-        super.onMount();
-        
-        // Exposer l'instance pour les événements onclick
-        window.contactPageInstance = this;
-        
-        // Pré-remplir depuis les paramètres URL
-        this.prefillFromURL();
+        return false; // Empêcher toute propagation
     }
     
     prefillFromURL() {
@@ -852,6 +838,11 @@ class ContactPage extends BasePage {
     }
     
     destroy() {
+        // Nettoyer le timer de statut
+        if (this.statusInterval) {
+            clearInterval(this.statusInterval);
+        }
+        
         // Nettoyer l'instance globale
         if (window.contactPageInstance === this) {
             delete window.contactPageInstance;
