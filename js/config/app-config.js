@@ -243,6 +243,126 @@ window.AppConfig = {
         
         console.log('✅ Configuration société cohérente');
         return true;
+    },
+
+    // Configuration sécurité formulaire de contact
+    contactForm: {
+        security: {
+            // Honeypot
+            honeypotFieldName: 'website_url',
+            honeypotEnabled: true,
+            
+            // reCAPTCHA v3
+            recaptcha: {
+                enabled: true,
+                siteKey: 'YOUR_RECAPTCHA_SITE_KEY', // À remplacer
+                action: 'contact_form',
+                minimumScore: 0.5
+            },
+            
+            // Validation
+            minSubmitDelay: 3000, // 3 secondes minimum
+            maxMessageLength: 5000,
+            maxNameLength: 100,
+            maxCompanyLength: 100,
+            
+            // Patterns de spam
+            spamPatterns: [
+                /\b(viagra|cialis|casino|lottery|click here|buy now|limited offer)\b/i,
+                /\b(bit\.ly|tinyurl|goo\.gl)\b/i,
+                /(.)\1{5,}/, // Caractères répétés
+                /[A-Z]{10,}/, // Trop de majuscules
+                /<[^>]*>/, // Tags HTML
+            ],
+            maxUrlsInMessage: 3,
+            
+            // Rate limiting côté client
+            rateLimit: {
+                enabled: true,
+                maxAttempts: 3,
+                cooldownMinutes: 1,
+                storageKey: 'oweo_contact_rate_limit'
+            }
+        },
+        
+        // Validation des champs
+        validation: {
+            requiredFields: ['name', 'email', 'company', 'message', 'consent'],
+            patterns: {
+                email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                phone: /^[\+]?[(]?[\d\s\-\(\)]{10,}$/,
+                name: /^[a-zA-ZÀ-ÿ\s\-']{2,}$/,
+                company: /^[a-zA-ZÀ-ÿ0-9\s\-'&.,]{2,}$/
+            }
+        },
+        
+        // Messages d'erreur personnalisés
+        errorMessages: {
+            required: 'Ce champ est requis',
+            email: 'Format d\'email invalide',
+            phone: 'Format de téléphone invalide',
+            name: 'Le nom contient des caractères invalides',
+            company: 'Le nom d\'entreprise contient des caractères invalides',
+            messageTooLong: 'Le message est trop long (max 5000 caractères)',
+            tooManyUrls: 'Le message contient trop de liens',
+            spamDetected: 'Votre message a été détecté comme spam',
+            rateLimited: 'Trop de tentatives. Veuillez attendre %minutes% minute(s).',
+            submitError: 'Erreur lors de l\'envoi. Veuillez réessayer.',
+            consentRequired: 'Vous devez accepter d\'être contacté'
+        },
+        
+        // Messages de succès
+        successMessages: {
+            formSubmitted: 'Votre message a été envoyé avec succès !',
+            confirmationEmailSent: 'Un email de confirmation vous a été envoyé.'
+        }
+    },
+    
+    // Configuration API mise à jour
+    api: {
+        baseUrl: window.location.hostname === 'localhost' 
+            ? 'http://localhost:3001/api/v1' 
+            : 'https://api.oweo-consulting.fr/api/v1',
+        timeout: 10000,
+        retries: 3,
+        endpoints: {
+            auth: '/auth',
+            demos: '/demos',
+            contact: '/contact', // Endpoint pour le formulaire
+            analytics: '/analytics'
+        },
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/json'
+        }
+    },
+    
+    // Méthode helper pour obtenir la config de sécurité
+    getContactFormSecurity() {
+        return this.contactForm.security;
+    },
+    
+    // Méthode helper pour obtenir les patterns de validation
+    getValidationPatterns() {
+        return this.contactForm.validation.patterns;
+    },
+    
+    // Méthode pour obtenir un message d'erreur
+    getErrorMessage(key, params = {}) {
+        let message = this.contactForm.errorMessages[key] || 'Erreur inconnue';
+        
+        // Remplacer les placeholders
+        Object.keys(params).forEach(param => {
+            message = message.replace(`%${param}%`, params[param]);
+        });
+        
+        return message;
+    },
+    
+    // Vérifier si reCAPTCHA est activé
+    isRecaptchaEnabled() {
+        return this.contactForm.security.recaptcha.enabled && 
+               this.contactForm.security.recaptcha.siteKey !== 'YOUR_RECAPTCHA_SITE_KEY';
     }
 };
 

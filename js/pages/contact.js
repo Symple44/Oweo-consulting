@@ -1,5 +1,5 @@
 // ========================================
-// js/pages/contact.js - Page de contact (VERSION COMPLÈTE FINALE)
+// js/pages/contact.js - Page de contact avec sécurité complète
 // ========================================
 
 class ContactPage extends BasePage {
@@ -15,58 +15,121 @@ class ContactPage extends BasePage {
             isSubmitting: false,
             hasSubmitted: false,
             errors: {},
-            data: {}
+            data: {},
+            formDisplayTime: null,
+            isSpam: false,
+            isSuspicious: false
         };
         
-        // Configuration validation
-        this.validation = {
-            required: ['name', 'email', 'company', 'message'],
-            email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            phone: /^[\+]?[(]?[\d\s\-\(\)]{10,}$/
+        // Rate limiting
+        this.rateLimit = {
+            attempts: 0,
+            lastAttempt: null
         };
         
-        // Informations de contact centralisées
+        // Charger la configuration
+        this.loadConfiguration();
+        
+        // Informations de contact
         this.contactInfo = this.getContactInfo();
     }
     
+    loadConfiguration() {
+        // Vérifier que AppConfig existe
+        if (!window.AppConfig) {
+            console.warn('AppConfig non disponible, utilisation des valeurs par défaut');
+            this.useDefaultConfiguration();
+            return;
+        }
+        
+        // Charger la configuration de sécurité
+        this.security = window.AppConfig.getContactFormSecurity ? 
+            window.AppConfig.getContactFormSecurity() : 
+            window.AppConfig.contactForm?.security || this.getDefaultSecurity();
+        
+        // Charger la configuration de validation
+        const validationConfig = window.AppConfig.contactForm?.validation || {};
+        this.validation = {
+            required: validationConfig.requiredFields || ['name', 'email', 'company', 'message', 'consent'],
+            patterns: window.AppConfig.getValidationPatterns ? 
+                window.AppConfig.getValidationPatterns() : 
+                validationConfig.patterns || this.getDefaultPatterns()
+        };
+        
+        // Configuration API
+        this.apiConfig = window.AppConfig.api || {
+            baseUrl: '/api/v1',
+            endpoints: { contact: '/contact' }
+        };
+        
+        // Messages
+        this.messages = window.AppConfig.contactForm || {};
+    }
+    
+    useDefaultConfiguration() {
+        this.security = this.getDefaultSecurity();
+        this.validation = {
+            required: ['name', 'email', 'company', 'message', 'consent'],
+            patterns: this.getDefaultPatterns()
+        };
+        this.apiConfig = {
+            baseUrl: '/api/v1',
+            endpoints: { contact: '/contact' }
+        };
+        this.messages = {
+            errorMessages: {},
+            successMessages: {}
+        };
+    }
+    
+    getDefaultSecurity() {
+        return {
+            honeypotFieldName: 'website_url',
+            honeypotEnabled: true,
+            recaptcha: {
+                enabled: false,
+                siteKey: '',
+                action: 'contact_form'
+            },
+            minSubmitDelay: 3000,
+            maxMessageLength: 5000,
+            maxNameLength: 100,
+            maxCompanyLength: 100,
+            spamPatterns: [
+                /\b(viagra|cialis|casino|lottery|click here|buy now)\b/i,
+                /(.)\1{5,}/,
+                /<[^>]*>/
+            ],
+            maxUrlsInMessage: 3,
+            rateLimit: {
+                enabled: true,
+                maxAttempts: 3,
+                cooldownMinutes: 1,
+                storageKey: 'oweo_contact_rate_limit'
+            }
+        };
+    }
+    
+    getDefaultPatterns() {
+        return {
+            email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            phone: /^[\+]?[(]?[\d\s\-\(\)]{10,}$/,
+            name: /^[a-zA-ZÀ-ÿ\s\-']{2,}$/,
+            company: /^[a-zA-ZÀ-ÿ0-9\s\-'&.,]{2,}$/
+        };
+    }
+    
     getContactInfo() {
-        // Priorité 1 : CompanyInfo (configuration centralisée)
+        // Utiliser CompanyInfo en priorité
         if (window.CompanyInfo) {
-            // S'assurer que toutes les méthodes utilitaires existent
-            if (!window.CompanyInfo.getFormattedPhone) {
-                window.CompanyInfo.getFormattedPhone = function() { 
-                    return this.contact.phoneFormatted; 
-                };
-            }
-            if (!window.CompanyInfo.getContactEmail) {
-                window.CompanyInfo.getContactEmail = function() { 
-                    return this.contact.email; 
-                };
-            }
-            if (!window.CompanyInfo.getCalendlyUrl) {
-                window.CompanyInfo.getCalendlyUrl = function() { 
-                    return this.urls.calendly; 
-                };
-            }
-            if (!window.CompanyInfo.getFullAddress) {
-                window.CompanyInfo.getFullAddress = function() { 
-                    return this.address.full; 
-                };
-            }
             return window.CompanyInfo;
         }
         
-        // Priorité 2 : AppConfig avec adaptation
-        if (window.AppConfig && window.AppConfig.contact) {
-            return this.getFallbackContactInfo();
-        }
-        
-        // Priorité 3 : Valeurs par défaut
+        // Fallback
         return this.getFallbackContactInfo();
     }
     
     getFallbackContactInfo() {
-        // Si AppConfig existe, utiliser ses valeurs
         if (window.AppConfig && window.AppConfig.contact) {
             const appContact = window.AppConfig.contact;
             return {
@@ -85,8 +148,7 @@ class ContactPage extends BasePage {
                 },
                 urls: {
                     calendly: window.AppConfig.calendlyUrl,
-                    linkedin: appContact.linkedin,
-                    website: appContact.website
+                    linkedin: appContact.linkedin
                 },
                 social: {
                     linkedin: appContact.linkedin
@@ -98,7 +160,7 @@ class ContactPage extends BasePage {
             };
         }
         
-        // Fallback par défaut si aucune config n'est disponible
+        // Fallback par défaut
         return {
             contact: {
                 email: 'contact@oweo-consulting.fr',
@@ -129,7 +191,7 @@ class ContactPage extends BasePage {
     
     getBusinessStatusHTML() {
         if (!this.contactInfo.isOpenNow || !this.contactInfo.getBusinessStatus) {
-            return ''; // Pas de statut si les méthodes n'existent pas
+            return '';
         }
         
         const isOpen = this.contactInfo.isOpenNow();
@@ -139,15 +201,25 @@ class ContactPage extends BasePage {
             <div class="business-status ${isOpen ? 'open' : 'closed'}">
                 <span class="status-indicator"></span>
                 <span class="status-text">${status}</span>
-                ${!isOpen && this.contactInfo.businessHours.closedMessage ? 
-                    `<p class="status-message">${this.contactInfo.businessHours.closedMessage}</p>` : 
-                    ''
-                }
             </div>
         `;
     }
     
     getTemplate() {
+        // Honeypot field
+        const honeypotField = this.security.honeypotEnabled ? `
+            <!-- Honeypot field - Hidden from users -->
+            <div class="form-group col-span-2" style="position: absolute; left: -9999px;">
+                <label for="${this.security.honeypotFieldName}">Website URL (leave empty)</label>
+                <input type="text" 
+                       id="${this.security.honeypotFieldName}" 
+                       name="${this.security.honeypotFieldName}"
+                       class="form-control" 
+                       tabindex="-1"
+                       autocomplete="off">
+            </div>
+        ` : '';
+        
         return `
             <div class="page-container contact-page">
                 <!-- Page Header -->
@@ -302,6 +374,8 @@ class ContactPage extends BasePage {
                                                 <span>Je souhaite recevoir les actualités et conseils d'Oweo</span>
                                             </label>
                                         </div>
+                                        
+                                        ${honeypotField}
                                     </div>
                                     
                                     <div class="form-actions">
@@ -336,7 +410,7 @@ class ContactPage extends BasePage {
                                             </div>
                                             <div class="method-content">
                                                 <div class="method-label">Email</div>
-                                                <a href="mailto:${this.contactInfo.getContactEmail ? this.contactInfo.getContactEmail() : this.contactInfo.contact.email}" class="method-value email-link">
+                                                <a href="mailto:${this.contactInfo.getContactEmail ? this.contactInfo.getContactEmail() : this.contactInfo.contact.email}" class="method-value">
                                                     ${this.contactInfo.getContactEmail ? this.contactInfo.getContactEmail() : this.contactInfo.contact.email}
                                                 </a>
                                             </div>
@@ -348,7 +422,7 @@ class ContactPage extends BasePage {
                                             </div>
                                             <div class="method-content">
                                                 <div class="method-label">Téléphone</div>
-                                                <a href="tel:${this.contactInfo.contact.phone}" class="method-value phone-link">
+                                                <a href="tel:${this.contactInfo.contact.phone}" class="method-value">
                                                     ${this.contactInfo.getFormattedPhone ? this.contactInfo.getFormattedPhone() : this.contactInfo.contact.phoneFormatted}
                                                 </a>
                                             </div>
@@ -406,32 +480,6 @@ class ContactPage extends BasePage {
     }
     
     renderSocialLinks() {
-        // Si CompanyInfo a une méthode getSocialLinks
-        if (this.contactInfo.getSocialLinks) {
-            const socialLinks = this.contactInfo.getSocialLinks();
-            if (socialLinks && socialLinks.length > 0) {
-                const linksHTML = socialLinks.map(({network, url}) => `
-                    <a href="${url}" 
-                       class="social-link" 
-                       target="_blank" 
-                       rel="noopener"
-                       title="${network.charAt(0).toUpperCase() + network.slice(1)}">
-                        <i class="fab fa-${network}"></i>
-                    </a>
-                `).join('');
-                
-                return `
-                    <div class="social-links">
-                        <h4>Suivez-nous</h4>
-                        <div class="social-links-container">
-                            ${linksHTML}
-                        </div>
-                    </div>
-                `;
-            }
-        }
-        
-        // Fallback : juste LinkedIn si disponible
         if (this.contactInfo.social?.linkedin || this.contactInfo.urls?.linkedin) {
             return `
                 <div class="social-links">
@@ -446,7 +494,6 @@ class ContactPage extends BasePage {
                 </div>
             `;
         }
-        
         return '';
     }
     
@@ -470,17 +517,17 @@ class ContactPage extends BasePage {
             },
             {
                 question: "Comment prendre rendez-vous ?",
-                answer: `Vous pouvez planifier un rendez-vous directement via notre calendrier en ligne ou nous appeler au ${this.contactInfo.contact.phoneFormatted}. Nous sommes disponibles ${this.contactInfo.businessHours.days} de ${this.contactInfo.businessHours.hours}.`
+                answer: `Vous pouvez planifier un rendez-vous directement via notre calendrier en ligne ou nous appeler au ${this.contactInfo.contact.phoneFormatted}.`
             },
             {
                 question: "Intervenez-vous dans toute la France ?",
-                answer: `Basés à ${this.contactInfo.address.city}, nous intervenons sur toute la France métropolitaine. Nos solutions peuvent être déployées à distance et nos équipes se déplacent selon les besoins du projet.`
+                answer: `Basés à ${this.contactInfo.address.city}, nous intervenons sur toute la France métropolitaine.`
             }
         ];
         
         return faqs.map((faq, index) => `
             <div class="faq-item fade-in-up">
-                <button type="button" class="faq-question" onclick="contactPageInstance.toggleFAQ(${index}); return false;">
+                <button type="button" class="faq-question" onclick="contactPageInstance.toggleFAQ(${index})">
                     <span>${faq.question}</span>
                     <i class="fas fa-chevron-down"></i>
                 </button>
@@ -492,28 +539,36 @@ class ContactPage extends BasePage {
     }
     
     async onMount() {
-        // Appelé par BasePage après que le DOM soit inséré
-        await super.onMount(); // Appelle bindEvents() et setupAnimations()
+        await super.onMount();
         
-        // Exposer l'instance pour les événements onclick
+        // Enregistrer le temps d'affichage
+        this.formState.formDisplayTime = Date.now();
+        
+        // Charger reCAPTCHA si configuré
+        if (window.AppConfig?.isRecaptchaEnabled && window.AppConfig.isRecaptchaEnabled()) {
+            this.loadRecaptcha();
+        }
+        
+        // Restaurer l'état du rate limiting
+        this.restoreRateLimitState();
+        
+        // Exposer l'instance
         window.contactPageInstance = this;
         
-        // Pré-remplir depuis les paramètres URL
+        // Pré-remplir depuis l'URL
         this.prefillFromURL();
         
-        // Mettre à jour le statut toutes les minutes si disponible
+        // Mettre à jour le statut business si disponible
         if (this.contactInfo.isOpenNow) {
             this.statusInterval = setInterval(() => {
                 this.updateBusinessStatus();
-            }, 60000); // 60 secondes
+            }, 60000);
         }
     }
     
     bindEvents() {
-        // Cette méthode est appelée automatiquement par BasePage.onMount()
         console.log('📋 Contact page: binding events');
         
-        // Validation en temps réel pour le formulaire
         const form = document.getElementById('contact-form');
         if (form) {
             const inputs = form.querySelectorAll('input, textarea, select');
@@ -524,20 +579,20 @@ class ContactPage extends BasePage {
         }
     }
     
-    updateBusinessStatus() {
-        const statusElements = document.querySelectorAll('.business-status');
-        if (!statusElements.length || !this.contactInfo.isOpenNow) return;
+    loadRecaptcha() {
+        if (window.grecaptcha) return;
         
-        const isOpen = this.contactInfo.isOpenNow();
-        const status = this.contactInfo.getBusinessStatus();
+        const siteKey = this.security.recaptcha.siteKey;
+        if (!siteKey || siteKey === 'YOUR_RECAPTCHA_SITE_KEY') {
+            console.warn('reCAPTCHA site key non configurée');
+            return;
+        }
         
-        statusElements.forEach(element => {
-            element.className = `business-status ${isOpen ? 'open' : 'closed'}`;
-            const statusText = element.querySelector('.status-text');
-            if (statusText) {
-                statusText.textContent = status;
-            }
-        });
+        const script = document.createElement('script');
+        script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
     }
     
     handleFormSubmit(e) {
@@ -569,32 +624,62 @@ class ContactPage extends BasePage {
         this.formState.errors = {};
         this.clearAllErrors();
         
+        // Validation des champs requis
         this.validation.required.forEach(field => {
             const value = formData.get(field);
             if (!value || value.trim() === '') {
-                this.formState.errors[field] = 'Ce champ est requis';
-                this.showFieldError(field, this.formState.errors[field]);
+                const message = this.getErrorMessage('required');
+                this.formState.errors[field] = message;
+                this.showFieldError(field, message);
                 isValid = false;
             }
         });
         
-        const email = formData.get('email');
-        if (email && !this.validation.email.test(email)) {
-            this.formState.errors.email = 'Format d\'email invalide';
-            this.showFieldError('email', this.formState.errors.email);
+        // Validation des patterns
+        Object.entries(this.validation.patterns).forEach(([field, pattern]) => {
+            const value = formData.get(field);
+            if (value && value.trim() && !pattern.test(value)) {
+                const message = this.getErrorMessage(field);
+                this.formState.errors[field] = message;
+                this.showFieldError(field, message);
+                isValid = false;
+            }
+        });
+        
+        // Vérifier le honeypot
+        if (this.security.honeypotEnabled) {
+            const honeypotValue = formData.get(this.security.honeypotFieldName);
+            if (honeypotValue && honeypotValue.trim() !== '') {
+                console.warn('🍯 Honeypot triggered');
+                this.formState.isSpam = true;
+            }
+        }
+        
+        // Vérifier la longueur du message
+        const message = formData.get('message');
+        if (message && message.length > this.security.maxMessageLength) {
+            const errorMsg = this.getErrorMessage('messageTooLong');
+            this.formState.errors.message = errorMsg;
+            this.showFieldError('message', errorMsg);
             isValid = false;
         }
         
-        const phone = formData.get('phone');
-        if (phone && phone.trim() && !this.validation.phone.test(phone)) {
-            this.formState.errors.phone = 'Format de téléphone invalide';
-            this.showFieldError('phone', this.formState.errors.phone);
-            isValid = false;
+        // Vérifier le timing
+        const timeSinceDisplay = Date.now() - this.formState.formDisplayTime;
+        if (timeSinceDisplay < this.security.minSubmitDelay) {
+            console.warn('⚡ Form submitted too quickly');
+            this.formState.isSuspicious = true;
         }
         
+        // Détecter les patterns de spam
+        if (this.detectSpamPatterns(formData)) {
+            this.formState.isSpam = true;
+        }
+        
+        // Vérifier le consentement
         const consent = formData.get('consent');
         if (!consent) {
-            this.formState.errors.consent = 'Vous devez accepter d\'être contacté';
+            this.formState.errors.consent = this.getErrorMessage('consentRequired');
             this.showFieldError('consent', this.formState.errors.consent);
             isValid = false;
         }
@@ -602,27 +687,197 @@ class ContactPage extends BasePage {
         return isValid;
     }
     
+    detectSpamPatterns(formData) {
+        const message = formData.get('message') || '';
+        const name = formData.get('name') || '';
+        const company = formData.get('company') || '';
+        const textToCheck = `${name} ${company} ${message}`;
+        
+        // Vérifier les patterns
+        for (const pattern of this.security.spamPatterns) {
+            if (pattern.test(textToCheck)) {
+                return true;
+            }
+        }
+        
+        // Vérifier le nombre d'URLs
+        const urlMatches = textToCheck.match(/\bhttps?:\/\/\S+/gi) || [];
+        if (urlMatches.length > this.security.maxUrlsInMessage) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    checkRateLimit() {
+        if (!this.security.rateLimit.enabled) return true;
+        
+        const now = Date.now();
+        const storageKey = this.security.rateLimit.storageKey;
+        const savedState = sessionStorage.getItem(storageKey);
+        
+        if (savedState) {
+            const state = JSON.parse(savedState);
+            const timeSinceLastAttempt = now - state.lastAttempt;
+            const cooldownMs = this.security.rateLimit.cooldownMinutes * 60 * 1000;
+            
+            if (timeSinceLastAttempt < cooldownMs && 
+                state.attempts >= this.security.rateLimit.maxAttempts) {
+                
+                const remainingMinutes = Math.ceil((cooldownMs - timeSinceLastAttempt) / 60000);
+                const message = this.getErrorMessage('rateLimited', { minutes: remainingMinutes });
+                
+                if (window.notifications) {
+                    window.notifications.warning(message);
+                }
+                
+                return false;
+            }
+            
+            if (timeSinceLastAttempt > cooldownMs) {
+                state.attempts = 0;
+            }
+            
+            this.rateLimit = state;
+        } else {
+            this.rateLimit = { attempts: 0, lastAttempt: null };
+        }
+        
+        return true;
+    }
+    
+    updateRateLimit() {
+        this.rateLimit.attempts++;
+        this.rateLimit.lastAttempt = Date.now();
+        
+        const storageKey = this.security.rateLimit.storageKey;
+        sessionStorage.setItem(storageKey, JSON.stringify(this.rateLimit));
+    }
+    
+    async submitForm() {
+        if (!this.checkRateLimit()) return;
+        
+        const submitBtn = document.getElementById('contact-submit');
+        const form = document.getElementById('contact-form');
+        const successDiv = document.getElementById('form-success');
+        
+        this.formState.isSubmitting = true;
+        this.updateRateLimit();
+        
+        submitBtn.disabled = true;
+        submitBtn.classList.add('loading');
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+        
+        try {
+            // Obtenir le token reCAPTCHA si activé
+            let recaptchaToken = null;
+            if (window.AppConfig?.isRecaptchaEnabled && window.AppConfig.isRecaptchaEnabled() && window.grecaptcha) {
+                recaptchaToken = await window.grecaptcha.execute(
+                    this.security.recaptcha.siteKey,
+                    { action: this.security.recaptcha.action }
+                );
+            }
+            
+            // Préparer les données
+            const formData = new FormData(form);
+            const data = {
+                ...Object.fromEntries(formData),
+                // Métadonnées
+                source_page: window.location.pathname,
+                user_agent: navigator.userAgent,
+                timestamp: new Date().toISOString(),
+                // Sécurité
+                recaptcha_token: recaptchaToken,
+                time_to_submit: Date.now() - this.formState.formDisplayTime,
+                is_spam_suspected: this.formState.isSpam || false,
+                is_suspicious: this.formState.isSuspicious || false
+            };
+            
+            // Supprimer le honeypot
+            if (this.security.honeypotEnabled) {
+                delete data[this.security.honeypotFieldName];
+            }
+            
+            // Envoyer au backend
+            const response = await this.sendToBackend(data);
+            
+            if (response.success) {
+                form.style.display = 'none';
+                successDiv.style.display = 'block';
+                this.formState.hasSubmitted = true;
+                
+                const successMessage = this.getSuccessMessage('formSubmitted');
+                if (window.notifications) {
+                    window.notifications.success(successMessage);
+                }
+                
+                // Reset rate limiting
+                sessionStorage.removeItem(this.security.rateLimit.storageKey);
+                
+                this.trackFormSubmission();
+            } else {
+                throw new Error(response.message || this.getErrorMessage('submitError'));
+            }
+        } catch (error) {
+            console.error('Erreur envoi formulaire:', error);
+            
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('loading');
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer le message';
+            
+            if (window.notifications) {
+                window.notifications.error(error.message || this.getErrorMessage('submitError'));
+            }
+        } finally {
+            this.formState.isSubmitting = false;
+        }
+    }
+    
+    async sendToBackend(data) {
+        const endpoint = `${this.apiConfig.baseUrl}${this.apiConfig.endpoints.contact}`;
+        
+        try {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: this.apiConfig.headers || {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify(data)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            // Mode développement
+            if (window.location.hostname === 'localhost') {
+                console.log('📧 Contact form data (dev mode):', data);
+                return { success: true, message: 'Message envoyé (mode dev)' };
+            }
+            
+            throw error;
+        }
+    }
+    
     validateField(field) {
         const value = field.value.trim();
         const name = field.name;
         
         if (this.validation.required.includes(name) && !value) {
-            this.showFieldError(name, 'Ce champ est requis');
+            this.showFieldError(name, this.getErrorMessage('required'));
             return false;
         }
         
-        if (name === 'email' && value && !this.validation.email.test(value)) {
-            this.showFieldError(name, 'Format d\'email invalide');
-            return false;
-        }
-        
-        if (name === 'phone' && value && !this.validation.phone.test(value)) {
-            this.showFieldError(name, 'Format de téléphone invalide');
+        if (this.validation.patterns[name] && value && !this.validation.patterns[name].test(value)) {
+            this.showFieldError(name, this.getErrorMessage(name));
             return false;
         }
         
         if (name === 'consent' && field.type === 'checkbox' && !field.checked) {
-            this.showFieldError(name, 'Vous devez accepter d\'être contacté');
+            this.showFieldError(name, this.getErrorMessage('consentRequired'));
             return false;
         }
         
@@ -666,58 +921,79 @@ class ContactPage extends BasePage {
         errors.forEach(error => error.style.display = 'none');
     }
     
-    async submitForm() {
-        const submitBtn = document.getElementById('contact-submit');
-        const form = document.getElementById('contact-form');
-        const successDiv = document.getElementById('form-success');
+    getErrorMessage(key, params = {}) {
+        if (window.AppConfig?.getErrorMessage) {
+            return window.AppConfig.getErrorMessage(key, params);
+        }
         
-        this.formState.isSubmitting = true;
+        const defaultMessages = {
+            required: 'Ce champ est requis',
+            email: 'Format d\'email invalide',
+            phone: 'Format de téléphone invalide',
+            name: 'Le nom contient des caractères invalides',
+            company: 'Le nom d\'entreprise contient des caractères invalides',
+            messageTooLong: 'Le message est trop long',
+            tooManyUrls: 'Le message contient trop de liens',
+            spamDetected: 'Votre message a été détecté comme spam',
+            rateLimited: 'Trop de tentatives. Veuillez attendre %minutes% minute(s).',
+            submitError: 'Erreur lors de l\'envoi. Veuillez réessayer.',
+            consentRequired: 'Vous devez accepter d\'être contacté'
+        };
         
-        submitBtn.disabled = true;
-        submitBtn.classList.add('loading');
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+        const messages = this.messages.errorMessages || defaultMessages;
+        let message = messages[key] || defaultMessages[key] || 'Erreur';
         
-        try {
-            await this.simulateFormSubmission();
-            
-            form.style.display = 'none';
-            successDiv.style.display = 'block';
-            
-            this.formState.hasSubmitted = true;
-            
-            if (window.notifications) {
-                window.notifications.success('Votre message a été envoyé avec succès !');
+        Object.keys(params).forEach(param => {
+            message = message.replace(`%${param}%`, params[param]);
+        });
+        
+        return message;
+    }
+    
+    getSuccessMessage(key) {
+        const defaultMessages = {
+            formSubmitted: 'Votre message a été envoyé avec succès !'
+        };
+        
+        const messages = this.messages.successMessages || defaultMessages;
+        return messages[key] || defaultMessages[key] || 'Succès';
+    }
+    
+    restoreRateLimitState() {
+        if (!this.security.rateLimit.enabled) return;
+        
+        const storageKey = this.security.rateLimit.storageKey;
+        const savedState = sessionStorage.getItem(storageKey);
+        
+        if (savedState) {
+            try {
+                this.rateLimit = JSON.parse(savedState);
+            } catch (error) {
+                console.error('Error restoring rate limit state:', error);
             }
-            
-            this.trackFormSubmission();
-            
-        } catch (error) {
-            console.error('Erreur envoi formulaire:', error);
-            
-            submitBtn.disabled = false;
-            submitBtn.classList.remove('loading');
-            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer le message';
-            
-            if (window.notifications) {
-                window.notifications.error('Erreur lors de l\'envoi. Veuillez réessayer.');
-            }
-            
-        } finally {
-            this.formState.isSubmitting = false;
         }
     }
     
-    async simulateFormSubmission() {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                console.log('📧 Message de contact envoyé:', this.formState.data);
-                resolve();
-            }, 2000);
+    updateBusinessStatus() {
+        const statusElements = document.querySelectorAll('.business-status');
+        if (!statusElements.length || !this.contactInfo.isOpenNow) return;
+        
+        const isOpen = this.contactInfo.isOpenNow();
+        const status = this.contactInfo.getBusinessStatus();
+        
+        statusElements.forEach(element => {
+            element.className = `business-status ${isOpen ? 'open' : 'closed'}`;
+            const statusText = element.querySelector('.status-text');
+            if (statusText) {
+                statusText.textContent = status;
+            }
         });
     }
     
     openCalendly() {
-        const calendlyUrl = this.contactInfo.getCalendlyUrl ? this.contactInfo.getCalendlyUrl() : (this.contactInfo.urls?.calendly || 'https://calendly.com/nicolas-dubain/30min');
+        const calendlyUrl = this.contactInfo.getCalendlyUrl ? 
+            this.contactInfo.getCalendlyUrl() : 
+            this.contactInfo.urls?.calendly || 'https://calendly.com/nicolas-dubain/30min';
         
         if (typeof window.Calendly !== 'undefined') {
             window.Calendly.initPopupWidget({
@@ -732,7 +1008,7 @@ class ContactPage extends BasePage {
         }
         
         this.trackCalendlyOpen();
-        return false; // Empêcher toute propagation
+        return false;
     }
     
     toggleFAQ(index) {
@@ -757,25 +1033,7 @@ class ContactPage extends BasePage {
             if (icon) icon.classList.add('rotate');
         }
         
-        return false; // Empêcher toute propagation
-    }
-    
-    trackPhoneClick() {
-        if (window.AppConfig?.analytics?.enabled && typeof gtag !== 'undefined') {
-            gtag('event', 'contact_phone_clicked', {
-                event_category: 'contact',
-                event_label: 'contact_page'
-            });
-        }
-    }
-    
-    trackEmailClick() {
-        if (window.AppConfig?.analytics?.enabled && typeof gtag !== 'undefined') {
-            gtag('event', 'contact_email_clicked', {
-                event_category: 'contact',
-                event_label: 'contact_page'
-            });
-        }
+        return false;
     }
     
     trackFormSubmission() {
@@ -801,7 +1059,7 @@ class ContactPage extends BasePage {
         if (window.app && window.app.router) {
             window.app.router.navigate(page);
         }
-        return false; // Empêcher toute propagation
+        return false;
     }
     
     prefillFromURL() {
