@@ -494,7 +494,7 @@ class OweoClientAccess {
         const indicator = document.createElement('div');
         indicator.className = 'client-status-indicator';
         indicator.innerHTML = `
-            <div class="status-badge ${this.hasAccess() ? 'authenticated' : 'guest'}">
+            <div class="status-badge client-status ${this.hasAccess() ? 'authenticated' : 'guest'}">
                 <i class="fas fa-${this.hasAccess() ? 'user-check' : 'user'}"></i>
                 <span>${this.hasAccess() ? this.clientCode : 'Invité'}</span>
                 ${this.hasAccess() ? `

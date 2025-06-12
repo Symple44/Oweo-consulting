@@ -419,31 +419,6 @@
     border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
-/* Statuts */
-.status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-1);
-    padding: var(--space-1) var(--space-3);
-    border-radius: var(--radius-full);
-    font-size: 0.8rem;
-    font-weight: 500;
-}
-
-.status-badge i {
-    font-size: 0.7rem;
-}
-
-.status-badge.success {
-    background: rgba(16, 185, 129, 0.2);
-    color: var(--success-color);
-}
-
-.status-badge.warning {
-    background: rgba(245, 158, 11, 0.2);
-    color: var(--warning-color);
-}
-
 /* Info DSTV */
 .dstv-info {
     background: linear-gradient(135deg, 
