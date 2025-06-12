@@ -2,51 +2,68 @@
    css/demos-page.css - Styles pour la page catalogue des démos (VISIBILITÉ CORRIGÉE)
    ======================================== */
 
-/* Reset et correction des espaces */
-.demos-page {
-    margin: 0;
-    padding: 0;
-}
-
-.demos-page .page-container {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-}
-
-/* Header de la page démos - VISIBILITÉ GARANTIE */
+/* Container principal */
 .demos-header {
+    --form-primary: var(--primary-color);
+    --form-secondary: var(--secondary-color);
+    --form-border: var(--border-color);
+    scroll-behavior: smooth;
+}
+
+/* Empêcher le focus de faire défiler la page */
+.demos-header * {
+    scroll-margin-top: var(--navbar-height);
+}
+
+/* Header de la page - Structure alignée avec services-page */
+.demos-header .page-header {
     background: linear-gradient(135deg, 
-        rgba(0, 212, 255, 0.08) 0%, 
-        rgba(124, 58, 237, 0.08) 100%);
-    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
-    padding: var(--space-8) 0; /* Restauré pour visibilité */
-    margin: 0;
-    min-height: auto; /* Assurer la visibilité */
+        rgba(0, 212, 255, 0.05) 0%, 
+        rgba(124, 58, 237, 0.05) 100%);
+    padding: var(--space-12) 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
 }
 
-.demos-header .container {
-    max-width: var(--container-max-width);
-    margin: 0 auto;
-    padding: 0 var(--space-4);
+.demos-header .page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(0, 212, 255, 0.1) 0%,
+        transparent 50%
+    );
+    pointer-events: none;
 }
 
-/* Titre et description visibles */
 .demos-header .page-title {
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 800;
-    margin-bottom: var(--space-4);
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: var(--font-weight-black);
     color: var(--text-primary);
+    margin-bottom: var(--space-4);
+    position: relative;
+    z-index: 2;
 }
 
 .demos-header .page-description {
     font-size: var(--font-size-lg);
     color: var(--text-secondary);
-    margin-bottom: var(--space-6);
+    line-height: var(--line-height-relaxed);
     max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.6;
+    margin: 0 auto var(--space-8);
+    position: relative;
+    z-index: 2;
+}
+
+.demos-header *:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
 }
 
 .demos-stats {
@@ -591,7 +608,7 @@
 
 /* Responsive - espacement cohérent */
 @media (max-width: 768px) {
-    .demos-header {
+    .demos-header .page-header{
         padding: var(--space-6) 0;
     }
     
@@ -693,7 +710,7 @@
 }
 
 @media (max-width: 480px) {
-    .demos-header {
+    .demos-header .page-header{
         padding: var(--space-4) 0;
     }
     

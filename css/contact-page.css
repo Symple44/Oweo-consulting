@@ -60,6 +60,12 @@
     z-index: 2;
 }
 
+.contact-page *:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
 /* Actions rapides */
 .contact-quick-actions {
     display: flex;
@@ -637,10 +643,6 @@ select:-webkit-autofill:active {
     }
 }
 
-/* ========================================
-   Améliorations CSS supplémentaires pour contact-page.css
-   ======================================== */
-
 /* Effet de brillance sur les cartes (comme dans services) */
 .contact-form-section::after,
 .contact-card::after {
@@ -777,13 +779,6 @@ select:-webkit-autofill:active {
 @keyframes rotate {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-}
-
-/* Amélioration de l'accessibilité */
-.contact-page *:focus-visible {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
-    border-radius: var(--radius-sm);
 }
 
 /* État de chargement amélioré */

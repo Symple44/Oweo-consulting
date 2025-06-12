@@ -27,9 +27,9 @@ class DemosPage extends BasePage {
     
     getTemplate() {
         return `
-            <div class="page-container demos-page">
+            <div class="page-container demos-header">
                 <!-- Page Header -->
-                <section class="page-header demos-header">
+                <section class="page-header">
                     <div class="container">
                         <div class="page-breadcrumb">
                             <a href="#" data-page="home">Accueil</a>

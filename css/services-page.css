@@ -2,6 +2,70 @@
    css/services-page.css - Styles page services
 ======================================== */
 
+/* Container principal */
+.services-page {
+    --form-primary: var(--primary-color);
+    --form-secondary: var(--secondary-color);
+    --form-border: var(--border-color);
+    scroll-behavior: smooth;
+}
+
+/* Empêcher le focus de faire défiler la page */
+.services-page * {
+    scroll-margin-top: var(--navbar-height);
+}
+
+/* Header de la page - Structure alignée avec services-page */
+.services-page .page-header {
+    background: linear-gradient(135deg, 
+        rgba(0, 212, 255, 0.05) 0%, 
+        rgba(124, 58, 237, 0.05) 100%);
+    padding: var(--space-12) 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.services-page .page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(0, 212, 255, 0.1) 0%,
+        transparent 50%
+    );
+    pointer-events: none;
+}
+
+.services-page .page-title {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: var(--font-weight-black);
+    color: var(--text-primary);
+    margin-bottom: var(--space-4);
+    position: relative;
+    z-index: 2;
+}
+
+.services-page .page-description {
+    font-size: var(--font-size-lg);
+    color: var(--text-secondary);
+    line-height: var(--line-height-relaxed);
+    max-width: 700px;
+    margin: 0 auto var(--space-8);
+    position: relative;
+    z-index: 2;
+}
+
+.services-page *:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
 /* Services Grid */
 .services-grid {
     display: grid;
@@ -42,14 +106,6 @@
 
 .service-card:hover::before {
     transform: scaleX(1);
-}
-
-/* Service Header */
-.service-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: var(--space-6);
 }
 
 .service-icon {
@@ -307,15 +363,16 @@
 
 /* Responsive Services */
 @media (max-width: 768px) {
+    .services-page .page-header {
+        padding: var(--space-8) 0;
+    }
+
+    .services-page .page-title {
+        font-size: 2rem;
+    }
+
     .services-grid {
         grid-template-columns: 1fr;
-    }
-    
-    .service-header {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: var(--space-4);
     }
     
     .service-meta {
@@ -358,5 +415,11 @@
     .contact-actions .btn {
         width: 100%;
         max-width: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .services-page .page-header {
+        padding: var(--space-6) 0;
     }
 }
