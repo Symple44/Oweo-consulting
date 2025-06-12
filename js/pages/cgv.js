@@ -12,7 +12,7 @@ class CGVPage extends BasePage {
         
         // Version et date des CGV
         this.cgvInfo = {
-            version: '2.0',
+            version: '1.0',
             dateVersion: '1er janvier 2024',
             dateApplication: '1er janvier 2024'
         };
@@ -77,7 +77,7 @@ class CGVPage extends BasePage {
                             </summary>
                             <nav class="toc">
                                 ${this.sections.map(section => `
-                                    <a href="#${section.id}" class="toc-link" onclick="this.closest('details').open = false">
+                                    <a href="#${section.id}" class="toc-link">
                                         ${section.title}
                                     </a>
                                 `).join('')}
@@ -344,27 +344,67 @@ class CGVPage extends BasePage {
     bindEvents() {
         super.bindEvents();
         
-        // Navigation interne
-        this.addDelegatedHandler('.toc-link', 'click', (e) => {
+        // Navigation interne - Utiliser une fonction fléchée pour garder le contexte
+        const handleTocClick = (e) => {
             e.preventDefault();
-            const target = e.target.getAttribute('href');
-            const element = document.querySelector(target);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            e.stopPropagation();
+            
+            const link = e.currentTarget;
+            const targetId = link.getAttribute('href');
+            
+            if (targetId && targetId.startsWith('#')) {
+                const elementId = targetId.substring(1);
+                const targetElement = document.getElementById(elementId);
                 
-                // Mettre à jour le lien actif
-                document.querySelectorAll('.toc-link').forEach(link => {
-                    link.classList.remove('active');
-                });
-                e.target.classList.add('active');
+                if (targetElement) {
+                    // Calculer la position avec offset pour la navbar
+                    const navbarHeight = document.querySelector('.navbar')?.offsetHeight || 70;
+                    const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                    const offsetPosition = elementPosition - navbarHeight - 20;
+                    
+                    // Scroll smooth
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Mettre à jour le lien actif
+                    document.querySelectorAll('.toc-link').forEach(l => {
+                        l.classList.remove('active');
+                    });
+                    link.classList.add('active');
+                    
+                    // Fermer le menu mobile si ouvert
+                    const mobileMenu = document.querySelector('.cgv-mobile-toc');
+                    if (mobileMenu && mobileMenu.open) {
+                        mobileMenu.open = false;
+                    }
+                    
+                    // Mettre à jour l'URL sans recharger
+                    if (history.pushState) {
+                        history.pushState(null, null, targetId);
+                    }
+                }
             }
+            
+            return false;
+        };
+        
+        // Attacher les événements aux liens de navigation
+        const tocLinks = document.querySelectorAll('.toc-link');
+        tocLinks.forEach(link => {
+            link.removeEventListener('click', handleTocClick); // Retirer d'abord pour éviter les doublons
+            link.addEventListener('click', handleTocClick);
         });
         
         // Navigation externe
-        this.addDelegatedHandler('[data-page]', 'click', (e) => {
-            e.preventDefault();
-            const page = e.target.closest('[data-page]').dataset.page;
-            this.navigateTo(page);
+        const pageLinks = document.querySelectorAll('[data-page]');
+        pageLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = link.dataset.page;
+                this.navigateTo(page);
+            });
         });
         
         // Scroll spy pour la navigation
@@ -462,17 +502,26 @@ class CGVPage extends BasePage {
         }
     }
     
-    onMount() {
-        super.onMount();
+    async onMount() {
+        await super.onMount();
+        
+        // Ajouter une classe au body pour les styles spécifiques
+        document.body.classList.add('page-cgv');
         
         // Exposer l'instance
         window.cgvPageInstance = this;
         
         // Mettre à jour le titre de la page
         document.title = 'CGV - OWEO';
+        
+        // S'assurer que le scroll est en haut
+        window.scrollTo(0, 0);
     }
     
     destroy() {
+        // Retirer la classe du body
+        document.body.classList.remove('page-cgv');
+        
         // Nettoyer l'instance globale
         if (window.cgvPageInstance === this) {
             delete window.cgvPageInstance;
