@@ -9,7 +9,7 @@
 window.CompanyInfo = {
     // Informations de base
     name: 'Oweo',
-    fullName: 'Oweo Consulting',
+    fullName: 'OWEO',
     tagline: 'Expert en transformation digitale pour l\'industrie métallique',
     
     // Contact principal
@@ -105,8 +105,14 @@ window.CompanyInfo = {
         tva: 'FR37945028199',
         rcs: 'RCS Nantes B 945 028 199',
         ape: '6202A',
+        apeName: 'Conseil en systèmes et logiciels informatiques',
         capital: '500 €',
-        forme: 'SARL'
+        forme: 'SASU',
+        dateCreation: '28/05/2025',
+        numeroRM: '', // Numéro au Répertoire des Métiers si applicable
+        assuranceRC: 'AXA France - Contrat n°123456789',
+        representantLegal: 'Nicolas Dubain',
+        qualiteRepresentant: 'Gérant'
     },
     
     // Informations bancaires (pour affichage uniquement)

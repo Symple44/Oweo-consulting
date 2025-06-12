@@ -1,6 +1,6 @@
 /* ========================================
-   css/cgv-page.css - Styles pour la page CGV
-   ======================================== */
+   css/cgv-page.css - Styles page CGV complet
+======================================== */
 
 /* Container principal */
 .cgv-page {
@@ -15,7 +15,10 @@
     scroll-margin-top: var(--navbar-height);
 }
 
-/* Header de la page - Structure alignée avec services-page */
+/* =================================
+   HEADER DE LA PAGE
+================================= */
+
 .cgv-page .page-header {
     background: linear-gradient(135deg, 
         rgba(0, 212, 255, 0.05) 0%, 
@@ -88,7 +91,10 @@
     color: var(--primary-color);
 }
 
-/* Layout principal */
+/* =================================
+   LAYOUT PRINCIPAL
+================================= */
+
 .cgv-content {
     padding: var(--space-8) 0;
     background: var(--bg-primary);
@@ -101,7 +107,10 @@
     align-items: start;
 }
 
-/* Navigation latérale */
+/* =================================
+   NAVIGATION LATÉRALE AMÉLIORÉE
+================================= */
+
 .cgv-nav {
     position: relative;
 }
@@ -113,8 +122,94 @@
     border: 1px solid var(--border-color);
     border-radius: var(--radius-xl);
     padding: var(--space-6);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    max-height: calc(100vh - var(--navbar-height) - var(--space-8));
+    overflow-y: auto;
+    overflow-x: hidden;
+    
+    /* Propriétés pour la progression du scroll */
+    --scroll-progress: 0%;
+    
+    /* Animation de chargement */
+    animation: menuLoadIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
 }
 
+/* Indicateur de progression sur le côté du menu */
+.nav-sticky::after {
+    content: '';
+    position: absolute;
+    right: -1px;
+    top: 0;
+    width: 3px;
+    height: var(--scroll-progress);
+    background: linear-gradient(
+        to bottom,
+        var(--primary-color) 0%,
+        var(--secondary-color) 50%,
+        var(--primary-color) 100%
+    );
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    transition: height 0.1s ease-out;
+    opacity: 0.8;
+}
+
+/* États du menu selon la position de scroll */
+.nav-sticky.at-top {
+    border-top-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.1);
+}
+
+.nav-sticky.in-middle {
+    border-color: rgba(0, 212, 255, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    background: var(--bg-card);
+}
+
+.nav-sticky.at-bottom {
+    border-bottom-color: var(--secondary-color);
+    box-shadow: 0 -4px 12px rgba(124, 58, 237, 0.1);
+}
+
+.nav-sticky::after {
+    transition: height 0.05s linear, opacity 0.2s ease;
+}
+
+.nav-sticky.scrolling {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 212, 255, 0.3);
+}
+.nav-sticky.at-top::after {
+    opacity: 0.3;
+}
+
+.nav-sticky.in-middle::after {
+    opacity: 0.8;
+}
+
+.nav-sticky.at-bottom::after {
+    opacity: 1;
+    box-shadow: 0 0 8px rgba(124, 58, 237, 0.3);
+}
+
+/* Animation lors de la navigation */
+.nav-sticky.navigating {
+    border-color: var(--primary-color);
+    box-shadow: 
+        0 8px 32px rgba(0, 212, 255, 0.2),
+        0 0 0 2px rgba(0, 212, 255, 0.1);
+    transform: scale(1.01);
+}
+
+/* États de scroll directionnels */
+.nav-sticky.scrolling[data-scroll-direction="down"] {
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
+}
+
+.nav-sticky.scrolling[data-scroll-direction="up"] {
+    box-shadow: 0 -4px 32px rgba(124, 58, 237, 0.1);
+}
+
+/* Titre de navigation */
 .cgv-nav h3 {
     font-size: 1rem;
     font-weight: 700;
@@ -124,13 +219,40 @@
     letter-spacing: 0.05em;
 }
 
-/* Table des matières */
+/* =================================
+   TABLE DES MATIÈRES AMÉLIORÉE
+================================= */
+
 .toc {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
 }
 
+/* Indicateur de position visuel */
+.toc.has-active::before {
+    content: '';
+    position: absolute;
+    left: -12px;
+    top: var(--indicator-top, 0);
+    width: 4px;
+    height: var(--indicator-height, 0);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: var(--radius-full);
+    transition: var(--indicator-transition, all 0.3s cubic-bezier(0.4, 0, 0.2, 1));
+    transform: translateY(0);
+    opacity: 1;
+    box-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
+}
+
+/* Animation de l'indicateur lors des transitions */
+.toc.has-active.updating::before {
+    opacity: 0.7;
+    transform: scale(1.1);
+}
+
+/* Liens de navigation */
 .toc-link {
     display: block;
     padding: var(--space-2) var(--space-3);
@@ -138,32 +260,40 @@
     text-decoration: none;
     font-size: 0.875rem;
     border-radius: var(--radius-md);
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
+    margin-left: 8px; /* Espace pour l'indicateur */
 }
 
 .toc-link:hover {
     background: var(--bg-secondary);
     color: var(--primary-color);
     transform: translateX(4px);
+    padding-left: var(--space-4);
 }
 
 .toc-link.active {
     background: rgba(0, 212, 255, 0.1);
     color: var(--primary-color);
     font-weight: 600;
+    transform: translateX(6px);
+    padding-left: var(--space-4);
+    border-left: 2px solid transparent; /* Pour éviter le shift lors de l'activation */
 }
 
-.toc-link.active::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 3px;
-    height: 60%;
-    background: var(--primary-color);
-    border-radius: var(--radius-full);
+/* Animation lors du clic/navigation */
+.toc-link.navigating-to {
+    background: rgba(0, 212, 255, 0.2);
+    transform: translateX(8px) scale(1.02);
+    box-shadow: 0 2px 8px rgba(0, 212, 255, 0.2);
+}
+
+/* Amélioration de l'accessibilité */
+.toc-link:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+    background: rgba(0, 212, 255, 0.1);
 }
 
 /* Actions CGV */
@@ -178,7 +308,35 @@
     justify-content: center;
 }
 
-/* Contenu principal */
+/* =================================
+   SCROLLBAR PERSONNALISÉE
+================================= */
+
+.nav-sticky::-webkit-scrollbar {
+    width: 6px;
+}
+
+.nav-sticky::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-full);
+    margin: var(--space-2) 0;
+}
+
+.nav-sticky::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: var(--radius-full);
+    transition: all 0.2s ease;
+}
+
+.nav-sticky::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+}
+
+/* =================================
+   CONTENU PRINCIPAL
+================================= */
+
 .cgv-main {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -192,7 +350,10 @@
     line-height: 1.8;
 }
 
-/* Informations société */
+/* =================================
+   INFORMATIONS SOCIÉTÉ
+================================= */
+
 .company-info {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
@@ -212,23 +373,44 @@
     line-height: 1.8;
 }
 
-/* Séparateur de section */
-.section-divider {
-    border: none;
-    height: 1px;
-    background: var(--border-color);
-    margin: var(--space-8) 0;
-}
+/* =================================
+   SECTIONS CGV AMÉLIORÉES
+================================= */
 
-/* Sections CGV */
 .cgv-section {
     margin-bottom: var(--space-12);
     scroll-margin-top: calc(var(--navbar-height) + var(--space-8));
     padding-top: var(--space-4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.9;
 }
 
 .cgv-section:last-child {
     margin-bottom: 0;
+}
+
+/* Section active */
+.cgv-section.active-section {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Section en vue */
+.cgv-section.in-view {
+    opacity: 1;
+}
+
+/* Section vers laquelle on navigue */
+.cgv-section.navigating-to {
+    background: linear-gradient(
+        90deg,
+        rgba(0, 212, 255, 0.02) 0%,
+        transparent 100%
+    );
+    border-left: 3px solid var(--primary-color);
+    padding-left: calc(var(--space-6) - 3px);
+    margin-left: -3px;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 
 .cgv-section h2 {
@@ -282,7 +464,21 @@
     line-height: 1.8;
 }
 
-/* Footer des CGV */
+/* =================================
+   SÉPARATEURS ET DIVIDERS
+================================= */
+
+.section-divider {
+    border: none;
+    height: 1px;
+    background: var(--border-color);
+    margin: var(--space-8) 0;
+}
+
+/* =================================
+   FOOTER DES CGV
+================================= */
+
 .cgv-footer {
     margin-top: var(--space-12);
     padding-top: var(--space-8);
@@ -310,85 +506,138 @@
     text-decoration: underline;
 }
 
-/* Navigation latérale */
-.cgv-nav {
-    position: relative;
+/* Badge de version */
+.version-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: rgba(0, 212, 255, 0.1);
+    color: var(--primary-color);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: 1px solid rgba(0, 212, 255, 0.2);
 }
 
-/* Version finale du menu sticky avec toutes les améliorations */
-.nav-sticky {
-    position: sticky;
-    top: calc(var(--navbar-height) + var(--space-4));
+/* =================================
+   TABLE DES MATIÈRES MOBILE
+================================= */
+
+.cgv-mobile-toc {
+    display: none;
+    margin-bottom: var(--space-6);
+}
+
+.cgv-mobile-toc summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-primary);
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-3);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+}
+
+.cgv-mobile-toc summary::-webkit-details-marker {
+    display: none;
+}
+
+.cgv-mobile-toc summary::after {
+    content: '▼';
+    font-size: 0.8em;
+    transition: transform 0.3s ease;
+}
+
+.cgv-mobile-toc[open] summary::after {
+    transform: rotate(180deg);
+}
+
+.cgv-mobile-toc[open] summary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.cgv-mobile-toc .toc {
+    margin-top: var(--space-4);
     background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-xl);
-    padding: var(--space-6);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    max-height: calc(100vh - var(--navbar-height) - var(--space-8));
-    overflow-y: auto;
-    overflow-x: hidden;
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
 }
 
-/* Effet "floating" subtil lors du scroll */
-@keyframes floatMenu {
-    0%, 100% {
+/* =================================
+   ANIMATIONS
+================================= */
+
+/* Animation de mise en évidence lors du ciblage */
+@keyframes highlightSection {
+    0% {
+        background: transparent;
+        transform: translateX(0);
+    }
+    25% {
+        background: rgba(0, 212, 255, 0.05);
+        transform: translateX(4px);
+    }
+    50% {
+        background: rgba(0, 212, 255, 0.08);
+        transform: translateX(6px);
+    }
+    100% {
+        background: rgba(0, 212, 255, 0.02);
+        transform: translateX(0);
+    }
+}
+
+.cgv-section:target {
+    animation: highlightSection 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Animation de chargement du menu */
+@keyframes menuLoadIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
         transform: translateY(0);
     }
-    50% {
-        transform: translateY(-2px);
-    }
 }
 
-.nav-sticky.scrolling {
-    animation: floatMenu 0.8s ease;
-    box-shadow: var(--shadow-lg);
+/* État de chargement du menu */
+.nav-sticky.loading {
+    opacity: 0.5;
+    pointer-events: none;
 }
 
-/* Direction du scroll */
-.nav-sticky.scrolling[data-scroll-direction="down"] {
-    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
+.nav-sticky.loading::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid var(--border-light);
+    border-top: 2px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
 
-.nav-sticky.scrolling[data-scroll-direction="up"] {
-    box-shadow: 0 -4px 32px rgba(124, 58, 237, 0.1);
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
-/* Animation lors de la navigation */
-@keyframes menuGlow {
-    0%, 100% {
-        box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.1);
-    }
-    50% {
-        box-shadow: 0 0 20px rgba(0, 212, 255, 0.3), 0 0 0 4px rgba(0, 212, 255, 0.2);
-    }
-}
+/* =================================
+   RESPONSIVE DESIGN
+================================= */
 
-.nav-sticky.navigating {
-    border-color: var(--primary-color);
-    animation: menuGlow 0.8s ease;
-}
-
-/* Scrollbar personnalisée pour le menu */
-.nav-sticky::-webkit-scrollbar {
-    width: 4px;
-}
-
-.nav-sticky::-webkit-scrollbar-track {
-    background: var(--bg-secondary);
-    border-radius: var(--radius-full);
-}
-
-.nav-sticky::-webkit-scrollbar-thumb {
-    background: var(--border-color);
-    border-radius: var(--radius-full);
-    transition: background 0.2s ease;
-}
-
-.nav-sticky::-webkit-scrollbar-thumb:hover {
-    background: var(--primary-color);
-}
-
-/* Responsive */
 @media (max-width: 1024px) {
     .cgv-layout {
         grid-template-columns: 1fr;
@@ -399,18 +648,35 @@
         display: none;
     }
     
+    .cgv-mobile-toc {
+        display: block;
+    }
+    
     .cgv-meta {
         flex-direction: column;
         gap: var(--space-3);
     }
+    
+    /* Masquer l'indicateur sur tablette/mobile */
+    .toc.has-active::before {
+        display: none;
+    }
+    
+    .nav-sticky::after {
+        display: none;
+    }
+    
+    .toc-link {
+        margin-left: 0;
+    }
 }
 
 @media (max-width: 768px) {
-    .cgv-header {
+    .cgv-page .page-header {
         padding: var(--space-6) 0;
     }
     
-    .cgv-header .page-title {
+    .cgv-page .page-title {
         font-size: 1.75rem;
     }
     
@@ -444,7 +710,7 @@
 }
 
 @media (max-width: 480px) {
-    .cgv-header .page-title {
+    .cgv-page .page-title {
         font-size: 1.5rem;
     }
     
@@ -467,9 +733,57 @@
     }
 }
 
-/* Styles d'impression */
+/* =================================
+   OPTIMISATIONS PERFORMANCE
+================================= */
+
+/* Optimisations de performance pour les transitions */
+.toc-link,
+.cgv-section,
+.nav-sticky {
+    will-change: transform;
+}
+
+/* Amélioration de la lisibilité lors du scroll */
+.nav-sticky.scrolling .toc-link:not(.active) {
+    opacity: 0.7;
+}
+
+.nav-sticky.scrolling .toc-link.active {
+    opacity: 1;
+    font-weight: 700;
+}
+
+/* =================================
+   ACCESSIBILITÉ
+================================= */
+
+/* Réduire les animations sur les appareils qui préfèrent moins de mouvement */
+@media (prefers-reduced-motion: reduce) {
+    .toc-link,
+    .cgv-section,
+    .nav-sticky,
+    .toc.has-active::before {
+        transition: none;
+        animation: none;
+    }
+    
+    .nav-sticky {
+        transform: none;
+    }
+    
+    .cgv-section:target {
+        animation: none;
+        background: rgba(0, 212, 255, 0.05);
+    }
+}
+
+/* =================================
+   STYLES D'IMPRESSION
+================================= */
+
 @media print {
-    .cgv-header {
+    .cgv-page .page-header {
         background: none;
         border: none;
         padding: 0;
@@ -485,6 +799,10 @@
     }
     
     .cgv-nav {
+        display: none;
+    }
+    
+    .cgv-mobile-toc {
         display: none;
     }
     
@@ -506,6 +824,11 @@
     .cgv-section {
         page-break-inside: avoid;
         margin-bottom: 1cm;
+        transform: none;
+        background: none !important;
+        border: none !important;
+        padding-left: 0 !important;
+        margin-left: 0 !important;
     }
     
     .cgv-section h2 {
@@ -541,95 +864,4 @@
         font-size: 0.8em;
         color: #666;
     }
-}
-
-/* Animations */
-@keyframes highlightSection {
-    0% {
-        background: transparent;
-    }
-    50% {
-        background: rgba(0, 212, 255, 0.05);
-    }
-    100% {
-        background: transparent;
-    }
-}
-
-.cgv-section:target {
-    animation: highlightSection 1s ease;
-}
-
-/* Amélioration de l'accessibilité */
-.cgv-document *:focus-visible {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
-    border-radius: var(--radius-sm);
-}
-
-/* Table des matières mobile (optionnel) */
-.cgv-mobile-toc {
-    display: none;
-    margin-bottom: var(--space-6);
-}
-
-@media (max-width: 1024px) {
-    .cgv-mobile-toc {
-        display: block;
-        background: var(--bg-card);
-        border: 1px solid var(--border-color);
-        border-radius: var(--radius-lg);
-        padding: var(--space-4);
-    }
-    
-    .cgv-mobile-toc summary {
-        cursor: pointer;
-        font-weight: 600;
-        color: var(--text-primary);
-        list-style: none;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    .cgv-mobile-toc summary::-webkit-details-marker {
-        display: none;
-    }
-    
-    .cgv-mobile-toc summary::after {
-        content: '▼';
-        font-size: 0.8em;
-        transition: transform 0.3s ease;
-    }
-    
-    .cgv-mobile-toc[open] summary::after {
-        transform: rotate(180deg);
-    }
-    
-    .cgv-mobile-toc .toc {
-        margin-top: var(--space-4);
-    }
-}
-
-/* Badge de version */
-.version-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    background: rgba(0, 212, 255, 0.1);
-    color: var(--primary-color);
-    padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-full);
-    font-size: 0.875rem;
-    font-weight: 600;
-    border: 1px solid rgba(0, 212, 255, 0.2);
-}
-
-/* Effet de survol sur les sections */
-.cgv-section {
-    transition: transform 0.2s ease;
-}
-
-.cgv-section:hover {
-    transform: translateX(2px);
 }

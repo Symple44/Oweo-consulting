@@ -456,18 +456,17 @@ class CGVPage extends BasePage {
         const toc = activeLink?.closest('.toc');
         if (!toc || !activeLink) return;
         
-        // Ajouter la classe pour afficher l'indicateur
+        // Assurer que l'indicateur est visible
         toc.classList.add('has-active');
         
-        // Calculer la position et la hauteur
-        const tocRect = toc.getBoundingClientRect();
-        const linkRect = activeLink.getBoundingClientRect();
+        // Position de l'indicateur
+        const indicatorTop = activeLink.offsetTop;
+        const indicatorHeight = activeLink.offsetHeight;
         
-        const indicatorTop = linkRect.top - tocRect.top;
-        const indicatorHeight = linkRect.height;
-        
+        // Appliquer avec transition smooth
         toc.style.setProperty('--indicator-top', `${indicatorTop}px`);
         toc.style.setProperty('--indicator-height', `${indicatorHeight}px`);
+        toc.style.setProperty('--indicator-transition', 'all 0.2s ease-out');
     }
     
     smoothScrollTo(targetPosition, duration = 800, callback) {
@@ -503,57 +502,113 @@ class CGVPage extends BasePage {
         const navLinks = document.querySelectorAll('.toc-link');
         const navSticky = document.querySelector('.nav-sticky');
         
-        // Observer pour les sections
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                const section = entry.target;
-                
-                // Effet de fondu pour les sections visibles
-                if (entry.isIntersecting) {
-                    section.classList.add('in-view');
-                } else {
-                    section.classList.remove('in-view');
-                }
-                
-                // Gestion du lien actif
-                if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-                    const id = section.getAttribute('id');
-                    
-                    // Retirer toutes les classes active-section
-                    document.querySelectorAll('.cgv-section').forEach(s => {
-                        s.classList.remove('active-section');
-                    });
-                    section.classList.add('active-section');
-                    
-                    navLinks.forEach(link => {
-                        link.classList.remove('active');
-                        if (link.getAttribute('href') === `#${id}`) {
-                            link.classList.add('active');
-                            // Faire défiler le menu pour montrer le lien actif
-                            this.scrollMenuToActiveLink(link);
-                            // Mettre à jour l'indicateur de position
-                            this.updateMenuIndicator(link);
-                        }
-                    });
-                }
-            });
-        }, {
-            rootMargin: '-100px 0px -40% 0px',
-            threshold: [0, 0.5, 1]
-        });
+        if (!sections.length || !navLinks.length) return;
         
-        sections.forEach(section => {
-            observer.observe(section);
-        });
-        
-        // Effet de suivi lors du scroll
+        // Variables pour le suivi
+        let currentActiveId = null;
         let scrollTimeout;
         let lastScrollTop = 0;
         
-        window.addEventListener('scroll', () => {
+        // Fonction simple et robuste pour trouver la section active
+        const findActiveSection = () => {
+            const scrollPosition = window.pageYOffset;
+            const navbarHeight = document.querySelector('.navbar')?.offsetHeight || 70;
+            
+            // Point de déclenchement : milieu de l'écran
+            const viewportMiddle = scrollPosition + window.innerHeight / 2;
+            
+            // Trouver toutes les sections visibles
+            const visibleSections = [];
+            
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                const sectionTop = scrollPosition + rect.top;
+                const sectionBottom = sectionTop + rect.height;
+                
+                // Une section est "visible" si elle intersecte avec la fenêtre
+                const isVisible = sectionBottom > scrollPosition + navbarHeight && 
+                                sectionTop < scrollPosition + window.innerHeight;
+                
+                if (isVisible) {
+                    visibleSections.push({
+                        element: section,
+                        id: section.getAttribute('id'),
+                        top: sectionTop,
+                        bottom: sectionBottom,
+                        distanceFromMiddle: Math.abs(viewportMiddle - (sectionTop + rect.height / 2))
+                    });
+                }
+            });
+            
+            // Si aucune section visible, utiliser la position de scroll
+            if (visibleSections.length === 0) {
+                // Si on est en haut de page
+                if (scrollPosition < 200) {
+                    return sections[0]?.getAttribute('id') || null;
+                }
+                // Si on est en bas de page
+                if (scrollPosition + window.innerHeight >= document.documentElement.scrollHeight - 100) {
+                    return sections[sections.length - 1]?.getAttribute('id') || null;
+                }
+                return null;
+            }
+            
+            // Trier par distance du milieu de l'écran et prendre la plus proche
+            visibleSections.sort((a, b) => a.distanceFromMiddle - b.distanceFromMiddle);
+            return visibleSections[0].id;
+        };
+        
+        // Fonction pour mettre à jour le lien actif
+        const updateActiveLink = (activeId) => {
+            if (!activeId || activeId === currentActiveId) return;
+            
+            console.log('🎯 Active section:', activeId); // Debug
+            
+            currentActiveId = activeId;
+            
+            // Mettre à jour les classes des sections
+            sections.forEach(section => {
+                section.classList.remove('active-section');
+                if (section.getAttribute('id') === activeId) {
+                    section.classList.add('active-section');
+                }
+            });
+            
+            // Mettre à jour les liens de navigation
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${activeId}`) {
+                    link.classList.add('active');
+                    this.scrollMenuToActiveLink(link);
+                    this.updateMenuIndicator(link);
+                }
+            });
+        };
+        
+        // Observer d'intersection pour les effets visuels
+        const visualObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                } else {
+                    entry.target.classList.remove('in-view');
+                }
+            });
+        }, {
+            rootMargin: '-50px 0px',
+            threshold: 0.1
+        });
+        
+        sections.forEach(section => {
+            visualObserver.observe(section);
+        });
+        
+        // Gestionnaire de scroll principal (simplifié)
+        const handleScroll = () => {
             const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
             const scrollDirection = currentScrollTop > lastScrollTop ? 'down' : 'up';
             
+            // Effets visuels du menu sticky
             if (navSticky) {
                 navSticky.classList.add('scrolling');
                 navSticky.setAttribute('data-scroll-direction', scrollDirection);
@@ -564,11 +619,125 @@ class CGVPage extends BasePage {
                 }, 150);
             }
             
-            lastScrollTop = currentScrollTop;
+            // Trouver et activer la section courante
+            const activeId = findActiveSection();
+            if (activeId) {
+                updateActiveLink(activeId);
+            }
             
-            // Calculer la progression du scroll
+            // Mettre à jour la progression du scroll
             this.updateScrollProgress();
-        });
+            
+            lastScrollTop = currentScrollTop;
+        };
+        
+        // Écouter le scroll avec throttling optimisé
+        let isScrolling = false;
+        
+        const throttledScroll = () => {
+            if (!isScrolling) {
+                requestAnimationFrame(() => {
+                    handleScroll();
+                    isScrolling = false;
+                });
+                isScrolling = true;
+            }
+        };
+        
+        window.addEventListener('scroll', throttledScroll, { passive: true });
+        
+        // Activation initiale avec délai pour s'assurer que tout est chargé
+        setTimeout(() => {
+            const initialActiveId = findActiveSection();
+            if (initialActiveId) {
+                updateActiveLink(initialActiveId);
+            }
+            console.log('🚀 Scroll spy initialized'); // Debug
+        }, 200);
+        
+        // Re-calculer lors du redimensionnement
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                const activeId = findActiveSection();
+                if (activeId) {
+                    updateActiveLink(activeId);
+                }
+            }, 100);
+        }, { passive: true });
+    }
+
+    setupStickyMenu() {
+        const navSticky = document.querySelector('.nav-sticky');
+        const cgvMain = document.querySelector('.cgv-main');
+        
+        if (!navSticky || !cgvMain) return;
+        
+        // Variables pour le calcul de position
+        let ticking = false;
+        let lastKnownScrollPosition = 0;
+        const navbarHeight = document.querySelector('.navbar')?.offsetHeight || 70;
+        
+        // Fonction pour ajuster la position du menu
+        const adjustMenuPosition = () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const mainRect = cgvMain.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
+            const menuHeight = navSticky.offsetHeight;
+            
+            // Calculer les limites
+            const topLimit = navbarHeight + 20;
+            const bottomLimit = mainRect.bottom - menuHeight - 20;
+            
+            // Si le menu est plus haut que la fenêtre
+            if (menuHeight > windowHeight - topLimit - 20) {
+                // Mode scroll interne
+                navSticky.style.position = 'fixed';
+                navSticky.style.top = `${topLimit}px`;
+                navSticky.style.maxHeight = `calc(100vh - ${topLimit + 20}px)`;
+                navSticky.style.overflowY = 'auto';
+            } else {
+                // Mode sticky normal
+                if (mainRect.top > topLimit) {
+                    // Au début du contenu
+                    navSticky.style.position = 'absolute';
+                    navSticky.style.top = '0';
+                } else if (bottomLimit < windowHeight) {
+                    // À la fin du contenu
+                    navSticky.style.position = 'absolute';
+                    navSticky.style.top = 'auto';
+                    navSticky.style.bottom = '20px';
+                } else {
+                    // En cours de scroll
+                    navSticky.style.position = 'fixed';
+                    navSticky.style.top = `${topLimit}px`;
+                    navSticky.style.bottom = 'auto';
+                }
+            }
+            
+            // Ajouter une classe pour les animations
+            navSticky.classList.toggle('is-scrolling', Math.abs(scrollTop - lastKnownScrollPosition) > 5);
+            lastKnownScrollPosition = scrollTop;
+        };
+        
+        // Optimisation avec requestAnimationFrame
+        const handleScroll = () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    adjustMenuPosition();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+        
+        // Événements
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('resize', adjustMenuPosition);
+        
+        // Ajustement initial
+        adjustMenuPosition();
     }
     
     updateScrollProgress() {
@@ -577,27 +746,43 @@ class CGVPage extends BasePage {
         
         const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
         const scrollPosition = window.pageYOffset;
-        const scrollProgress = (scrollPosition / scrollHeight) * 100;
         
-        cgvNav.style.setProperty('--scroll-progress', `${scrollProgress}%`);
+        const scrollProgress = scrollHeight > 0 ? (scrollPosition / scrollHeight) * 100 : 0;
+        const clampedProgress = Math.max(0, Math.min(100, scrollProgress));
+        
+        cgvNav.style.setProperty('--scroll-progress', `${clampedProgress}%`);
+        
+        // Classes selon la position
+        const navSticky = document.querySelector('.nav-sticky');
+        if (navSticky) {
+            navSticky.classList.toggle('at-top', clampedProgress < 5);
+            navSticky.classList.toggle('at-bottom', clampedProgress > 95);
+            navSticky.classList.toggle('in-middle', clampedProgress >= 5 && clampedProgress <= 95);
+        }
     }
     
     scrollMenuToActiveLink(activeLink) {
         const navSticky = document.querySelector('.nav-sticky');
         if (!navSticky || !activeLink) return;
         
-        const linkRect = activeLink.getBoundingClientRect();
-        const navRect = navSticky.getBoundingClientRect();
-        const linkTop = activeLink.offsetTop;
         const navHeight = navSticky.clientHeight;
+        const linkTop = activeLink.offsetTop;
         const linkHeight = activeLink.offsetHeight;
+        const currentScrollTop = navSticky.scrollTop;
         
-        // Si le lien est en dehors de la vue du menu
-        if (linkRect.top < navRect.top || linkRect.bottom > navRect.bottom) {
-            // Centrer le lien actif dans le menu
-            const scrollTo = linkTop - (navHeight / 2) + (linkHeight / 2);
+        // Position du lien dans la vue actuelle du menu
+        const linkRelativeTop = linkTop - currentScrollTop;
+        const linkRelativeBottom = linkRelativeTop + linkHeight;
+        
+        // Vérifier si le lien est visible dans le menu
+        const isLinkVisible = linkRelativeTop >= 0 && linkRelativeBottom <= navHeight;
+        
+        if (!isLinkVisible) {
+            // Centrer le lien dans le menu
+            const targetScrollTop = linkTop - (navHeight / 2) + (linkHeight / 2);
+            
             navSticky.scrollTo({
-                top: scrollTo,
+                top: Math.max(0, targetScrollTop),
                 behavior: 'smooth'
             });
         }
@@ -697,6 +882,10 @@ class CGVPage extends BasePage {
         
         // Initialiser la progression du scroll
         this.updateScrollProgress();
+        
+        // Initialiser le menu sticky amélioré
+        this.setupStickyMenu();
+        
     }
     
     destroy() {
