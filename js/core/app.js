@@ -117,9 +117,14 @@ class OweoApp {
             this.router.register('demos', new DemosPage());
         }
         
-        // ⭐ NOUVEAU : Page de contact
+        // Page de contact
         if (typeof ContactPage !== 'undefined') {
             this.router.register('contact', new ContactPage());
+        }
+
+        // Page de contact
+        if (typeof CGVPage !== 'undefined') {
+            this.router.register('cgv', new CGVPage());
         }
         
         // Pages démo individuelles

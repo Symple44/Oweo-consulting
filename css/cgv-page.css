@@ -1,0 +1,508 @@
+/* ========================================
+   css/cgv-page.css - Styles pour la page CGV
+   ======================================== */
+
+/* Header de la page */
+.cgv-header {
+    background: linear-gradient(135deg, 
+        rgba(0, 212, 255, 0.05) 0%, 
+        rgba(124, 58, 237, 0.05) 100%);
+    padding: var(--space-8) 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.cgv-header .page-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    margin-bottom: var(--space-6);
+    color: var(--text-primary);
+}
+
+/* Métadonnées */
+.cgv-meta {
+    display: flex;
+    gap: var(--space-6);
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: var(--space-6);
+}
+
+.cgv-meta .meta-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.cgv-meta .meta-item i {
+    color: var(--primary-color);
+}
+
+/* Layout principal */
+.cgv-content {
+    padding: var(--space-8) 0;
+    background: var(--bg-primary);
+}
+
+.cgv-layout {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: var(--space-8);
+    align-items: start;
+}
+
+/* Navigation latérale */
+.cgv-nav {
+    position: relative;
+}
+
+.nav-sticky {
+    position: sticky;
+    top: calc(var(--navbar-height) + var(--space-4));
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+}
+
+.cgv-nav h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-4);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Table des matières */
+.toc {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.toc-link {
+    display: block;
+    padding: var(--space-2) var(--space-3);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.toc-link:hover {
+    background: var(--bg-secondary);
+    color: var(--primary-color);
+    transform: translateX(4px);
+}
+
+.toc-link.active {
+    background: rgba(0, 212, 255, 0.1);
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.toc-link.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 60%;
+    background: var(--primary-color);
+    border-radius: var(--radius-full);
+}
+
+/* Actions CGV */
+.cgv-actions {
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border-light);
+}
+
+.cgv-actions .btn {
+    width: 100%;
+    justify-content: center;
+}
+
+/* Contenu principal */
+.cgv-main {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+
+.cgv-document {
+    padding: var(--space-8);
+    color: var(--text-secondary);
+    line-height: 1.8;
+}
+
+/* Informations société */
+.company-info {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    margin-bottom: var(--space-8);
+}
+
+.company-info h2 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: var(--space-4);
+}
+
+.company-info p {
+    margin: 0;
+    line-height: 1.8;
+}
+
+/* Séparateur de section */
+.section-divider {
+    border: none;
+    height: 1px;
+    background: var(--border-color);
+    margin: var(--space-8) 0;
+}
+
+/* Sections CGV */
+.cgv-section {
+    margin-bottom: var(--space-12);
+    scroll-margin-top: calc(var(--navbar-height) + var(--space-4));
+}
+
+.cgv-section:last-child {
+    margin-bottom: 0;
+}
+
+.cgv-section h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-6);
+    position: relative;
+    padding-bottom: var(--space-3);
+}
+
+.cgv-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: var(--primary-color);
+    border-radius: var(--radius-full);
+}
+
+.cgv-section h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-4);
+}
+
+.cgv-section h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-3);
+}
+
+.cgv-section p {
+    margin-bottom: var(--space-4);
+    text-align: justify;
+}
+
+.cgv-section ul {
+    margin-bottom: var(--space-4);
+    padding-left: var(--space-6);
+}
+
+.cgv-section li {
+    margin-bottom: var(--space-2);
+    line-height: 1.8;
+}
+
+/* Footer des CGV */
+.cgv-footer {
+    margin-top: var(--space-12);
+    padding-top: var(--space-8);
+    border-top: 2px solid var(--border-color);
+    text-align: center;
+}
+
+.version-note {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-3);
+}
+
+.contact-note {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.contact-note a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.contact-note a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .cgv-layout {
+        grid-template-columns: 1fr;
+        gap: var(--space-6);
+    }
+    
+    .cgv-nav {
+        display: none;
+    }
+    
+    .cgv-meta {
+        flex-direction: column;
+        gap: var(--space-3);
+    }
+}
+
+@media (max-width: 768px) {
+    .cgv-header {
+        padding: var(--space-6) 0;
+    }
+    
+    .cgv-header .page-title {
+        font-size: 1.75rem;
+    }
+    
+    .cgv-content {
+        padding: var(--space-4) 0;
+    }
+    
+    .cgv-document {
+        padding: var(--space-4);
+    }
+    
+    .cgv-section h2 {
+        font-size: 1.5rem;
+    }
+    
+    .cgv-section h3 {
+        font-size: 1.125rem;
+    }
+    
+    .cgv-section p {
+        text-align: left;
+    }
+    
+    .company-info {
+        padding: var(--space-4);
+    }
+    
+    .cgv-meta .meta-item {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .cgv-header .page-title {
+        font-size: 1.5rem;
+    }
+    
+    .cgv-document {
+        padding: var(--space-3);
+    }
+    
+    .cgv-section {
+        margin-bottom: var(--space-8);
+    }
+    
+    .cgv-section h2 {
+        font-size: 1.25rem;
+        margin-bottom: var(--space-4);
+    }
+    
+    .cgv-section h3 {
+        font-size: 1rem;
+        margin-top: var(--space-4);
+    }
+}
+
+/* Styles d'impression */
+@media print {
+    .cgv-header {
+        background: none;
+        border: none;
+        padding: 0;
+        margin-bottom: 2cm;
+    }
+    
+    .cgv-meta {
+        display: none;
+    }
+    
+    .page-breadcrumb {
+        display: none;
+    }
+    
+    .cgv-nav {
+        display: none;
+    }
+    
+    .cgv-layout {
+        display: block;
+    }
+    
+    .cgv-main {
+        background: white;
+        border: none;
+        box-shadow: none;
+    }
+    
+    .cgv-document {
+        padding: 0;
+        color: black;
+    }
+    
+    .cgv-section {
+        page-break-inside: avoid;
+        margin-bottom: 1cm;
+    }
+    
+    .cgv-section h2 {
+        page-break-after: avoid;
+        color: black;
+    }
+    
+    .cgv-section h3,
+    .cgv-section h4 {
+        page-break-after: avoid;
+        color: black;
+    }
+    
+    .company-info {
+        background: none;
+        border: 1px solid #ddd;
+        margin-bottom: 1cm;
+    }
+    
+    .section-divider {
+        background: #ddd;
+    }
+    
+    a {
+        color: black;
+        text-decoration: underline;
+    }
+    
+    /* Ajout de l'URL après les liens */
+    a[href^="http"]:after,
+    a[href^="mailto"]:after {
+        content: " (" attr(href) ")";
+        font-size: 0.8em;
+        color: #666;
+    }
+}
+
+/* Animations */
+@keyframes highlightSection {
+    0% {
+        background: transparent;
+    }
+    50% {
+        background: rgba(0, 212, 255, 0.05);
+    }
+    100% {
+        background: transparent;
+    }
+}
+
+.cgv-section:target {
+    animation: highlightSection 1s ease;
+}
+
+/* Amélioration de l'accessibilité */
+.cgv-document *:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+/* Table des matières mobile (optionnel) */
+.cgv-mobile-toc {
+    display: none;
+    margin-bottom: var(--space-6);
+}
+
+@media (max-width: 1024px) {
+    .cgv-mobile-toc {
+        display: block;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: var(--space-4);
+    }
+    
+    .cgv-mobile-toc summary {
+        cursor: pointer;
+        font-weight: 600;
+        color: var(--text-primary);
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .cgv-mobile-toc summary::-webkit-details-marker {
+        display: none;
+    }
+    
+    .cgv-mobile-toc summary::after {
+        content: '▼';
+        font-size: 0.8em;
+        transition: transform 0.3s ease;
+    }
+    
+    .cgv-mobile-toc[open] summary::after {
+        transform: rotate(180deg);
+    }
+    
+    .cgv-mobile-toc .toc {
+        margin-top: var(--space-4);
+    }
+}
+
+/* Badge de version */
+.version-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: rgba(0, 212, 255, 0.1);
+    color: var(--primary-color);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+/* Effet de survol sur les sections */
+.cgv-section {
+    transition: transform 0.2s ease;
+}
+
+.cgv-section:hover {
+    transform: translateX(2px);
+}
