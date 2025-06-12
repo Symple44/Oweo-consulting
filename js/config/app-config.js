@@ -255,7 +255,7 @@ window.AppConfig = {
             // reCAPTCHA v3
             recaptcha: {
                 enabled: true,
-                siteKey: 'YOUR_RECAPTCHA_SITE_KEY', // À remplacer
+                siteKey: '6LfwlFwrAAAAAGqiSXVELtmshYK8MrpAYbmyMc8a', // À remplacer
                 action: 'contact_form',
                 minimumScore: 0.5
             },

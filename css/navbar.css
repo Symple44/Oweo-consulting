@@ -242,6 +242,7 @@
     border: none;
     cursor: pointer;
     padding: 0;
+    z-index: 1001;
 }
 
 .toggle-line {
@@ -251,6 +252,11 @@
     margin: 2px 0;
     transition: all 0.3s ease;
     transform-origin: center;
+}
+
+.navbar-toggle.active {
+    position: relative;
+    z-index: 1001;
 }
 
 .navbar-toggle.active .toggle-line:nth-child(1) {
@@ -269,18 +275,47 @@
 .navbar-mobile {
     position: fixed;
     top: var(--navbar-height, 70px);
+    left: -100%; /* Utiliser left au lieu de transform */
+    width: 100%; /* CRUCIAL: 100% au lieu d'une largeur fixe */
+    height: calc(100vh - var(--navbar-height, 70px));
+    background: rgba(26, 26, 46, 0.98);
+    backdrop-filter: blur(10px);
+    transition: left 0.3s ease; /* Transition sur left */
+    overflow-y: auto;
+    z-index: 999;
+}
+/* Ajouter une overlay sombre pendant que le menu est ouvert */
+.navbar-mobile::before {
+    content: '';
+    position: fixed;
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(26, 26, 46, 0.98);
-    backdrop-filter: blur(10px);
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.navbar-mobile.show::before {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .navbar-mobile.show {
-    transform: translateX(0);
+    transform: translateX(0) !important;
+}
+
+@supports (-webkit-touch-callout: none) {
+    .navbar-mobile {
+        -webkit-transform: translateX(-100%);
+    }
+    
+    .navbar-mobile.show {
+        -webkit-transform: translateX(0) !important;
+    }
 }
 
 .mobile-menu-content {
@@ -289,6 +324,8 @@
     flex-direction: column;
     gap: 2rem;
     min-height: 100%;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .mobile-nav {
