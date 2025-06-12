@@ -310,6 +310,84 @@
     text-decoration: underline;
 }
 
+/* Navigation latérale */
+.cgv-nav {
+    position: relative;
+}
+
+/* Version finale du menu sticky avec toutes les améliorations */
+.nav-sticky {
+    position: sticky;
+    top: calc(var(--navbar-height) + var(--space-4));
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    max-height: calc(100vh - var(--navbar-height) - var(--space-8));
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Effet "floating" subtil lors du scroll */
+@keyframes floatMenu {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-2px);
+    }
+}
+
+.nav-sticky.scrolling {
+    animation: floatMenu 0.8s ease;
+    box-shadow: var(--shadow-lg);
+}
+
+/* Direction du scroll */
+.nav-sticky.scrolling[data-scroll-direction="down"] {
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
+}
+
+.nav-sticky.scrolling[data-scroll-direction="up"] {
+    box-shadow: 0 -4px 32px rgba(124, 58, 237, 0.1);
+}
+
+/* Animation lors de la navigation */
+@keyframes menuGlow {
+    0%, 100% {
+        box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.1);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.3), 0 0 0 4px rgba(0, 212, 255, 0.2);
+    }
+}
+
+.nav-sticky.navigating {
+    border-color: var(--primary-color);
+    animation: menuGlow 0.8s ease;
+}
+
+/* Scrollbar personnalisée pour le menu */
+.nav-sticky::-webkit-scrollbar {
+    width: 4px;
+}
+
+.nav-sticky::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-full);
+}
+
+.nav-sticky::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: var(--radius-full);
+    transition: background 0.2s ease;
+}
+
+.nav-sticky::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
     .cgv-layout {

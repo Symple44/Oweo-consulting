@@ -31,16 +31,19 @@ class CGVPage extends BasePage {
             { id: 'tribunal', title: '10. Tribunal compétent' },
             { id: 'loi-applicable', title: '11. Langue et loi applicables' }
         ];
+        
+        // Récupérer les infos de l'entreprise
+        this.companyInfo = window.CompanyInfo || {};
     }
     
     getTemplate() {
         return `
             <div class="page-container cgv-page">
                 <!-- Header -->
-                <section class="cgv-header">
+                <section class="cgv-header page-header">
                     <div class="container">
                         <div class="page-breadcrumb">
-                            <a href="#" data-page="home">Accueil</a>
+                            <a href="#home" class="nav-link">Accueil</a>
                             <i class="fas fa-chevron-right"></i>
                             <span>CGV</span>
                         </div>
@@ -109,18 +112,18 @@ class CGVPage extends BasePage {
                             <!-- Contenu principal -->
                             <main class="cgv-main">
                                 <div class="cgv-document">
-                                    <!-- Informations société -->
+                                    <!-- Informations société depuis CompanyInfo -->
                                     <div class="company-info">
-                                        <h2>OWEO</h2>
+                                        <h2>${this.companyInfo.fullName || 'OWEO'}</h2>
                                         <p>
-                                            <strong>Raison sociale :</strong> OWEO SAS<br>
-                                            <strong>SIREN :</strong> 945 028 199<br>
-                                            <strong>SIRET :</strong> 945 028 199 00012<br>
-                                            <strong>TVA intracommunautaire :</strong> FR37 945 028 199<br>
-                                            <strong>Siège social :</strong> 10 rue du Sous-Bois, 44700 Orvault<br>
-                                            <strong>Forme juridique :</strong> Société par Actions Simplifiée (SAS)<br>
-                                            <strong>Code NAF/APE :</strong> 62.02A - Conseil en systèmes et logiciels informatiques<br>
-                                            <strong>Capital social :</strong> 1 000 €
+                                            <strong>Raison sociale :</strong> ${this.companyInfo.fullName} ${this.companyInfo.legal?.forme || 'SAS'}<br>
+                                            <strong>SIREN :</strong> ${this.companyInfo.legal?.siren || '945 028 199'}<br>
+                                            <strong>SIRET :</strong> ${this.companyInfo.legal?.siret || '945 028 199 00012'}<br>
+                                            <strong>TVA intracommunautaire :</strong> ${this.companyInfo.legal?.tva || 'FR37 945 028 199'}<br>
+                                            <strong>Siège social :</strong> ${this.companyInfo.address?.complete || '10 rue du Sous-Bois, 44700 Orvault'}<br>
+                                            <strong>Forme juridique :</strong> ${this.getFormeJuridique()}<br>
+                                            <strong>Code NAF/APE :</strong> ${this.companyInfo.legal?.ape || '62.02A'} - Conseil en systèmes et logiciels informatiques<br>
+                                            <strong>Capital social :</strong> ${this.companyInfo.legal?.capital || '1 000 €'}
                                         </p>
                                     </div>
                                     
@@ -131,8 +134,8 @@ class CGVPage extends BasePage {
                                         <h2>1. Dispositions générales</h2>
                                         
                                         <h3>1.1 Objet</h3>
-                                        <p>Les présentes Conditions Générales de Vente (ci-après dénommées "CGV") constituent, conformément à l'article L. 441-1 du code du commerce, le socle unique de la relation commerciale entre OWEO (ci-après dénommée "le Prestataire") et ses clients (ci-après dénommés "le Client").</p>
-                                        <p>OWEO exerce des activités de prestations de services informatiques et d'assistance à distance dans le domaine informatique, avec une expertise particulière dans les solutions ERP pour l'industrie métallique.</p>
+                                        <p>Les présentes Conditions Générales de Vente (ci-après dénommées "CGV") constituent, conformément à l'article L. 441-1 du code du commerce, le socle unique de la relation commerciale entre ${this.companyInfo.fullName || 'OWEO'} (ci-après dénommée "le Prestataire") et ses clients (ci-après dénommés "le Client").</p>
+                                        <p>${this.companyInfo.fullName || 'OWEO'} exerce des activités de prestations de services informatiques et d'assistance à distance dans le domaine informatique, avec une expertise particulière dans les solutions ERP pour l'industrie métallique.</p>
                                         <p>Les présentes CGV détaillent les conditions contractuelles (droits et obligations) entre le Prestataire et le Client, dans le cadre des prestations définies au titre des conditions particulières.</p>
                                         <p>Elles s'appliquent, sans restriction ni réserve, à tous les services rendus par le Prestataire auprès de ses Clients, quelles que soient les clauses pouvant figurer sur les documents du Client, et notamment ses conditions générales d'achat. Elles sont applicables de plein droit à tout contrat portant sur la fourniture de nos services conclu par un Client.</p>
                                         <p>Conformément à la réglementation en vigueur, le Prestataire se réserve le droit de déroger à certaines clauses des présentes CGV, en fonction des négociations menées avec le Client, par l'établissement de Conditions de vente particulières.</p>
@@ -200,13 +203,14 @@ class CGVPage extends BasePage {
                                         <h2>3. Prestations de service</h2>
                                         <p>Les caractéristiques essentielles des prestations de service fournies par le Prestataire sont de manière claire et compréhensible décrites dans le devis (lettre de mission) valant conditions particulières.</p>
                                         <p>Les exemples de prestations, les tarifs, les graphismes figurant sur le site Internet ne sont donnés qu'à titre indicatif et ne sauraient constituer un engagement contractuel de l'entreprise.</p>
-                                        <p>Les prestations d'OWEO incluent notamment :</p>
+                                        <p>Les prestations d'${this.companyInfo.fullName || 'OWEO'} incluent notamment :</p>
                                         <ul>
                                             <li>Conseil en transformation digitale</li>
                                             <li>Implémentation de solutions ERP</li>
                                             <li>Développement de logiciels sur mesure</li>
                                             <li>Formation et accompagnement au changement</li>
                                             <li>Support et maintenance applicative</li>
+                                            <li>Intégration de solutions métiers spécifiques à l'industrie métallique</li>
                                         </ul>
                                     </section>
                                     
@@ -286,14 +290,14 @@ class CGVPage extends BasePage {
                                         
                                         <h3>7.2. Exonération de responsabilité et force majeure</h3>
                                         <p>La responsabilité du Prestataire ne pourra en aucun cas être engagée en cas de retard ou de suspension de la fourniture de la prestation imputable au Client, ou en cas de force majeure.</p>
-                                        <p>Sont considérés comme cas de force majeure ou cas fortuits, outre ceux habituellement reconnus par la jurisprudence des cours et tribunaux français et sans que cette liste soit restrictive : la maladie ou l'accident d'un consultant ou d'un animateur de formation, les grèves ou conflits sociaux internes ou externes à OWEO, les désastres naturels, les incendies, l'interruption des télécommunications, de l'approvisionnement en énergie, ou des transports de tout type, ou toute autre circonstance échappant au contrôle raisonnable d'OWEO.</p>
+                                        <p>Sont considérés comme cas de force majeure ou cas fortuits, outre ceux habituellement reconnus par la jurisprudence des cours et tribunaux français et sans que cette liste soit restrictive : la maladie ou l'accident d'un consultant ou d'un animateur de formation, les grèves ou conflits sociaux internes ou externes à ${this.companyInfo.fullName || 'OWEO'}, les désastres naturels, les incendies, l'interruption des télécommunications, de l'approvisionnement en énergie, ou des transports de tout type, ou toute autre circonstance échappant au contrôle raisonnable d'${this.companyInfo.fullName || 'OWEO'}.</p>
                                     </section>
                                     
                                     <!-- Article 8 -->
                                     <section id="propriete-intellectuelle" class="cgv-section">
                                         <h2>8. Propriété intellectuelle</h2>
                                         <p>Le Prestataire reste propriétaire de tous les droits de propriété intellectuelle sur les études, dessins, modèles, prototypes, logiciels, etc., réalisés (même à la demande du Client) en vue de la Fourniture des Services au Client. Le Client s'interdit donc toute reproduction ou exploitation desdites études, dessins, modèles et prototypes, etc., sans l'autorisation expresse, écrite et préalable du Prestataire qui peut la conditionner à une contrepartie financière.</p>
-                                        <p>Les méthodes, le savoir-faire et la documentation d'OWEO demeurent sa propriété exclusive. Le Client s'engage à ne pas les divulguer à des tiers sans autorisation écrite préalable.</p>
+                                        <p>Les méthodes, le savoir-faire et la documentation d'${this.companyInfo.fullName || 'OWEO'} demeurent sa propriété exclusive. Le Client s'engage à ne pas les divulguer à des tiers sans autorisation écrite préalable.</p>
                                     </section>
                                     
                                     <!-- Article 9 -->
@@ -303,14 +307,14 @@ class CGVPage extends BasePage {
                                         <p>Le responsable du traitement des données est le Fournisseur. L'accès aux données personnelles sera strictement limité aux employés du responsable de traitement, habilités à les traiter en raison de leurs fonctions. Les informations recueillies pourront éventuellement être communiquées à des tiers liés à l'entreprise par contrat pour l'exécution de tâches sous-traitées, sans que l'autorisation du Client soit nécessaire.</p>
                                         <p>Dans le cadre de l'exécution de leurs prestations, les tiers n'ont qu'un accès limité aux données et ont l'obligation de les utiliser en conformité avec les dispositions de la législation applicable en matière de protection des données personnelles. En dehors des cas énoncés ci-dessus, le Fournisseur s'interdit de vendre, louer, céder ou donner accès à des tiers aux données sans consentement préalable du Client, à moins d'y être contraint en raison d'un motif légitime.</p>
                                         <p>Si les données sont amenées à être transférées en dehors de l'Union européenne, le Client en sera informé et les garanties prises afin de sécuriser les données (par exemple, pour les États-Unis conformément à la décision d'adéquation de la Commission européenne du 10 juillet 2023 constatant que les États-Unis assurent un niveau de protection équivalent à celui de l'UE, adoption de clauses types de protection validées par la CNIL, adoption d'un code de conduite, obtention d'une certification CNIL, etc.) lui seront précisées.</p>
-                                        <p>Conformément à la réglementation applicable, le Client dispose d'un droit d'accès, de rectification, d'effacement, et de portabilité des données le concernant, ainsi que du droit de s'opposer au traitement pour motif légitime, droits qu'il peut exercer en s'adressant au responsable de traitement à l'adresse suivante : <a href="mailto:contact@oweo-consulting.fr">contact@oweo-consulting.fr</a>.</p>
+                                        <p>Conformément à la réglementation applicable, le Client dispose d'un droit d'accès, de rectification, d'effacement, et de portabilité des données le concernant, ainsi que du droit de s'opposer au traitement pour motif légitime, droits qu'il peut exercer en s'adressant au responsable de traitement à l'adresse suivante : <a href="mailto:${this.companyInfo.contact?.email || 'contact@oweo-consulting.fr'}">${this.companyInfo.contact?.email || 'contact@oweo-consulting.fr'}</a>.</p>
                                         <p>En cas de réclamation, le Client peut adresser une réclamation auprès de la Commission Nationale de l'Informatique et des Libertés (CNIL).</p>
                                     </section>
                                     
                                     <!-- Article 10 -->
                                     <section id="tribunal" class="cgv-section">
                                         <h2>10. Tribunal compétent</h2>
-                                        <p>Tous les litiges auxquels le présent contrat et les accords qui en découlent pourraient donner lieu, concernant tant leur validité, leur interprétation, leur exécution, leur résolution, leurs conséquences et leurs suites seront soumis au tribunal de commerce de Nantes.</p>
+                                        <p>Tous les litiges auxquels le présent contrat et les accords qui en découlent pourraient donner lieu, concernant tant leur validité, leur interprétation, leur exécution, leur résolution, leurs conséquences et leurs suites seront soumis au tribunal de commerce de ${this.companyInfo.address?.city || 'Nantes'}.</p>
                                         <p>Cette clause s'applique même en cas de référé, de demande incidente ou de pluralité de défendeurs ou d'appel en garantie, et quels que soient le mode et les modalités de paiement, sans que les clauses attributives de juridiction qui pourraient exister sur les documents des Clients puissent mettre obstacle à l'application de la présente clause.</p>
                                     </section>
                                     
@@ -329,7 +333,7 @@ class CGVPage extends BasePage {
                                         </p>
                                         <p class="contact-note">
                                             Pour toute question concernant ces CGV, veuillez nous contacter à :
-                                            <a href="mailto:contact@oweo-consulting.fr">contact@oweo-consulting.fr</a>
+                                            <a href="mailto:${this.companyInfo.contact?.email || 'contact@oweo-consulting.fr'}">${this.companyInfo.contact?.email || 'contact@oweo-consulting.fr'}</a>
                                         </p>
                                     </div>
                                 </div>
@@ -341,10 +345,24 @@ class CGVPage extends BasePage {
         `;
     }
     
+    getFormeJuridique() {
+        // Mapper les abréviations vers les formes complètes
+        const formes = {
+            'SARL': 'Société à Responsabilité Limitée (SARL)',
+            'SAS': 'Société par Actions Simplifiée (SAS)',
+            'SASU': 'Société par Actions Simplifiée Unipersonnelle (SASU)',
+            'SA': 'Société Anonyme (SA)',
+            'EURL': 'Entreprise Unipersonnelle à Responsabilité Limitée (EURL)'
+        };
+        
+        const forme = this.companyInfo.legal?.forme || 'SAS';
+        return formes[forme] || forme;
+    }
+    
     bindEvents() {
         super.bindEvents();
         
-        // Navigation interne - Utiliser une fonction fléchée pour garder le contexte
+        // Navigation interne (table des matières)
         const handleTocClick = (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -352,27 +370,47 @@ class CGVPage extends BasePage {
             const link = e.currentTarget;
             const targetId = link.getAttribute('href');
             
-            if (targetId && targetId.startsWith('#')) {
+            if (targetId && targetId.startsWith('#') && targetId !== '#home') {
+                // Navigation interne dans les CGV
                 const elementId = targetId.substring(1);
                 const targetElement = document.getElementById(elementId);
                 
                 if (targetElement) {
+                    // Ajouter une classe d'animation au menu
+                    const navSticky = document.querySelector('.nav-sticky');
+                    if (navSticky) {
+                        navSticky.classList.add('navigating');
+                    }
+                    
+                    // Marquer la section cible
+                    document.querySelectorAll('.cgv-section').forEach(section => {
+                        section.classList.remove('navigating-to');
+                    });
+                    targetElement.classList.add('navigating-to');
+                    
                     // Calculer la position avec offset pour la navbar
                     const navbarHeight = document.querySelector('.navbar')?.offsetHeight || 70;
                     const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
                     const offsetPosition = elementPosition - navbarHeight - 20;
                     
-                    // Scroll smooth
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
-                    
-                    // Mettre à jour le lien actif
+                    // Mettre à jour le lien actif immédiatement
                     document.querySelectorAll('.toc-link').forEach(l => {
-                        l.classList.remove('active');
+                        l.classList.remove('active', 'navigating-to');
                     });
-                    link.classList.add('active');
+                    link.classList.add('active', 'navigating-to');
+                    
+                    // Mettre à jour l'indicateur immédiatement
+                    this.updateMenuIndicator(link);
+                    
+                    // Scroll smooth avec callback
+                    this.smoothScrollTo(offsetPosition, 800, () => {
+                        // Retirer les classes d'animation
+                        if (navSticky) {
+                            navSticky.classList.remove('navigating');
+                        }
+                        link.classList.remove('navigating-to');
+                        targetElement.classList.remove('navigating-to');
+                    });
                     
                     // Fermer le menu mobile si ouvert
                     const mobileMenu = document.querySelector('.cgv-mobile-toc');
@@ -390,20 +428,23 @@ class CGVPage extends BasePage {
             return false;
         };
         
-        // Attacher les événements aux liens de navigation
+        // Attacher les événements aux liens de navigation interne
         const tocLinks = document.querySelectorAll('.toc-link');
         tocLinks.forEach(link => {
-            link.removeEventListener('click', handleTocClick); // Retirer d'abord pour éviter les doublons
+            link.removeEventListener('click', handleTocClick);
             link.addEventListener('click', handleTocClick);
         });
         
-        // Navigation externe
-        const pageLinks = document.querySelectorAll('[data-page]');
-        pageLinks.forEach(link => {
+        // Navigation externe (breadcrumb)
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                const page = link.dataset.page;
-                this.navigateTo(page);
+                const href = link.getAttribute('href');
+                if (href && href.startsWith('#')) {
+                    const page = href.substring(1);
+                    this.navigateTo(page);
+                }
             });
         });
         
@@ -411,29 +452,155 @@ class CGVPage extends BasePage {
         this.setupScrollSpy();
     }
     
+    updateMenuIndicator(activeLink) {
+        const toc = activeLink?.closest('.toc');
+        if (!toc || !activeLink) return;
+        
+        // Ajouter la classe pour afficher l'indicateur
+        toc.classList.add('has-active');
+        
+        // Calculer la position et la hauteur
+        const tocRect = toc.getBoundingClientRect();
+        const linkRect = activeLink.getBoundingClientRect();
+        
+        const indicatorTop = linkRect.top - tocRect.top;
+        const indicatorHeight = linkRect.height;
+        
+        toc.style.setProperty('--indicator-top', `${indicatorTop}px`);
+        toc.style.setProperty('--indicator-height', `${indicatorHeight}px`);
+    }
+    
+    smoothScrollTo(targetPosition, duration = 800, callback) {
+        const startPosition = window.pageYOffset;
+        const distance = targetPosition - startPosition;
+        const startTime = performance.now();
+        
+        const easeInOutCubic = (t) => {
+            return t < 0.5 
+                ? 4 * t * t * t 
+                : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        };
+        
+        const animation = (currentTime) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const ease = easeInOutCubic(progress);
+            
+            window.scrollTo(0, startPosition + distance * ease);
+            
+            if (progress < 1) {
+                requestAnimationFrame(animation);
+            } else if (callback) {
+                callback();
+            }
+        };
+        
+        requestAnimationFrame(animation);
+    }
+    
     setupScrollSpy() {
         const sections = document.querySelectorAll('.cgv-section');
         const navLinks = document.querySelectorAll('.toc-link');
+        const navSticky = document.querySelector('.nav-sticky');
         
+        // Observer pour les sections
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
+                const section = entry.target;
+                
+                // Effet de fondu pour les sections visibles
                 if (entry.isIntersecting) {
-                    const id = entry.target.getAttribute('id');
+                    section.classList.add('in-view');
+                } else {
+                    section.classList.remove('in-view');
+                }
+                
+                // Gestion du lien actif
+                if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+                    const id = section.getAttribute('id');
+                    
+                    // Retirer toutes les classes active-section
+                    document.querySelectorAll('.cgv-section').forEach(s => {
+                        s.classList.remove('active-section');
+                    });
+                    section.classList.add('active-section');
+                    
                     navLinks.forEach(link => {
                         link.classList.remove('active');
                         if (link.getAttribute('href') === `#${id}`) {
                             link.classList.add('active');
+                            // Faire défiler le menu pour montrer le lien actif
+                            this.scrollMenuToActiveLink(link);
+                            // Mettre à jour l'indicateur de position
+                            this.updateMenuIndicator(link);
                         }
                     });
                 }
             });
         }, {
-            rootMargin: '-100px 0px -70% 0px'
+            rootMargin: '-100px 0px -40% 0px',
+            threshold: [0, 0.5, 1]
         });
         
         sections.forEach(section => {
             observer.observe(section);
         });
+        
+        // Effet de suivi lors du scroll
+        let scrollTimeout;
+        let lastScrollTop = 0;
+        
+        window.addEventListener('scroll', () => {
+            const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollDirection = currentScrollTop > lastScrollTop ? 'down' : 'up';
+            
+            if (navSticky) {
+                navSticky.classList.add('scrolling');
+                navSticky.setAttribute('data-scroll-direction', scrollDirection);
+                
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    navSticky.classList.remove('scrolling');
+                }, 150);
+            }
+            
+            lastScrollTop = currentScrollTop;
+            
+            // Calculer la progression du scroll
+            this.updateScrollProgress();
+        });
+    }
+    
+    updateScrollProgress() {
+        const cgvNav = document.querySelector('.cgv-nav');
+        if (!cgvNav) return;
+        
+        const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPosition = window.pageYOffset;
+        const scrollProgress = (scrollPosition / scrollHeight) * 100;
+        
+        cgvNav.style.setProperty('--scroll-progress', `${scrollProgress}%`);
+    }
+    
+    scrollMenuToActiveLink(activeLink) {
+        const navSticky = document.querySelector('.nav-sticky');
+        if (!navSticky || !activeLink) return;
+        
+        const linkRect = activeLink.getBoundingClientRect();
+        const navRect = navSticky.getBoundingClientRect();
+        const linkTop = activeLink.offsetTop;
+        const navHeight = navSticky.clientHeight;
+        const linkHeight = activeLink.offsetHeight;
+        
+        // Si le lien est en dehors de la vue du menu
+        if (linkRect.top < navRect.top || linkRect.bottom > navRect.bottom) {
+            // Centrer le lien actif dans le menu
+            const scrollTo = linkTop - (navHeight / 2) + (linkHeight / 2);
+            navSticky.scrollTo({
+                top: scrollTo,
+                behavior: 'smooth'
+            });
+        }
     }
     
     downloadPDF() {
@@ -497,9 +664,20 @@ class CGVPage extends BasePage {
     }
     
     navigateTo(page) {
+        // Option 1: Si le router est accessible via window.app
         if (window.app && window.app.router) {
             window.app.router.navigate(page);
+            return;
         }
+        
+        // Option 2: Utiliser l'eventBus si disponible
+        if (window.app && window.app.eventBus) {
+            window.app.eventBus.emit('navigate', { page });
+            return;
+        }
+        
+        // Option 3: Navigation manuelle par hash
+        window.location.hash = `#${page}`;
     }
     
     async onMount() {
@@ -512,10 +690,13 @@ class CGVPage extends BasePage {
         window.cgvPageInstance = this;
         
         // Mettre à jour le titre de la page
-        document.title = 'CGV - OWEO';
+        document.title = 'CGV - ' + (this.companyInfo.name || 'OWEO');
         
         // S'assurer que le scroll est en haut
         window.scrollTo(0, 0);
+        
+        // Initialiser la progression du scroll
+        this.updateScrollProgress();
     }
     
     destroy() {
