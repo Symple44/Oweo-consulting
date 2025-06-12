@@ -1,5 +1,5 @@
 // ========================================
-// js/components/navbar.js - Navigation principale
+// js/components/navbar.js - Navigation principale CORRIGÉE
 // ========================================
 
 class OweoNavbar extends BaseComponent {
@@ -155,26 +155,6 @@ class OweoNavbar extends BaseComponent {
     
     bindEvents() {
         super.bindEvents();
-
-        // Toggle mobile menu avec vérification
-        const mobileToggle = this.$('#mobile-menu-toggle');
-        const mobileMenu = this.$('#mobile-menu');
-        
-        if (mobileToggle && mobileMenu) {
-            console.log('✅ Mobile menu elements found');
-            
-            this.addEventHandler(mobileToggle, 'click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('🔄 Toggle clicked, current state:', this.isMenuOpen);
-                this.toggleMobileMenu();
-            });
-        } else {
-            console.error('❌ Mobile menu elements not found', {
-                toggle: !!mobileToggle,
-                menu: !!mobileMenu
-            });
-        }
         
         // Navigation principale
         this.addDelegatedHandler('[data-page]', 'click', (e) => {
@@ -189,6 +169,12 @@ class OweoNavbar extends BaseComponent {
             const demoId = e.target.closest('.client-demo-link').dataset.demo;
             this.handleDemoAccess(demoId);
         });
+        
+        // Toggle mobile menu
+        const mobileToggle = this.$('#mobile-menu-toggle');
+        if (mobileToggle) {
+            this.addEventHandler(mobileToggle, 'click', () => this.toggleMobileMenu());
+        }
         
         // Dropdowns
         this.addDelegatedHandler('.dropdown-toggle', 'click', (e) => {
@@ -219,11 +205,21 @@ class OweoNavbar extends BaseComponent {
             this.closeMobileMenu();
         });
         
+        // Fermer le menu mobile en cliquant sur les boutons d'action
+        this.addDelegatedHandler('.mobile-actions button[data-page]', 'click', () => {
+            this.closeMobileMenu();
+        });
+        
         // Resize handler
         this.addEventHandler(window, 'resize', () => this.handleResize());
     }
     
     navigateTo(page) {
+        // Fermer le menu mobile si ouvert
+        if (this.isMenuOpen) {
+            this.closeMobileMenu();
+        }
+        
         this.emit('navigate', { page });
         
         // Navigation via EventBus
@@ -275,13 +271,6 @@ class OweoNavbar extends BaseComponent {
         const toggle = this.$('#mobile-menu-toggle');
         const menu = this.$('#mobile-menu');
         
-        if (!toggle || !menu) {
-            console.error('❌ Cannot find mobile menu elements');
-            return;
-        }
-        
-        console.log('📱 Toggling mobile menu to:', this.isMenuOpen ? 'open' : 'closed');
-        
         if (this.isMenuOpen) {
             this.openMobileMenu(toggle, menu);
         } else {
@@ -293,65 +282,20 @@ class OweoNavbar extends BaseComponent {
         toggle = toggle || this.$('#mobile-menu-toggle');
         menu = menu || this.$('#mobile-menu');
         
-        if (!toggle || !menu) {
-            console.error('❌ Cannot open mobile menu - elements not found');
-            return;
-        }
-        
-        // Créer une overlay si elle n'existe pas
-        let overlay = document.querySelector('.navbar-mobile-overlay');
-        if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.className = 'navbar-mobile-overlay';
-            document.body.appendChild(overlay);
-            
-            // Fermer le menu en cliquant sur l'overlay
-            overlay.addEventListener('click', () => this.closeMobileMenu());
-        }
-        
-        // Forcer l'affichage
-        menu.style.display = 'block';
-        menu.style.visibility = 'visible';
-        
-        // Utiliser requestAnimationFrame pour s'assurer que le DOM est prêt
-        requestAnimationFrame(() => {
-            // Ajouter les classes
-            toggle.classList.add('active');
+        if (toggle) toggle.classList.add('active');
+        if (menu) {
             menu.classList.add('show');
-            overlay.classList.add('show');
+            // Ajouter la classe loading pour l'effet de liseré
+            this.element.classList.add('loading');
             
-            // FORCER le transform après un court délai
+            // Retirer la classe loading après l'animation
             setTimeout(() => {
-                // Vérifier si le transform n'est pas appliqué
-                const currentTransform = window.getComputedStyle(menu).transform;
-                console.log('Current transform:', currentTransform);
-                
-                if (currentTransform.includes('-') || currentTransform === 'none') {
-                    console.log('⚠️ Transform incorrect, application forcée');
-                    menu.style.transform = 'translateX(0)';
-                    menu.style.setProperty('transform', 'translateX(0)', 'important');
-                }
-                
-                // Vérifier la visibilité finale
-                const rect = menu.getBoundingClientRect();
-                console.log('Menu position:', {
-                    left: rect.left,
-                    width: rect.width,
-                    visible: rect.left >= 0 && rect.left < window.innerWidth
-                });
-                
-                if (rect.left < 0) {
-                    console.error('❌ Menu toujours hors écran !');
-                    // Forcer avec left
-                    menu.style.left = '0';
-                    menu.style.transform = 'none';
-                }
-            }, 50);
-        });
+                this.element.classList.remove('loading');
+            }, 600);
+        }
         
-        // Bloquer le scroll
+        // Bloquer le scroll du body
         document.body.style.overflow = 'hidden';
-        document.body.classList.add('menu-open');
         
         this.isMenuOpen = true;
         this.emit('mobileMenuOpened');
@@ -362,16 +306,7 @@ class OweoNavbar extends BaseComponent {
         menu = menu || this.$('#mobile-menu');
         
         if (toggle) toggle.classList.remove('active');
-        if (menu) {
-            menu.classList.remove('show');
-            
-            // Attendre la fin de la transition avant de cacher
-            setTimeout(() => {
-                if (!this.isMenuOpen) {
-                    menu.style.display = 'none';
-                }
-            }, 300); // Durée de la transition
-        }
+        if (menu) menu.classList.remove('show');
         
         // Restaurer le scroll du body
         document.body.style.overflow = '';
