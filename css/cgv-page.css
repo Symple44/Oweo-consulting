@@ -1,5 +1,6 @@
 /* ========================================
    css/cgv-page.css - Styles page CGV complet
+   Version corrigée avec les bonnes variables
 ======================================== */
 
 /* Container principal */
@@ -8,11 +9,23 @@
     --form-secondary: var(--secondary-color);
     --form-border: var(--border-color);
     scroll-behavior: smooth;
+    /* Important: pas d'overflow hidden sur la page */
+    overflow: visible;
+}
+
+/* Ajustement du body pour le mode démo */
+body.page-cgv {
+    /* Override pour s'assurer que le padding est correct */
+    padding-top: var(--navbar-height, 70px);
+}
+
+body.page-cgv.demo-mode {
+    padding-top: calc(var(--navbar-height, 70px) + var(--demo-banner-height, 80px));
 }
 
 /* Empêcher le focus de faire défiler la page */
 .cgv-page * {
-    scroll-margin-top: var(--navbar-height);
+    scroll-margin-top: calc(var(--navbar-height, 70px) + var(--space-4, 16px));
 }
 
 /* =================================
@@ -23,7 +36,7 @@
     background: linear-gradient(135deg, 
         rgba(0, 212, 255, 0.05) 0%, 
         rgba(124, 58, 237, 0.05) 100%);
-    padding: var(--space-12) 0;
+    padding: var(--space-12, 48px) 0;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -46,19 +59,19 @@
 
 .cgv-page .page-title {
     font-size: clamp(2.5rem, 5vw, 3.5rem);
-    font-weight: var(--font-weight-black);
+    font-weight: var(--font-weight-black, 900);
     color: var(--text-primary);
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-4, 16px);
     position: relative;
     z-index: 2;
 }
 
 .cgv-page .page-description {
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-lg, 1.125rem);
     color: var(--text-secondary);
-    line-height: var(--line-height-relaxed);
+    line-height: var(--line-height-relaxed, 1.6);
     max-width: 700px;
-    margin: 0 auto var(--space-8);
+    margin: 0 auto var(--space-8, 32px);
     position: relative;
     z-index: 2;
 }
@@ -66,23 +79,23 @@
 .cgv-page *:focus-visible {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-sm, 4px);
 }
 
 /* Métadonnées */
 .cgv-meta {
     display: flex;
-    gap: var(--space-6);
+    gap: var(--space-6, 24px);
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    margin-top: var(--space-6);
+    margin-top: var(--space-6, 24px);
 }
 
 .cgv-meta .meta-item {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--space-2, 8px);
     font-size: 0.875rem;
     color: var(--text-muted);
 }
@@ -96,15 +109,20 @@
 ================================= */
 
 .cgv-content {
-    padding: var(--space-8) 0;
+    padding: var(--space-8, 32px) 0;
     background: var(--bg-primary);
+    /* Important: ne pas utiliser overflow:hidden sur les parents du sticky */
 }
 
 .cgv-layout {
     display: grid;
     grid-template-columns: 250px 1fr;
-    gap: var(--space-8);
+    gap: var(--space-8, 32px);
     align-items: start;
+    /* Important: le parent ne doit pas avoir overflow:hidden */
+    position: relative;
+    /* S'assurer que le layout a une hauteur suffisante */
+    min-height: 100vh;
 }
 
 /* =================================
@@ -113,25 +131,65 @@
 
 .cgv-nav {
     position: relative;
+    /* Important: assurer une hauteur suffisante pour le sticky */
+    min-height: 100px;
+    /* Pas d'overflow hidden qui pourrait bloquer le sticky */
+    overflow: visible;
 }
 
 .nav-sticky {
+    /* Position sticky avec fallbacks */
+    position: -webkit-sticky;
     position: sticky;
-    top: calc(var(--navbar-height) + var(--space-4));
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-xl);
-    padding: var(--space-6);
+    
+    /* Calcul correct du top avec fallback */
+    --sticky-offset: calc(var(--navbar-height, 70px) + var(--space-4, 16px));
+    top: var(--sticky-offset);
+    /* Fallback en dur si les variables ne fonctionnent pas */
+    top: 86px;
+    
+    /* Styles visuels */
+    background: var(--bg-card, rgba(255, 255, 255, 0.05));
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    border-radius: var(--radius-xl, 16px);
+    padding: var(--space-6, 24px);
+    
+    /* Transition et animations */
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    max-height: calc(100vh - var(--navbar-height) - var(--space-8));
+    
+    /* Hauteur maximale avec calcul correct */
+    --menu-max-height: calc(100vh - var(--navbar-height, 70px) - var(--space-8, 32px));
+    max-height: var(--menu-max-height);
+    /* Fallback si le calcul échoue */
+    max-height: calc(100vh - 102px);
+    
+    /* Scroll interne */
     overflow-y: auto;
     overflow-x: hidden;
+    
+    /* Z-index pour passer au-dessus */
+    z-index: var(--z-sticky, 100);
     
     /* Propriétés pour la progression du scroll */
     --scroll-progress: 0%;
     
     /* Animation de chargement */
     animation: menuLoadIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+}
+
+/* Ajustement pour le mode démo avec banner */
+body.demo-mode .nav-sticky,
+.has-demo-banner .nav-sticky,
+#demo-search-banner.active ~ * .nav-sticky {
+    --sticky-offset: calc(var(--navbar-height, 70px) + var(--demo-banner-height, 80px) + var(--space-4, 16px));
+    top: var(--sticky-offset);
+    /* Fallback */
+    top: 166px;
+    
+    --menu-max-height: calc(100vh - var(--navbar-height, 70px) - var(--demo-banner-height, 80px) - var(--space-8, 32px));
+    max-height: var(--menu-max-height);
+    /* Fallback */
+    max-height: calc(100vh - 182px);
 }
 
 /* Indicateur de progression sur le côté du menu */
@@ -148,7 +206,7 @@
         var(--secondary-color) 50%,
         var(--primary-color) 100%
     );
-    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    border-radius: 0 var(--radius-md, 8px) var(--radius-md, 8px) 0;
     transition: height 0.1s ease-out;
     opacity: 0.8;
 }
@@ -162,7 +220,6 @@
 .nav-sticky.in-middle {
     border-color: rgba(0, 212, 255, 0.2);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    background: var(--bg-card);
 }
 
 .nav-sticky.at-bottom {
@@ -178,6 +235,7 @@
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     border-color: rgba(0, 212, 255, 0.3);
 }
+
 .nav-sticky.at-top::after {
     opacity: 0.3;
 }
@@ -214,7 +272,7 @@
     font-size: 1rem;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-4, 16px);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
@@ -227,7 +285,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
+    gap: var(--space-1, 4px);
 }
 
 /* Indicateur de position visuel */
@@ -255,11 +313,11 @@
 /* Liens de navigation */
 .toc-link {
     display: block;
-    padding: var(--space-2) var(--space-3);
+    padding: var(--space-2, 8px) var(--space-3, 12px);
     color: var(--text-secondary);
     text-decoration: none;
     font-size: 0.875rem;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-md, 8px);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     margin-left: 8px; /* Espace pour l'indicateur */
@@ -269,7 +327,7 @@
     background: var(--bg-secondary);
     color: var(--primary-color);
     transform: translateX(4px);
-    padding-left: var(--space-4);
+    padding-left: var(--space-4, 16px);
 }
 
 .toc-link.active {
@@ -277,7 +335,7 @@
     color: var(--primary-color);
     font-weight: 600;
     transform: translateX(6px);
-    padding-left: var(--space-4);
+    padding-left: var(--space-4, 16px);
     border-left: 2px solid transparent; /* Pour éviter le shift lors de l'activation */
 }
 
@@ -292,14 +350,14 @@
 .toc-link:focus-visible {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-sm, 4px);
     background: rgba(0, 212, 255, 0.1);
 }
 
 /* Actions CGV */
 .cgv-actions {
-    margin-top: var(--space-6);
-    padding-top: var(--space-6);
+    margin-top: var(--space-6, 24px);
+    padding-top: var(--space-6, 24px);
     border-top: 1px solid var(--border-light);
 }
 
@@ -319,7 +377,7 @@
 .nav-sticky::-webkit-scrollbar-track {
     background: var(--bg-secondary);
     border-radius: var(--radius-full);
-    margin: var(--space-2) 0;
+    margin: var(--space-2, 8px) 0;
 }
 
 .nav-sticky::-webkit-scrollbar-thumb {
@@ -340,12 +398,12 @@
 .cgv-main {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-xl, 16px);
     overflow: hidden;
 }
 
 .cgv-document {
-    padding: var(--space-8);
+    padding: var(--space-8, 32px);
     color: var(--text-secondary);
     line-height: 1.8;
 }
@@ -357,15 +415,15 @@
 .company-info {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    padding: var(--space-6);
-    margin-bottom: var(--space-8);
+    border-radius: var(--radius-lg, 12px);
+    padding: var(--space-6, 24px);
+    margin-bottom: var(--space-8, 32px);
 }
 
 .company-info h2 {
     font-size: 1.5rem;
     color: var(--primary-color);
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-4, 16px);
 }
 
 .company-info p {
@@ -378,9 +436,9 @@
 ================================= */
 
 .cgv-section {
-    margin-bottom: var(--space-12);
-    scroll-margin-top: calc(var(--navbar-height) + var(--space-8));
-    padding-top: var(--space-4);
+    margin-bottom: var(--space-12, 48px);
+    scroll-margin-top: calc(var(--navbar-height, 70px) + var(--space-8, 32px));
+    padding-top: var(--space-4, 16px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     opacity: 0.9;
 }
@@ -408,18 +466,18 @@
         transparent 100%
     );
     border-left: 3px solid var(--primary-color);
-    padding-left: calc(var(--space-6) - 3px);
+    padding-left: calc(var(--space-6, 24px) - 3px);
     margin-left: -3px;
-    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    border-radius: 0 var(--radius-md, 8px) var(--radius-md, 8px) 0;
 }
 
 .cgv-section h2 {
     font-size: 1.75rem;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-6, 24px);
     position: relative;
-    padding-bottom: var(--space-3);
+    padding-bottom: var(--space-3, 12px);
 }
 
 .cgv-section h2::after {
@@ -437,30 +495,30 @@
     font-size: 1.25rem;
     font-weight: 600;
     color: var(--text-primary);
-    margin-top: var(--space-6);
-    margin-bottom: var(--space-4);
+    margin-top: var(--space-6, 24px);
+    margin-bottom: var(--space-4, 16px);
 }
 
 .cgv-section h4 {
     font-size: 1.125rem;
     font-weight: 600;
     color: var(--text-primary);
-    margin-top: var(--space-4);
-    margin-bottom: var(--space-3);
+    margin-top: var(--space-4, 16px);
+    margin-bottom: var(--space-3, 12px);
 }
 
 .cgv-section p {
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-4, 16px);
     text-align: justify;
 }
 
 .cgv-section ul {
-    margin-bottom: var(--space-4);
-    padding-left: var(--space-6);
+    margin-bottom: var(--space-4, 16px);
+    padding-left: var(--space-6, 24px);
 }
 
 .cgv-section li {
-    margin-bottom: var(--space-2);
+    margin-bottom: var(--space-2, 8px);
     line-height: 1.8;
 }
 
@@ -472,7 +530,7 @@
     border: none;
     height: 1px;
     background: var(--border-color);
-    margin: var(--space-8) 0;
+    margin: var(--space-8, 32px) 0;
 }
 
 /* =================================
@@ -480,8 +538,8 @@
 ================================= */
 
 .cgv-footer {
-    margin-top: var(--space-12);
-    padding-top: var(--space-8);
+    margin-top: var(--space-12, 48px);
+    padding-top: var(--space-8, 32px);
     border-top: 2px solid var(--border-color);
     text-align: center;
 }
@@ -489,7 +547,7 @@
 .version-note {
     font-size: 0.875rem;
     color: var(--text-muted);
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-3, 12px);
 }
 
 .contact-note {
@@ -510,10 +568,10 @@
 .version-badge {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--space-2, 8px);
     background: rgba(0, 212, 255, 0.1);
     color: var(--primary-color);
-    padding: var(--space-2) var(--space-4);
+    padding: var(--space-2, 8px) var(--space-4, 16px);
     border-radius: var(--radius-full);
     font-size: 0.875rem;
     font-weight: 600;
@@ -526,7 +584,7 @@
 
 .cgv-mobile-toc {
     display: none;
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-6, 24px);
 }
 
 .cgv-mobile-toc summary {
@@ -537,9 +595,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--space-3);
+    padding: var(--space-3, 12px);
     background: var(--bg-secondary);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-md, 8px);
     transition: all 0.2s ease;
 }
 
@@ -563,10 +621,10 @@
 }
 
 .cgv-mobile-toc .toc {
-    margin-top: var(--space-4);
+    margin-top: var(--space-4, 16px);
     background: var(--bg-card);
-    border-radius: var(--radius-md);
-    padding: var(--space-4);
+    border-radius: var(--radius-md, 8px);
+    padding: var(--space-4, 16px);
 }
 
 /* =================================
@@ -635,13 +693,55 @@
 }
 
 /* =================================
+   BOUTONS (pour les actions CGV)
+================================= */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2, 8px);
+    padding: var(--space-3, 12px) var(--space-6, 24px);
+    font-size: var(--font-size-base, 1rem);
+    font-weight: var(--font-weight-semibold, 600);
+    text-decoration: none;
+    border: none;
+    border-radius: var(--radius-lg, 12px);
+    cursor: pointer;
+    transition: all var(--transition-base, 0.3s ease);
+    user-select: none;
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+}
+
+.btn-outline:hover {
+    background: var(--primary-color);
+    color: var(--text-on-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+}
+
+.btn-sm {
+    padding: var(--space-2, 8px) var(--space-4, 16px);
+    font-size: var(--font-size-sm, 0.875rem);
+}
+
+.btn-block {
+    width: 100%;
+}
+
+/* =================================
    RESPONSIVE DESIGN
 ================================= */
 
 @media (max-width: 1024px) {
     .cgv-layout {
         grid-template-columns: 1fr;
-        gap: var(--space-6);
+        gap: var(--space-6, 24px);
     }
     
     .cgv-nav {
@@ -654,7 +754,7 @@
     
     .cgv-meta {
         flex-direction: column;
-        gap: var(--space-3);
+        gap: var(--space-3, 12px);
     }
     
     /* Masquer l'indicateur sur tablette/mobile */
@@ -673,7 +773,7 @@
 
 @media (max-width: 768px) {
     .cgv-page .page-header {
-        padding: var(--space-6) 0;
+        padding: var(--space-6, 24px) 0;
     }
     
     .cgv-page .page-title {
@@ -681,11 +781,11 @@
     }
     
     .cgv-content {
-        padding: var(--space-4) 0;
+        padding: var(--space-4, 16px) 0;
     }
     
     .cgv-document {
-        padding: var(--space-4);
+        padding: var(--space-4, 16px);
     }
     
     .cgv-section h2 {
@@ -701,7 +801,7 @@
     }
     
     .company-info {
-        padding: var(--space-4);
+        padding: var(--space-4, 16px);
     }
     
     .cgv-meta .meta-item {
@@ -715,21 +815,21 @@
     }
     
     .cgv-document {
-        padding: var(--space-3);
+        padding: var(--space-3, 12px);
     }
     
     .cgv-section {
-        margin-bottom: var(--space-8);
+        margin-bottom: var(--space-8, 32px);
     }
     
     .cgv-section h2 {
         font-size: 1.25rem;
-        margin-bottom: var(--space-4);
+        margin-bottom: var(--space-4, 16px);
     }
     
     .cgv-section h3 {
         font-size: 1rem;
-        margin-top: var(--space-4);
+        margin-top: var(--space-4, 16px);
     }
 }
 

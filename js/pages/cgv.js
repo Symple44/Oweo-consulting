@@ -504,6 +504,17 @@ class CGVPage extends BasePage {
         
         if (!sections.length || !navLinks.length) return;
         
+        // Debug: vérifier que le sticky fonctionne
+        if (navSticky) {
+            const computedStyle = window.getComputedStyle(navSticky);
+            console.log('🔧 Menu sticky debug:', {
+                position: computedStyle.position,
+                top: computedStyle.top,
+                display: computedStyle.display,
+                parent: navSticky.parentElement
+            });
+        }
+        
         // Variables pour le suivi
         let currentActiveId = null;
         let scrollTimeout;
@@ -668,81 +679,30 @@ class CGVPage extends BasePage {
         }, { passive: true });
     }
 
-    setupStickyMenu() {
+    adjustStickyMenuOffset() {
         const navSticky = document.querySelector('.nav-sticky');
-        const cgvMain = document.querySelector('.cgv-main');
+        if (!navSticky) return;
         
-        if (!navSticky || !cgvMain) return;
+        // Vérifier si le demo banner est visible
+        const demoBanner = document.getElementById('demo-search-banner');
+        const isDemoMode = demoBanner && demoBanner.style.display !== 'none';
         
-        // Variables pour le calcul de position
-        let ticking = false;
-        let lastKnownScrollPosition = 0;
+        // Calculer l'offset
         const navbarHeight = document.querySelector('.navbar')?.offsetHeight || 70;
+        const demoBarHeight = isDemoMode ? 80 : 0;
+        const spacing = 20; // var(--space-4)
         
-        // Fonction pour ajuster la position du menu
-        const adjustMenuPosition = () => {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            const mainRect = cgvMain.getBoundingClientRect();
-            const windowHeight = window.innerHeight;
-            const menuHeight = navSticky.offsetHeight;
-            
-            // Calculer les limites
-            const topLimit = navbarHeight + 20;
-            const bottomLimit = mainRect.bottom - menuHeight - 20;
-            
-            // Si le menu est plus haut que la fenêtre
-            if (menuHeight > windowHeight - topLimit - 20) {
-                // Mode scroll interne
-                navSticky.style.position = 'fixed';
-                navSticky.style.top = `${topLimit}px`;
-                navSticky.style.maxHeight = `calc(100vh - ${topLimit + 20}px)`;
-                navSticky.style.overflowY = 'auto';
-            } else {
-                // Mode sticky normal
-                if (mainRect.top > topLimit) {
-                    // Au début du contenu
-                    navSticky.style.position = 'absolute';
-                    navSticky.style.top = '0';
-                } else if (bottomLimit < windowHeight) {
-                    // À la fin du contenu
-                    navSticky.style.position = 'absolute';
-                    navSticky.style.top = 'auto';
-                    navSticky.style.bottom = '20px';
-                } else {
-                    // En cours de scroll
-                    navSticky.style.position = 'fixed';
-                    navSticky.style.top = `${topLimit}px`;
-                    navSticky.style.bottom = 'auto';
-                }
-            }
-            
-            // Ajouter une classe pour les animations
-            navSticky.classList.toggle('is-scrolling', Math.abs(scrollTop - lastKnownScrollPosition) > 5);
-            lastKnownScrollPosition = scrollTop;
-        };
+        const totalOffset = navbarHeight + demoBarHeight + spacing;
         
-        // Optimisation avec requestAnimationFrame
-        const handleScroll = () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    adjustMenuPosition();
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        };
-        
-        // Événements
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        window.addEventListener('resize', adjustMenuPosition);
-        
-        // Ajustement initial
-        adjustMenuPosition();
+        // Appliquer l'offset via une variable CSS pour garder la cohérence
+        navSticky.style.setProperty('--sticky-top', `${totalOffset}px`);
+        navSticky.style.top = `${totalOffset}px`;
+        navSticky.style.maxHeight = `calc(100vh - ${totalOffset + spacing}px)`;
     }
     
     updateScrollProgress() {
-        const cgvNav = document.querySelector('.cgv-nav');
-        if (!cgvNav) return;
+        const navSticky = document.querySelector('.nav-sticky');
+        if (!navSticky) return;
         
         const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
         const scrollPosition = window.pageYOffset;
@@ -750,15 +710,12 @@ class CGVPage extends BasePage {
         const scrollProgress = scrollHeight > 0 ? (scrollPosition / scrollHeight) * 100 : 0;
         const clampedProgress = Math.max(0, Math.min(100, scrollProgress));
         
-        cgvNav.style.setProperty('--scroll-progress', `${clampedProgress}%`);
+        navSticky.style.setProperty('--scroll-progress', `${clampedProgress}%`);
         
         // Classes selon la position
-        const navSticky = document.querySelector('.nav-sticky');
-        if (navSticky) {
-            navSticky.classList.toggle('at-top', clampedProgress < 5);
-            navSticky.classList.toggle('at-bottom', clampedProgress > 95);
-            navSticky.classList.toggle('in-middle', clampedProgress >= 5 && clampedProgress <= 95);
-        }
+        navSticky.classList.toggle('at-top', clampedProgress < 5);
+        navSticky.classList.toggle('at-bottom', clampedProgress > 95);
+        navSticky.classList.toggle('in-middle', clampedProgress >= 5 && clampedProgress <= 95);
     }
     
     scrollMenuToActiveLink(activeLink) {
@@ -883,10 +840,19 @@ class CGVPage extends BasePage {
         // Initialiser la progression du scroll
         this.updateScrollProgress();
         
-        // Initialiser le menu sticky amélioré
-        this.setupStickyMenu();
+        // Ajuster l'offset du menu sticky
+        this.adjustStickyMenuOffset();
+        
+        // Écouter les changements de mode démo pour ajuster le menu
+        if (window.app && window.app.eventBus) {
+            window.app.eventBus.on('routeChanged', (data) => {
+                setTimeout(() => this.adjustStickyMenuOffset(), 100);
+            });
+        }
+
         
     }
+    
     
     destroy() {
         // Retirer la classe du body
