@@ -5,34 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oweo - Expert ERP Charpente Métallique</title>
     
-    <!-- CSS Variables et Base -->
-    <link rel="stylesheet" href="css/variables.css">
-    <link rel="stylesheet" href="css/base.css">
+    <!-- ========================================
+         SYSTÈME DE THÈME GÉNÉRIQUE
+    ======================================== -->
+    
+    <!-- Variables et composants génériques -->
+    <link rel="stylesheet" href="css/theme-variables.css">
+    <link rel="stylesheet" href="css/theme-components.css">
+    
+    <!-- Composants spécifiques mais génériques -->
+    <link rel="stylesheet" href="css/navbar-generic.css">
+    <link rel="stylesheet" href="css/footer-generic.css">
+    
+    <!-- Utilitaires et layout (si encore nécessaires) -->
     <link rel="stylesheet" href="css/utilities.css">
     <link rel="stylesheet" href="css/layout.css">
-
-    <!-- Composants -->
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/navbar.css">
-    <link rel="stylesheet" href="css/footer.css">
+    
+    <!-- Composants existants à migrer progressivement -->
     <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/notifications.css">
     <link rel="stylesheet" href="css/demo-search.css">
-
-    <!-- Pages -->
-    <link rel="stylesheet" href="css/pages.css">
-    <link rel="stylesheet" href="css/home-pages.css">
-    <link rel="stylesheet" href="css/services-page.css">
-    <link rel="stylesheet" href="css/demos-page.css">
-    <link rel="stylesheet" href="css/contact-page.css">
-    <link rel="stylesheet" href="css/cgv-page.css">
-    <link rel="stylesheet" href="css/error-pages.css">
-
-    <!-- Démos -->
+    
+    <!-- Démos (à migrer vers le système générique) -->
     <link rel="stylesheet" href="css/demo-components.css">
     <link rel="stylesheet" href="css/auth-modal.css">
     <link rel="stylesheet" href="css/dstv-demo.css">
-
+    
+    <!-- Pages d'erreur -->
+    <link rel="stylesheet" href="css/error-pages.css">
+    
     <!-- Icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -52,60 +53,22 @@
                     <span>Navigation Démos</span>
                 </div>
                 <div class="demo-search-input-container">
-                    <div class="search-input-wrapper">
-                        <input 
-                            type="text" 
-                            id="demo-search-input" 
-                            class="demo-search-input" 
-                            placeholder="Rechercher une démo ou fonctionnalité... (ex: 'chiffrage', 'DSTV', 'métrage')"
-                            autocomplete="off"
-                            spellcheck="false"
-                        >
-                        <div class="search-input-actions">
-                            <button class="search-clear-btn" id="search-clear" style="display: none;">
-                                <i class="fas fa-times"></i>
-                            </button>
-                            <div class="search-loading" id="search-loading" style="display: none;">
-                                <i class="fas fa-spinner fa-spin"></i>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Résultats de recherche -->
-                    <div id="demo-search-results" class="demo-search-results">
-                        <div class="search-empty-state">
-                            <i class="fas fa-search"></i>
-                            <p>Tapez pour rechercher parmi les démonstrations disponibles</p>
-                            <div class="search-suggestions">
-                                <span class="suggestion-label">Suggestions :</span>
-                                <button class="suggestion-pill" data-query="chiffrage">Chiffrage</button>
-                                <button class="suggestion-pill" data-query="dstv">DSTV</button>
-                                <button class="suggestion-pill" data-query="stock">Stock</button>
-                                <button class="suggestion-pill" data-query="planning">Planning</button>
-                            </div>
-                        </div>
-                    </div>
+                    <input 
+                        type="text" 
+                        id="demo-search-input" 
+                        class="demo-search-input" 
+                        placeholder="Rechercher une démo ou fonctionnalité... (ex: 'chiffrage', 'DSTV', 'métrage')"
+                        autocomplete="off"
+                    >
+                    <div id="demo-search-results" class="demo-search-results"></div>
                 </div>
-                
                 <div class="demo-search-actions">
-                    <button id="demo-search-help" class="demo-search-help-btn" title="Aide et raccourcis">
+                    <button id="demo-search-help" class="demo-search-help-btn" title="Aide">
                         <i class="fas fa-question-circle"></i>
                     </button>
-                    <button id="demo-search-close" class="demo-search-close-btn" title="Fermer (Échap)">
+                    <button id="demo-search-close" class="demo-search-close-btn" title="Fermer">
                         <i class="fas fa-times"></i>
                     </button>
-                </div>
-            </div>
-            
-            <!-- Barre de statut -->
-            <div class="demo-search-status" id="demo-search-status" style="display: none;">
-                <div class="status-content">
-                    <span class="status-text"></span>
-                    <div class="status-shortcuts">
-                        <kbd>↑↓</kbd> naviguer
-                        <kbd>↵</kbd> sélectionner
-                        <kbd>Échap</kbd> fermer
-                    </div>
                 </div>
             </div>
         </div>
@@ -125,209 +88,157 @@
     <!-- Modals Container -->
     <div id="modals-container"></div>
     
-    <!-- Scripts - Architecture Modulaire -->
+    <!-- ========================================
+         SCRIPTS - SYSTÈME DE THÈME
+    ======================================== -->
     
-    <!-- 0. Configuration société (EN PREMIER) -->
-    <script src="js/config/company-info.js"></script>
+    <!-- 1. Système de thème et utilitaires -->
+    <script src="js/utils/theme-manager.js"></script>
+    <script src="js/utils/component-builder.js"></script>
     
-    <!-- 1. Core Classes de base -->
+    <!-- 2. Configuration de migration (optionnel) -->
+    <script src="js/config/theme-config.js"></script>
+    
+    <!-- ========================================
+         SCRIPTS - ARCHITECTURE EXISTANTE
+    ======================================== -->
+    
+    <!-- 3. Core Classes de base -->
     <script src="js/core/event-bus.js"></script>
     <script src="js/core/component-manager.js"></script>
     
-    <!-- 2. Utilities -->
-    <script src="js/utils/dom-utils.js"></script>
-    <script src="js/utils/animation-utils.js"></script>
-    <script src="js/utils/client-access.js"></script>
-    <script src="js/utils/notifications.js"></script>
-    
-    <!-- 3. Base Components -->
+    <!-- 4. Base Components -->
     <script src="js/components/base-component.js"></script>
     <script src="js/pages/base-page.js"></script>
     <script src="js/demos/base-demo.js"></script>
     
-    <!-- 4. Core System -->
+    <!-- 5. Core System -->
     <script src="js/core/router.js"></script>
     <script src="js/core/app.js"></script>
     
-    <!-- 5. Components -->
-    <script src="js/components/navbar.js"></script>
-    <script src="js/components/footer.js"></script>
+    <!-- 6. Components (version générique) -->
+    <script src="js/components/navbar-generic.js"></script>
+    <script src="js/components/footer-generic.js"></script>
     <script src="js/components/demo-search.js"></script>
     <script src="js/components/modal.js"></script>
     
-    <!-- 6. Pages -->
-    <script src="js/pages/home.js"></script>
+    <!-- 7. Pages (version générique pour home) -->
+    <script src="js/pages/home-page-generic.js"></script>
     <script src="js/pages/services.js"></script>
     <script src="js/pages/demos.js"></script>
     <script src="js/pages/contact.js"></script>
     <script src="js/pages/cgv.js"></script>
     
-    <!-- 7. Demo Pages -->
+    <!-- 8. Demo Pages -->
     <script src="js/demos/chiffrage-demo.js"></script>
     <script src="js/demos/dstv-demo.js"></script>
     
-    <!-- 8. Configuration APRÈS CompanyInfo -->
+    <!-- 9. Configuration -->
+    <script src="js/config/company-info.js"></script>
     <script src="js/config/environment.js"></script>
     <script src="js/config/demo-config.js"></script>
     <script src="js/config/app-config.js"></script>
     
-    <!-- 9. Tools (développement uniquement) -->
+    <!-- 10. Utilitaires -->
+    <script src="js/utils/dom-utils.js"></script>
+    <script src="js/utils/animation-utils.js"></script>
+    <script src="js/utils/client-access.js"></script>
+    <script src="js/utils/notifications.js"></script>
+    
+    <!-- 11. Tools (développement uniquement) -->
     <script src="js/tools/consistency-checker.js"></script>
-    <!-- Bibliothèques pour la génération PDF -->
+    <script src="js/tools/migration-helper.js"></script>
+    
+    <!-- 12. Bibliothèques externes -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
-    <!-- 10. Services externes -->
     <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
     
-    <!-- 11. App Initialization -->
+    <!-- ========================================
+         INITIALISATION AVEC SYSTÈME GÉNÉRIQUE
+    ======================================== -->
     <script>
-        // Initialisation de l'application
-        document.addEventListener('DOMContentLoaded', () => {
+        // Configuration pour utiliser les composants génériques
+        window.addEventListener('DOMContentLoaded', () => {
+            // Remplacer les composants par les versions génériques
+            if (window.NavbarGeneric) {
+                window.OweoNavbar = window.NavbarGeneric;
+            }
+            
+            if (window.FooterGeneric) {
+                window.OweoFooter = window.FooterGeneric;
+            }
+            
+            if (window.HomePageGeneric) {
+                window.HomePage = window.HomePageGeneric;
+            }
+            
+            // Message console pour le système de thème
+            console.log(`
+🎨 Système de Thème Générique Actif
+===================================
+Utilisez ThemeManager pour changer de thème :
+- ThemeManager.applyTheme('cool')
+- ThemeManager.applyTheme('nature')
+- ThemeManager.toggleMode()
+- Ctrl+Shift+T pour ouvrir le sélecteur
+
+Migration progressive :
+- ThemeConfig.migration.migrateDOM()
+            `);
+        });
+        
+        // Initialisation de l'application (code existant)
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('🚀 Initialisation de l\'application Oweo...');
+            
             try {
-                console.log('🔍 Checking dependencies...');
-                
-                // Vérifier que les configurations sont cohérentes
-                if (window.CompanyInfo) {
-                    const validation = window.CompanyInfo.validate();
-                    if (!validation.valid) {
-                        console.error('❌ Configuration société invalide:', validation.issues);
-                    } else {
-                        console.log('✅ Company info validated');
-                    }
-                } else {
-                    console.warn('⚠️ CompanyInfo not loaded');
-                }
-                
-                // Vérifier AppConfig
-                if (window.AppConfig) {
-                    if (typeof window.AppConfig.validateCompanyInfo === 'function') {
-                        window.AppConfig.validateCompanyInfo();
-                    }
-                    console.log('✅ App config loaded');
-                } else {
-                    console.warn('⚠️ AppConfig not loaded');
-                }
-                
-                // Vérifier que toutes les dépendances sont chargées
-                const requiredClasses = [
-                    'EventBus', 'ComponentManager', 'DOMUtils', 'AnimationUtils',
-                    'BaseComponent', 'OweoRouter', 'OweoApp'
-                ];
-                
-                const missingClasses = requiredClasses.filter(className => {
-                    return typeof window[className] === 'undefined';
-                });
-                
-                if (missingClasses.length > 0) {
-                    throw new Error(`Classes manquantes: ${missingClasses.join(', ')}`);
-                }
-                
-                console.log('✅ All dependencies loaded');
-                
-                // Vérifier les pages importantes
-                const pageClasses = ['HomePage', 'ServicesPage', 'DemosPage', 'ContactPage'];
-                const missingPages = pageClasses.filter(className => {
-                    return typeof window[className] === 'undefined';
-                });
-                
-                if (missingPages.length > 0) {
-                    console.warn('⚠️ Pages manquantes:', missingPages.join(', '));
-                } else {
-                    console.log('✅ All pages loaded');
-                }
+                // Créer l'instance de l'application
+                window.app = new OweoApp();
                 
                 // Initialiser l'application
-                if (typeof window.OweoApp !== 'undefined') {
-                    window.app = new window.OweoApp();
-                    window.app.init();
-                } else {
-                    console.error('OweoApp not found');
+                await window.app.init();
+                
+                // Démarrer l'application
+                await window.app.start();
+                
+                console.log('✅ Application initialisée avec succès');
+                
+                // En mode développement, afficher les outils
+                if (window.location.hostname === 'localhost' || window.location.search.includes('debug=true')) {
+                    console.log('🛠️ Mode développement activé');
+                    console.log('Outils disponibles :');
+                    console.log('- OweoDebug.validateSite()');
+                    console.log('- OweoDebug.testDemoSearch()');
+                    console.log('- ThemeManager (gestion des thèmes)');
+                    console.log('- ThemeConfig (configuration du thème)');
                 }
                 
             } catch (error) {
-                console.error('App initialization failed:', error);
-                document.getElementById('app').innerHTML = `
-                    <div class="error-container">
-                        <div class="error-icon">
-                            <i class="fas fa-exclamation-triangle"></i>
+                console.error('❌ Erreur lors de l\'initialisation:', error);
+                
+                // Afficher une page d'erreur
+                const appContainer = document.getElementById('app');
+                if (appContainer) {
+                    appContainer.innerHTML = `
+                        <div class="error-page">
+                            <div class="container">
+                                <h1 class="error-code">500</h1>
+                                <h2 class="error-title">Erreur de chargement</h2>
+                                <p class="error-message">
+                                    Une erreur s'est produite lors du chargement de l'application.
+                                    Veuillez rafraîchir la page ou contacter le support.
+                                </p>
+                                <button class="btn btn--primary" onclick="location.reload()">
+                                    <i class="fas fa-redo"></i>
+                                    Rafraîchir
+                                </button>
+                            </div>
                         </div>
-                        <h1>Erreur de chargement</h1>
-                        <p>Une erreur est survenue lors du chargement de l'application.</p>
-                        <details>
-                            <summary>Détails de l'erreur</summary>
-                            <pre>${error.message}</pre>
-                        </details>
-                        <button onclick="location.reload()" class="btn btn-primary">
-                            Recharger la page
-                        </button>
-                    </div>
-                    
-                    <style>
-                    .error-container {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        justify-content: center;
-                        min-height: 60vh;
-                        text-align: center;
-                        padding: 2rem;
-                    }
-                    
-                    .error-icon {
-                        font-size: 4rem;
-                        color: #ef4444;
-                        margin-bottom: 1rem;
-                    }
-                    
-                    .error-container h1 {
-                        font-size: 2rem;
-                        margin-bottom: 1rem;
-                        color: #1f2937;
-                    }
-                    
-                    .error-container p {
-                        margin-bottom: 2rem;
-                        color: #6b7280;
-                        max-width: 500px;
-                    }
-                    
-                    .btn {
-                        padding: 0.75rem 1.5rem;
-                        border-radius: 8px;
-                        font-weight: 600;
-                        background: #3b82f6;
-                        color: white;
-                        border: none;
-                        cursor: pointer;
-                        transition: all 0.2s;
-                    }
-                    
-                    .btn:hover {
-                        background: #2563eb;
-                    }
-                    </style>
-                `;
+                    `;
+                }
             }
         });
-        
-        // Validation périodique de cohérence (développement uniquement)
-        if (window.location.hostname === 'localhost') {
-            setTimeout(() => {
-                if (window.ConsistencyChecker) {
-                    console.log('🔍 Lancement de la vérification de cohérence...');
-                    window.checkConsistency = () => new window.ConsistencyChecker().checkAll();
-                    window.startMonitoring = () => new window.ConsistencyChecker().startMonitoring();
-                    
-                    // Vérification initiale
-                    window.checkConsistency();
-                    
-                    console.log('💡 Commandes disponibles en dev:');
-                    console.log('  - checkConsistency() : Vérifier la cohérence');
-                    console.log('  - startMonitoring() : Surveillance continue');
-                }
-            }, 3000);
-        }
         
         // Gestion des erreurs JavaScript globales
         window.addEventListener('error', (event) => {
@@ -345,6 +256,25 @@
         window.addEventListener('unhandledrejection', (event) => {
             console.error('Promise rejetée:', event.reason);
         });
+        
+        // Validation périodique en développement
+        if (window.location.hostname === 'localhost') {
+            setTimeout(() => {
+                if (window.ConsistencyChecker) {
+                    console.log('🔍 Lancement de la vérification de cohérence...');
+                    window.checkConsistency = () => new window.ConsistencyChecker().checkAll();
+                    window.startMonitoring = () => new window.ConsistencyChecker().startMonitoring();
+                    
+                    // Vérification initiale
+                    window.checkConsistency();
+                    
+                    console.log('💡 Commandes disponibles :');
+                    console.log('  - checkConsistency() : Vérifier la cohérence');
+                    console.log('  - startMonitoring() : Surveillance continue');
+                    console.log('  - ThemeManager : Gestion des thèmes');
+                }
+            }, 3000);
+        }
     </script>
 </body>
 </html>

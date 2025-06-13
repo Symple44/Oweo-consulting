@@ -706,10 +706,12 @@ body.demo-mode .nav-sticky,
 @media screen and (-webkit-min-device-pixel-ratio:0) {
     .nav-sticky {
         -webkit-transform: translateZ(0);
+        transform: translateZ(0);
     }
     
     .cgv-nav {
         -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
     }
 }
 
