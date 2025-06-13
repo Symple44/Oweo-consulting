@@ -34,6 +34,9 @@ class CGVPage extends BasePage {
         
         // Récupérer les infos de l'entreprise
         this.companyInfo = window.CompanyInfo || {};
+
+        // État de génération PDF
+        this.pdfGenerating = false;
     }
     
     getTemplate() {
@@ -357,6 +360,458 @@ class CGVPage extends BasePage {
         
         const forme = this.companyInfo.legal?.forme || 'SAS';
         return formes[forme] || forme;
+    }
+
+    // Méthode principale pour le téléchargement PDF
+    async downloadPDF() {
+        // D'abord, essayer de charger les bibliothèques PDF si pas déjà fait
+        if (!window.jspdf || !window.html2canvas) {
+            try {
+                await this.loadPDFLibraries();
+            } catch (error) {
+                console.error('Impossible de charger les bibliothèques PDF:', error);
+                this.fallbackToPrint();
+                return;
+            }
+        }
+
+        // Si déjà en cours de génération, ne rien faire
+        if (this.pdfGenerating) {
+            if (window.notifications) {
+                window.notifications.warning('Génération PDF déjà en cours...');
+            }
+            return;
+        }
+
+        try {
+            this.pdfGenerating = true;
+            
+            // Afficher une notification de chargement
+            let notificationId = null;
+            if (window.notifications) {
+                notificationId = window.notifications.info('Génération du PDF en cours...', { 
+                    duration: 0, 
+                    showProgress: true 
+                });
+            }
+
+            // Générer le PDF
+            await this.generatePDF();
+            
+            // Succès
+            if (window.notifications && notificationId) {
+                window.notifications.hide(notificationId);
+                window.notifications.success('PDF téléchargé avec succès !');
+            }
+
+        } catch (error) {
+            console.error('Erreur lors de la génération du PDF:', error);
+            
+            if (window.notifications) {
+                window.notifications.error('Erreur lors de la génération du PDF. Utilisation de l\'impression navigateur.');
+            }
+            
+            // Fallback vers l'impression
+            this.fallbackToPrint();
+            
+        } finally {
+            this.pdfGenerating = false;
+        }
+    }
+    
+    // Charger dynamiquement les bibliothèques PDF
+    async loadPDFLibraries() {
+        const scripts = [
+            {
+                src: 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+                global: 'jspdf'
+            },
+            {
+                src: 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+                global: 'html2canvas'
+            }
+        ];
+        
+        for (const script of scripts) {
+            if (!window[script.global]) {
+                await this.loadScript(script.src);
+            }
+        }
+    }
+    
+    // Helper pour charger un script
+    loadScript(src) {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+        });
+    }
+    
+    // Générer le PDF
+    async generatePDF() {
+        const { jsPDF } = window.jspdf;
+        
+        // Configuration du PDF
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4',
+            compress: true
+        });
+        
+        // Métadonnées du PDF
+        pdf.setProperties({
+            title: `CGV ${this.companyInfo.fullName || 'OWEO'} v${this.cgvInfo.version}`,
+            subject: 'Conditions Générales de Vente',
+            author: this.companyInfo.fullName || 'OWEO',
+            keywords: 'cgv, conditions générales, vente, oweo, erp, métallique',
+            creator: 'OWEO CGV Generator'
+        });
+        
+        // Utiliser la méthode de génération programmatique
+        await this.buildPDFContent(pdf);
+        
+        // Ajouter les numéros de page
+        this.addPageNumbers(pdf);
+        
+        // Nom du fichier
+        const fileName = `CGV-${this.companyInfo.name || 'OWEO'}-v${this.cgvInfo.version}-${new Date().toISOString().slice(0, 10)}.pdf`;
+        
+        // Sauvegarder le PDF
+        pdf.save(fileName);
+    }
+    
+    // Construire le contenu du PDF
+    async buildPDFContent(pdf) {
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const margins = {
+            top: 25,
+            bottom: 25,
+            left: 20,
+            right: 20
+        };
+        const contentWidth = pageWidth - margins.left - margins.right;
+        let currentY = margins.top;
+        
+        // Styles
+        const styles = {
+            title: { size: 16, style: 'bold', color: [0, 0, 0] },
+            h2: { size: 14, style: 'bold', color: [0, 0, 0] },
+            h3: { size: 12, style: 'bold', color: [0, 0, 0] },
+            h4: { size: 11, style: 'bold', color: [0, 0, 0] },
+            normal: { size: 10, style: 'normal', color: [0, 0, 0] },
+            small: { size: 9, style: 'normal', color: [100, 100, 100] }
+        };
+        
+        // Fonction helper pour ajouter du texte
+        const addText = (text, style, options = {}) => {
+            const { size, style: fontStyle, color } = styles[style] || styles.normal;
+            const { indent = 0, spacing = 5, align = 'left' } = options;
+            
+            pdf.setFontSize(size);
+            pdf.setFont(undefined, fontStyle);
+            pdf.setTextColor(...color);
+            
+            const lines = pdf.splitTextToSize(text, contentWidth - indent);
+            
+            lines.forEach(line => {
+                // Vérifier si on doit ajouter une nouvelle page
+                if (currentY + spacing > pageHeight - margins.bottom) {
+                    pdf.addPage();
+                    currentY = margins.top;
+                    
+                    // Ré-ajouter l'en-tête sur la nouvelle page
+                    this.addPageHeader(pdf, currentY, margins, contentWidth);
+                    currentY += 15;
+                }
+                
+                // Calculer la position X selon l'alignement
+                let x = margins.left + indent;
+                if (align === 'center') {
+                    const textWidth = pdf.getTextWidth(line);
+                    x = (pageWidth - textWidth) / 2;
+                } else if (align === 'right') {
+                    const textWidth = pdf.getTextWidth(line);
+                    x = pageWidth - margins.right - textWidth;
+                }
+                
+                pdf.text(line, x, currentY);
+                currentY += spacing;
+            });
+            
+            return currentY;
+        };
+        
+        // Ajouter une ligne
+        const addLine = (y, color = [200, 200, 200], width = 0.5) => {
+            pdf.setDrawColor(...color);
+            pdf.setLineWidth(width);
+            pdf.line(margins.left, y, pageWidth - margins.right, y);
+        };
+        
+        // Page de garde
+        currentY = this.addCoverPage(pdf, currentY, margins, contentWidth, styles);
+        
+        // Nouvelle page pour le contenu
+        pdf.addPage();
+        currentY = margins.top;
+        
+        // En-tête de page
+        this.addPageHeader(pdf, currentY, margins, contentWidth);
+        currentY += 20;
+        
+        // Informations de la société
+        currentY = addText('INFORMATIONS SOCIÉTÉ', 'h2', { align: 'center' });
+        currentY += 5;
+        addLine(currentY - 2, [0, 212, 255], 1);
+        currentY += 10;
+        
+        const companyInfo = [
+            `Raison sociale : ${this.companyInfo.fullName || 'OWEO'} ${this.companyInfo.legal?.forme || 'SAS'}`,
+            `SIREN : ${this.companyInfo.legal?.siren || '945 028 199'}`,
+            `SIRET : ${this.companyInfo.legal?.siret || '945 028 199 00012'}`,
+            `TVA intracommunautaire : ${this.companyInfo.legal?.tva || 'FR37 945 028 199'}`,
+            `Siège social : ${this.companyInfo.address?.complete || '10 rue du Sous-Bois, 44700 Orvault'}`,
+            `Forme juridique : ${this.getFormeJuridique()}`,
+            `Code NAF/APE : ${this.companyInfo.legal?.ape || '62.02A'} - ${this.companyInfo.legal?.apeName || 'Conseil en systèmes et logiciels informatiques'}`,
+            `Capital social : ${this.companyInfo.legal?.capital || '1 000 €'}`
+        ];
+        
+        companyInfo.forEach(info => {
+            currentY = addText(info, 'normal', { indent: 5 });
+            currentY += 2;
+        });
+        
+        currentY += 10;
+        addLine(currentY);
+        currentY += 15;
+        
+        // Contenu des CGV
+        const sections = document.querySelectorAll('.cgv-section');
+        
+        for (const section of sections) {
+            // Titre de section (H2)
+            const h2 = section.querySelector('h2');
+            if (h2) {
+                // S'assurer qu'on a assez de place pour le titre
+                if (currentY + 20 > pageHeight - margins.bottom) {
+                    pdf.addPage();
+                    currentY = margins.top;
+                    this.addPageHeader(pdf, currentY, margins, contentWidth);
+                    currentY += 15;
+                }
+                
+                currentY = addText(h2.textContent.trim(), 'h2');
+                currentY += 8;
+            }
+            
+            // Parcourir tous les éléments de la section
+            const elements = section.querySelectorAll('h3, h4, p, ul, ol');
+            
+            for (const element of elements) {
+                const tagName = element.tagName.toLowerCase();
+                const text = element.textContent.trim();
+                
+                if (!text) continue;
+                
+                switch (tagName) {
+                    case 'h3':
+                        currentY += 5;
+                        currentY = addText(text, 'h3');
+                        currentY += 5;
+                        break;
+                        
+                    case 'h4':
+                        currentY += 3;
+                        currentY = addText(text, 'h4', { indent: 5 });
+                        currentY += 3;
+                        break;
+                        
+                    case 'p':
+                        currentY = addText(text, 'normal');
+                        currentY += 4;
+                        break;
+                        
+                    case 'ul':
+                    case 'ol':
+                        const items = element.querySelectorAll('li');
+                        items.forEach((item, index) => {
+                            const bullet = tagName === 'ul' ? '• ' : `${index + 1}. `;
+                            currentY = addText(bullet + item.textContent.trim(), 'normal', { indent: 10 });
+                            currentY += 2;
+                        });
+                        currentY += 4;
+                        break;
+                }
+            }
+            
+            currentY += 8;
+        }
+        
+        // Footer final
+        currentY += 10;
+        if (currentY + 30 > pageHeight - margins.bottom) {
+            pdf.addPage();
+            currentY = margins.top;
+        }
+        
+        addLine(currentY, [0, 212, 255], 1);
+        currentY += 10;
+        
+        currentY = addText(`Version ${this.cgvInfo.version} - Dernière mise à jour : ${this.cgvInfo.dateVersion}`, 'small', { align: 'center' });
+        currentY += 5;
+        currentY = addText(`Pour toute question concernant ces CGV :`, 'small', { align: 'center' });
+        currentY += 3;
+        currentY = addText(this.companyInfo.contact?.email || 'contact@oweo-consulting.fr', 'normal', { align: 'center' });
+    }
+    
+    // Page de garde
+    addCoverPage(pdf, y, margins, contentWidth, styles) {
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        
+        // Logo ou nom centré
+        y = pageHeight / 3;
+        
+        pdf.setFontSize(36);
+        pdf.setFont(undefined, 'bold');
+        pdf.setTextColor(0, 212, 255);
+        const companyName = this.companyInfo.fullName || 'OWEO';
+        const nameWidth = pdf.getTextWidth(companyName);
+        pdf.text(companyName, (pageWidth - nameWidth) / 2, y);
+        
+        // Titre du document
+        y += 20;
+        pdf.setFontSize(24);
+        pdf.setFont(undefined, 'normal');
+        pdf.setTextColor(0, 0, 0);
+        const title = 'Conditions Générales de Vente';
+        const titleWidth = pdf.getTextWidth(title);
+        pdf.text(title, (pageWidth - titleWidth) / 2, y);
+        
+        // Version
+        y += 15;
+        pdf.setFontSize(14);
+        pdf.setTextColor(100, 100, 100);
+        const version = `Version ${this.cgvInfo.version}`;
+        const versionWidth = pdf.getTextWidth(version);
+        pdf.text(version, (pageWidth - versionWidth) / 2, y);
+        
+        // Date
+        y += 8;
+        pdf.setFontSize(12);
+        const date = `En vigueur au ${this.cgvInfo.dateApplication}`;
+        const dateWidth = pdf.getTextWidth(date);
+        pdf.text(date, (pageWidth - dateWidth) / 2, y);
+        
+        // Informations de contact en bas de page
+        y = pageHeight - 50;
+        pdf.setFontSize(10);
+        pdf.setTextColor(0, 0, 0);
+        
+        const contactInfo = [
+            this.companyInfo.address?.full || 'Nantes, France',
+            this.companyInfo.contact?.phoneFormatted || '06 86 76 81 31',
+            this.companyInfo.urls?.website || 'https://oweo-consulting.fr'
+        ];
+        
+        contactInfo.forEach(info => {
+            const infoWidth = pdf.getTextWidth(info);
+            pdf.text(info, (pageWidth - infoWidth) / 2, y);
+            y += 5;
+        });
+        
+        return y;
+    }
+    
+    // En-tête de page
+    addPageHeader(pdf, y, margins, contentWidth) {
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        
+        // Nom de l'entreprise à gauche
+        pdf.setFontSize(10);
+        pdf.setFont(undefined, 'bold');
+        pdf.setTextColor(0, 212, 255);
+        pdf.text(this.companyInfo.name || 'OWEO', margins.left, y);
+        
+        // CGV à droite
+        pdf.setFont(undefined, 'normal');
+        pdf.setTextColor(100, 100, 100);
+        const headerText = 'Conditions Générales de Vente';
+        const textWidth = pdf.getTextWidth(headerText);
+        pdf.text(headerText, pageWidth - margins.right - textWidth, y);
+        
+        // Ligne de séparation
+        y += 5;
+        pdf.setDrawColor(200, 200, 200);
+        pdf.setLineWidth(0.5);
+        pdf.line(margins.left, y, pageWidth - margins.right, y);
+        
+        return y;
+    }
+    
+    // Ajouter les numéros de page
+    addPageNumbers(pdf) {
+        const pageCount = pdf.internal.getNumberOfPages();
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        
+        pdf.setFontSize(9);
+        pdf.setTextColor(150, 150, 150);
+        
+        // Commencer à la page 2 (pas de numéro sur la page de garde)
+        for (let i = 2; i <= pageCount; i++) {
+            pdf.setPage(i);
+            const text = `Page ${i - 1} / ${pageCount - 1}`;
+            const textWidth = pdf.getTextWidth(text);
+            pdf.text(text, (pageWidth - textWidth) / 2, pageHeight - 10);
+        }
+    }
+    
+    // Méthode helper existante
+    getFormeJuridique() {
+        const formes = {
+            'SARL': 'Société à Responsabilité Limitée (SARL)',
+            'SAS': 'Société par Actions Simplifiée (SAS)',
+            'SASU': 'Société par Actions Simplifiée Unipersonnelle (SASU)',
+            'SA': 'Société Anonyme (SA)',
+            'EURL': 'Entreprise Unipersonnelle à Responsabilité Limitée (EURL)'
+        };
+        
+        const forme = this.companyInfo.legal?.forme || 'SAS';
+        return formes[forme] || forme;
+    }
+    
+    // Fallback vers l'impression navigateur
+    fallbackToPrint() {
+        if (window.modalSystem) {
+            window.modalSystem.alert({
+                title: 'Sauvegarder les CGV en PDF',
+                message: `
+                    <div style="text-align: left;">
+                        <h4>Comment sauvegarder en PDF :</h4>
+                        <ol>
+                            <li>Dans la fenêtre d'impression qui va s'ouvrir</li>
+                            <li>Choisissez "Enregistrer en PDF" comme imprimante</li>
+                            <li>Cliquez sur "Enregistrer"</li>
+                            <li>Nommez le fichier : CGV-OWEO-v${this.cgvInfo.version}.pdf</li>
+                        </ol>
+                        <p style="margin-top: 1rem; color: var(--text-muted);">
+                            <small>Pour une meilleure qualité, nous recommandons de désactiver les en-têtes et pieds de page dans les options d'impression.</small>
+                        </p>
+                    </div>
+                `,
+                type: 'info'
+            });
+        }
+        
+        setTimeout(() => {
+            window.print();
+        }, 500);
     }
     
     bindEvents() {
@@ -743,36 +1198,6 @@ class CGVPage extends BasePage {
                 behavior: 'smooth'
             });
         }
-    }
-    
-    downloadPDF() {
-        // Option 1 : Si un PDF pré-généré existe
-        const pdfUrl = '/assets/documents/cgv-oweo-v' + this.cgvInfo.version.replace('.', '-') + '.pdf';
-        
-        // Vérifier si le PDF existe
-        fetch(pdfUrl, { method: 'HEAD' })
-            .then(response => {
-                if (response.ok) {
-                    // Le PDF existe, le télécharger
-                    const link = document.createElement('a');
-                    link.href = pdfUrl;
-                    link.download = 'CGV-OWEO-v' + this.cgvInfo.version + '.pdf';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    
-                    if (window.notifications) {
-                        window.notifications.success('Téléchargement du PDF démarré');
-                    }
-                } else {
-                    // Le PDF n'existe pas, proposer l'impression
-                    this.printToPDF();
-                }
-            })
-            .catch(() => {
-                // En cas d'erreur, proposer l'impression
-                this.printToPDF();
-            });
     }
     
     printToPDF() {
