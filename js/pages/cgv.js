@@ -35,6 +35,9 @@ class CGVPage extends BasePage {
         // Récupérer les infos de l'entreprise
         this.companyInfo = window.CompanyInfo || {};
 
+        // Stockage des écouteurs pour le nettoyage
+        this._eventListeners = [];
+
         // État de génération PDF
         this.pdfGenerating = false;
     }
@@ -817,7 +820,10 @@ class CGVPage extends BasePage {
     bindEvents() {
         super.bindEvents();
         
-        // Navigation interne (table des matières)
+        // IMPORTANT: Nettoyer les anciens écouteurs d'abord
+        this.cleanupEventListeners();
+        
+        // Navigation interne (table des matières) - SÉLECTEUR SPÉCIFIQUE
         const handleTocClick = (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -883,28 +889,47 @@ class CGVPage extends BasePage {
             return false;
         };
         
-        // Attacher les événements aux liens de navigation interne
-        const tocLinks = document.querySelectorAll('.toc-link');
+        // Sélecteur spécifique pour les liens TOC uniquement
+        const tocLinks = document.querySelectorAll('.cgv-page .toc-link');
         tocLinks.forEach(link => {
-            link.removeEventListener('click', handleTocClick);
             link.addEventListener('click', handleTocClick);
+            this._eventListeners.push({ element: link, event: 'click', handler: handleTocClick });
         });
         
-        // Navigation externe (breadcrumb)
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
+        // Handler spécifique pour le breadcrumb CGV uniquement
+        const handleBreadcrumbClick = (e) => {
+            const link = e.currentTarget;
+            const href = link.getAttribute('href');
+            
+            // Vérifier que c'est bien un lien de navigation et pas un lien TOC
+            if (href && href.startsWith('#') && !link.classList.contains('toc-link')) {
                 e.preventDefault();
-                const href = link.getAttribute('href');
-                if (href && href.startsWith('#')) {
-                    const page = href.substring(1);
-                    this.navigateTo(page);
-                }
-            });
+                e.stopPropagation();
+                
+                const page = href.substring(1);
+                this.navigateTo(page);
+            }
+        };
+        
+        // Sélecteur plus spécifique pour le breadcrumb CGV
+        const breadcrumbLinks = document.querySelectorAll('.cgv-page .page-breadcrumb .nav-link');
+        breadcrumbLinks.forEach(link => {
+            link.addEventListener('click', handleBreadcrumbClick);
+            this._eventListeners.push({ element: link, event: 'click', handler: handleBreadcrumbClick });
         });
         
         // Scroll spy pour la navigation
         this.setupScrollSpy();
+    }
+
+    // Méthode pour nettoyer les écouteurs
+    cleanupEventListeners() {
+        this._eventListeners.forEach(({ element, event, handler }) => {
+            if (element) {
+                element.removeEventListener(event, handler);
+            }
+        });
+        this._eventListeners = [];
     }
     
     updateMenuIndicator(activeLink) {
@@ -1278,8 +1303,15 @@ class CGVPage extends BasePage {
         
     }
     
-    
     destroy() {
+        // Nettoyer tous les écouteurs d'événements
+        this.cleanupEventListeners();
+        
+        // Nettoyer le scroll spy si nécessaire
+        if (this._scrollHandler) {
+            window.removeEventListener('scroll', this._scrollHandler);
+        }
+        
         // Retirer la classe du body
         document.body.classList.remove('page-cgv');
         

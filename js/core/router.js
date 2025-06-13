@@ -232,6 +232,21 @@ class OweoRouter {
      * Gérer les événements
      */
     bindEvents() {
+        // Protéger contre la propagation d'événements
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a[href^="#"]');
+            if (link && !link.closest('.cgv-page')) {
+                const href = link.getAttribute('href');
+                if (href && href !== '#' && href.length > 1) {
+                    // C'est une navigation de route principale
+                    e.preventDefault();
+                    e.stopImmediatePropagation(); // Empêcher d'autres handlers
+                    const route = href.substring(1);
+                    this.navigate(route);
+                }
+            }
+        }, true); // Utiliser la phase de capture
+
         // Événement popstate (boutons précédent/suivant)
         window.addEventListener('popstate', (event) => {
             const path = this.getRouteFromURL();
