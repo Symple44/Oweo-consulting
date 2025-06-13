@@ -1,5 +1,5 @@
 // ========================================
-// js/config/template-config.js - Configuration centralisée du système template
+// js/config/template-config.js - Configuration centralisée CORRIGÉE
 // ========================================
 
 window.TemplateConfig = {
@@ -13,13 +13,13 @@ window.TemplateConfig = {
     showThemeSelector: true,
     
     // ========================================
-    // CENTRALISATION COMPLÈTE
+    // CENTRALISATION COMPLÈTE - CORRIGÉE
     // ========================================
     
     // Approche: remplacer tous les fichiers CSS par le système template
     replaceExistingCSS: true,
     
-    // Fichiers CSS remplacés par template-variables.css et template-components.css
+    // Fichiers CSS remplacés par le système template centralisé
     replacedFiles: [
         'css/variables.css',
         'css/base.css', 
@@ -29,26 +29,19 @@ window.TemplateConfig = {
     ],
     
     // ========================================
-    // MIGRATION AUTOMATIQUE
+    // FICHIERS TEMPLATE COMPLETS - NOUVEAU
     // ========================================
     
-    // Mapping automatique des classes existantes
-    autoMigration: {
-        enabled: true,
-        preserveOriginal: true,  // Garder les anciennes classes pour compatibilité
-        logChanges: true
-    },
-    
-    // Mapping des classes (gardé pour compatibilité mais pas nécessaire avec la centralisation)
-    classMapping: {
-        // Les classes existantes sont maintenant intégrées directement dans template-components.css
-        'warm-card': 'card card--primary card--hover',
-        'service-card-warm': 'card card--primary card--hover',
-        'btn-warm': 'btn btn--primary',
-        'btn-warm--outline': 'btn btn--outline',
-        'icon-warm': 'icon-box icon-box--primary icon-box--animated',
-        'warm-grid': 'grid grid-auto-fit'
-    },
+    // TOUS les fichiers template requis (d'après votre index.html)
+    requiredTemplateFiles: [
+        'template-variables.css',    // Variables centralisées
+        'template-utilities.css',    // Base, layout, utilities
+        'template-navigation.css',   // Navigation et footer
+        'template-modals.css',       // Modales et notifications
+        'template-components.css',   // Composants UI
+        'template-pages.css',        // Pages complètes
+        'template-demos.css'         // Démos spécialisées
+    ],
     
     // ========================================
     // THÈMES OWEO CENTRALISÉS
@@ -86,67 +79,74 @@ window.TemplateConfig = {
     // ========================================
     
     features: {
-        centralizedCSS: true,       // Utiliser uniquement les fichiers template
-        autoThemeDetection: true,   // Détecter automatiquement les préférences
-        responsiveComponents: true, // Composants adaptatifs
-        animationSystem: true,      // Système d'animations unifié
-        utilitiesFirst: true,       // Approche utility-first
-        darkModeToggle: true,       // Toggle mode sombre
-        devTools: true,            // Outils de développement
-        performanceMode: false      // Mode performance (désactive certaines animations)
+        centralizedCSS: true,       
+        autoThemeDetection: true,   
+        responsiveComponents: true, 
+        animationSystem: true,      
+        utilitiesFirst: true,       
+        darkModeToggle: true,       
+        devTools: true,            
+        performanceMode: false      
     },
     
     // ========================================
-    // INITIALISATION CENTRALISÉE
+    // INITIALISATION CENTRALISÉE - CORRIGÉE
     // ========================================
     
     init() {
         console.log('🎨 Initialisation du Template System Centralisé Oweo');
         
-        // Vérifier que les fichiers template sont chargés
-        this.validateTemplateFiles();
-        
-        // Enregistrer les thèmes Oweo
-        this.registerCustomThemes();
-        
-        // Configurer les raccourcis
-        this.setupShortcuts();
-        
-        // Écouter les changements de thème
-        this.observeThemeChanges();
-        
-        // Initialiser la détection de mode
-        this.setupModeDetection();
-        
-        // Outils de développement
-        if (this.features.devTools) {
-            this.setupDevTools();
+        try {
+            // Vérifier que TOUS les fichiers template sont chargés - CORRIGÉ
+            this.validateAllTemplateFiles();
+            
+            // Enregistrer les thèmes Oweo
+            this.registerCustomThemes();
+            
+            // Configurer les raccourcis
+            this.setupShortcuts();
+            
+            // Écouter les changements de thème
+            this.observeThemeChanges();
+            
+            // Initialiser la détection de mode
+            this.setupModeDetection();
+            
+            // Outils de développement
+            if (this.features.devTools) {
+                this.setupDevTools();
+            }
+            
+            // Performance monitoring
+            this.setupPerformanceMonitoring();
+            
+            console.log('✅ Template System centralisé initialisé');
+            
+        } catch (error) {
+            console.error('❌ Erreur initialisation Template System:', error);
+            this.handleInitError(error);
         }
-        
-        // Performance monitoring
-        this.setupPerformanceMonitoring();
-        
-        console.log('✅ Template System centralisé initialisé');
     },
     
-    validateTemplateFiles() {
-        const requiredFiles = [
-            'template-variables.css',
-            'template-components.css'
-        ];
-        
+    // ========================================
+    // VALIDATION COMPLÈTE - NOUVEAU
+    // ========================================
+    
+    validateAllTemplateFiles() {
         const loadedFiles = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
             .map(link => link.href.split('/').pop());
             
-        const missing = requiredFiles.filter(file => 
+        const missing = this.requiredTemplateFiles.filter(file => 
             !loadedFiles.some(loaded => loaded.includes(file))
         );
         
         if (missing.length > 0) {
             console.warn('⚠️ Fichiers template manquants:', missing);
             this.loadMissingTemplateFiles(missing);
+            return false;
         } else {
-            console.log('✅ Tous les fichiers template sont chargés');
+            console.log('✅ Tous les fichiers template sont chargés:', this.requiredTemplateFiles.length);
+            return true;
         }
     },
     
@@ -158,6 +158,62 @@ window.TemplateConfig = {
             document.head.appendChild(link);
             console.log(`🔄 Chargement de ${file}`);
         });
+        
+        // Attendre le chargement et relancer l'initialisation
+        setTimeout(() => {
+            console.log('🔄 Rechargement après ajout des fichiers manquants');
+            this.init();
+        }, 500);
+    },
+    
+    // ========================================
+    // GESTION D'ERREURS - NOUVEAU
+    // ========================================
+    
+    handleInitError(error) {
+        // Mode dégradé - au moins afficher quelque chose
+        console.warn('🚨 Mode dégradé activé');
+        
+        // Créer un style de base minimal
+        const fallbackCSS = `
+            body { 
+                font-family: -apple-system, BlinkMacSystemFont, sans-serif; 
+                margin: 0; 
+                padding: 20px; 
+                background: #f9fafb;
+                color: #1f2937;
+            }
+            .error-notice {
+                background: #fef2f2;
+                color: #991b1b;
+                padding: 16px;
+                border-radius: 8px;
+                border: 1px solid #fecaca;
+                margin: 20px 0;
+            }
+            .app-container { 
+                max-width: 1200px; 
+                margin: 0 auto; 
+            }
+        `;
+        
+        const style = document.createElement('style');
+        style.textContent = fallbackCSS;
+        document.head.appendChild(style);
+        
+        // Afficher une notification d'erreur
+        const appContainer = document.querySelector('.app-container') || document.body;
+        const errorNotice = document.createElement('div');
+        errorNotice.className = 'error-notice';
+        errorNotice.innerHTML = `
+            <h3>⚠️ Problème de chargement du thème</h3>
+            <p>Le système de template n'a pas pu s'initialiser complètement. L'application fonctionne en mode dégradé.</p>
+            <details>
+                <summary>Détails techniques</summary>
+                <pre>${error.message}</pre>
+            </details>
+        `;
+        appContainer.insertBefore(errorNotice, appContainer.firstChild);
     },
     
     registerCustomThemes() {
@@ -172,7 +228,8 @@ window.TemplateConfig = {
                 // Appliquer le thème par défaut
                 manager.applyTheme(this.defaultTheme);
             } else {
-                setTimeout(registerThemes, 100);
+                // Attendre un peu plus longtemps et réessayer
+                setTimeout(registerThemes, 200);
             }
         };
         
@@ -181,62 +238,67 @@ window.TemplateConfig = {
     
     setupShortcuts() {
         document.addEventListener('keydown', (e) => {
-            if (!this.features.devTools) return;
-            
-            // Ctrl+Shift+T: Sélecteur de thème
-            if (e.ctrlKey && e.shiftKey && e.key === 'T') {
-                e.preventDefault();
-                this.toggleThemeSelector();
-            }
-            
-            // Ctrl+Shift+M: Toggle mode clair/sombre
-            if (e.ctrlKey && e.shiftKey && e.key === 'M') {
-                e.preventDefault();
-                this.toggleMode();
-            }
-            
-            // Ctrl+Shift+D: Toggle dev tools
-            if (e.ctrlKey && e.shiftKey && e.key === 'D') {
-                e.preventDefault();
-                this.toggleDevTools();
-            }
-            
-            // Ctrl+Shift+P: Toggle performance mode
-            if (e.ctrlKey && e.shiftKey && e.key === 'P') {
-                e.preventDefault();
-                this.togglePerformanceMode();
+            if (e.ctrlKey && e.shiftKey) {
+                switch (e.key) {
+                    case 'T':
+                        e.preventDefault();
+                        this.toggleThemeSelector();
+                        break;
+                    case 'M':
+                        e.preventDefault();
+                        this.toggleMode();
+                        break;
+                    case 'D':
+                        e.preventDefault();
+                        this.toggleDevTools();
+                        break;
+                    case 'P':
+                        e.preventDefault();
+                        this.togglePerformanceMode();
+                        break;
+                }
             }
         });
     },
     
     observeThemeChanges() {
-        window.addEventListener('themechange', (e) => {
-            console.log('🎨 Thème centralisé changé:', e.detail);
-            
-            // Émettre vers le système Oweo existant
-            if (window.app && window.app.eventBus) {
-                window.app.eventBus.emit('template:theme:changed', e.detail);
-            }
-            
-            // Mettre à jour les métriques de performance
-            this.updatePerformanceMetrics(e.detail);
+        // Observer les changements d'attributs de thème
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && 
+                    (mutation.attributeName === 'data-theme' || 
+                     mutation.attributeName === 'data-theme-mode')) {
+                    console.log('🎨 Thème centralisé changé:', {
+                        theme: document.documentElement.getAttribute('data-theme'),
+                        mode: document.documentElement.getAttribute('data-theme-mode')
+                    });
+                }
+            });
+        });
+        
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme', 'data-theme-mode']
         });
     },
     
     setupModeDetection() {
         if (!this.features.autoThemeDetection) return;
         
-        // Détecter les préférences système
-        const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
-        const contrastQuery = window.matchMedia('(prefers-contrast: high)');
-        const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
         
-        // Écouter les changements
-        darkModeQuery.addEventListener('change', (e) => {
+        const handleModeChange = (e) => {
             if (this.defaultMode === 'auto') {
                 this.setMode(e.matches ? 'dark' : 'light');
             }
-        });
+        };
+        
+        mediaQuery.addEventListener('change', handleModeChange);
+        handleModeChange(mediaQuery);
+        
+        // Détecter les préférences de contraste et mouvement
+        const contrastQuery = window.matchMedia('(prefers-contrast: high)');
+        const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
         
         contrastQuery.addEventListener('change', (e) => {
             document.documentElement.setAttribute('data-high-contrast', e.matches);
@@ -256,7 +318,8 @@ window.TemplateConfig = {
             benchmarkPerformance: () => this.benchmarkPerformance(),
             validateStructure: () => this.validateHTMLStructure(),
             exportConfig: () => this.exportConfiguration(),
-            toggleDebugMode: () => this.toggleDebugMode()
+            toggleDebugMode: () => this.toggleDebugMode(),
+            validateFiles: () => this.validateAllTemplateFiles()
         };
         
         console.log(`
@@ -268,6 +331,7 @@ TemplateDevTools.benchmarkPerformance() - Test de performance
 TemplateDevTools.validateStructure() - Validation HTML
 TemplateDevTools.exportConfig()    - Export de la configuration
 TemplateDevTools.toggleDebugMode() - Mode debug
+TemplateDevTools.validateFiles()   - Valider fichiers template
 
 Raccourcis:
 Ctrl+Shift+T : Sélecteur de thème
@@ -325,36 +389,43 @@ Ctrl+Shift+P : Toggle performance mode
     
     createThemeSelector() {
         const manager = window.OweoThemeManager || window.ThemeManager;
-        if (!manager) return;
+        if (!manager) {
+            console.warn('ThemeManager non disponible');
+            return;
+        }
         
         const selector = document.createElement('div');
         selector.id = 'template-theme-selector';
         selector.innerHTML = `
             <div style="position: fixed; top: 20px; right: 20px; z-index: 9999; 
-                        background: var(--bg-elevated); border: 1px solid var(--border-default);
-                        border-radius: var(--radius-xl); padding: var(--space-6);
-                        font-family: var(--font-family-base); font-size: var(--font-size-sm);
-                        box-shadow: var(--shadow-xl); min-width: 250px;">
-                <div style="margin-bottom: var(--space-4); font-weight: var(--font-weight-semibold);">
+                        background: white; border: 1px solid #e5e7eb;
+                        border-radius: 12px; padding: 24px;
+                        font-family: -apple-system, BlinkMacSystemFont, sans-serif; 
+                        font-size: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); 
+                        min-width: 250px;">
+                <div style="margin-bottom: 16px; font-weight: 600;">
                     🎨 Template Theme Manager
                 </div>
-                <select id="template-theme-select" style="margin-bottom: var(--space-3); width: 100%; 
-                        padding: var(--space-2); border-radius: var(--radius-md);">
-                    ${Object.entries(manager.themes).map(([key, theme]) => 
+                <select id="template-theme-select" style="margin-bottom: 12px; width: 100%; 
+                        padding: 8px; border-radius: 6px; border: 1px solid #d1d5db;">
+                    ${Object.entries(manager.themes || {}).map(([key, theme]) => 
                         `<option value="${key}" ${key === manager.currentTheme ? 'selected' : ''}>${theme.name}</option>`
                     ).join('')}
                 </select>
-                <button id="template-mode-toggle" style="width: 100%; padding: var(--space-2); 
-                        margin-bottom: var(--space-3); border-radius: var(--radius-md);">
+                <button id="template-mode-toggle" style="width: 100%; padding: 8px; 
+                        margin-bottom: 12px; border-radius: 6px; border: 1px solid #d1d5db; 
+                        background: white; cursor: pointer;">
                     ${manager.currentMode === 'dark' ? '☀️ Mode Clair' : '🌙 Mode Sombre'}
                 </button>
-                <div style="display: flex; gap: var(--space-2);">
-                    <button id="template-export-btn" style="flex: 1; padding: var(--space-1); 
-                            font-size: var(--font-size-xs); border-radius: var(--radius-md);">
+                <div style="display: flex; gap: 8px;">
+                    <button id="template-export-btn" style="flex: 1; padding: 6px; 
+                            font-size: 12px; border-radius: 6px; border: 1px solid #d1d5db; 
+                            background: white; cursor: pointer;">
                         Export
                     </button>
-                    <button id="template-close-btn" style="flex: 1; padding: var(--space-1); 
-                            font-size: var(--font-size-xs); border-radius: var(--radius-md);">
+                    <button id="template-close-btn" style="flex: 1; padding: 6px; 
+                            font-size: 12px; border-radius: 6px; border: 1px solid #d1d5db; 
+                            background: white; cursor: pointer;">
                         Fermer
                     </button>
                 </div>
@@ -401,11 +472,9 @@ Ctrl+Shift+P : Toggle performance mode
         }
     },
     
-    togglePerformanceMode() {
-        this.features.performanceMode = !this.features.performanceMode;
-        document.documentElement.setAttribute('data-performance-mode', this.features.performanceMode);
-        console.log(`🚀 Performance mode: ${this.features.performanceMode ? 'ON' : 'OFF'}`);
-    },
+    // ========================================
+    // MÉTHODES D'ANALYSE
+    // ========================================
     
     listAvailableThemes() {
         const manager = window.OweoThemeManager || window.ThemeManager;
@@ -419,7 +488,12 @@ Ctrl+Shift+P : Toggle performance mode
         const usage = {
             templateFiles: styles.filter(s => s.href.includes('template-')),
             totalFiles: styles.length,
-            replaced: this.replacedFiles
+            loadedTemplateFiles: this.requiredTemplateFiles.filter(file => 
+                styles.some(s => s.href.includes(file))
+            ),
+            missingTemplateFiles: this.requiredTemplateFiles.filter(file => 
+                !styles.some(s => s.href.includes(file))
+            )
         };
         
         console.log('📊 Analyse CSS:', usage);
@@ -430,12 +504,13 @@ Ctrl+Shift+P : Toggle performance mode
         const manager = window.OweoThemeManager || window.ThemeManager;
         const config = {
             system: 'Oweo Template System',
-            version: '1.0.0',
+            version: '2.0.0',
             currentTheme: manager?.currentTheme,
             currentMode: manager?.currentMode,
             themes: manager?.themes,
             features: this.features,
-            performance: this.performanceMetrics
+            performance: this.performanceMetrics,
+            loadedFiles: this.analyzeCSSUsage()
         };
         
         const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
@@ -447,26 +522,27 @@ Ctrl+Shift+P : Toggle performance mode
         URL.revokeObjectURL(url);
         
         console.log('📁 Configuration exportée');
-    },
-    
-    updatePerformanceMetrics(themeData) {
-        this.performanceMetrics.themeChanges++;
-        this.performanceMetrics.lastChangeTime = Date.now();
     }
 };
 
 // ========================================
-// AUTO-INITIALISATION
+// AUTO-INITIALISATION SÉCURISÉE
 // ========================================
 
 // Initialiser automatiquement quand le DOM est prêt
 if (window.TemplateConfig.enabled) {
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
-            window.TemplateConfig.init();
+            // Attendre que tous les scripts soient chargés
+            setTimeout(() => {
+                window.TemplateConfig.init();
+            }, 100);
         });
     } else {
-        window.TemplateConfig.init();
+        // DOM déjà prêt
+        setTimeout(() => {
+            window.TemplateConfig.init();
+        }, 100);
     }
 }
 

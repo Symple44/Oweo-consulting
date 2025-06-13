@@ -225,3 +225,4 @@ class EventBus {
         return stats;
     }
 }
+window.EventBus = EventBus;
