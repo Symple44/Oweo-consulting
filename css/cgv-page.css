@@ -1,6 +1,6 @@
 /* ========================================
    css/cgv-page.css - Styles page CGV complet
-   Version corrigée avec les bonnes variables
+   Version finale avec menu sticky fonctionnel
 ======================================== */
 
 /* Container principal */
@@ -9,13 +9,31 @@
     --form-secondary: var(--secondary-color);
     --form-border: var(--border-color);
     scroll-behavior: smooth;
-    /* Important: pas d'overflow hidden sur la page */
     overflow: visible;
+}
+
+/* CORRECTIONS STICKY - Forcer overflow visible partout */
+.cgv-page,
+.cgv-page *,
+.page-container,
+.cgv-content,
+.cgv-layout,
+.cgv-main,
+.cgv-document,
+.container,
+#app,
+.app-container {
+    overflow: visible !important;
+}
+
+/* Exception pour le body */
+body {
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
 }
 
 /* Ajustement du body pour le mode démo */
 body.page-cgv {
-    /* Override pour s'assurer que le padding est correct */
     padding-top: var(--navbar-height, 70px);
 }
 
@@ -105,48 +123,53 @@ body.page-cgv.demo-mode {
 }
 
 /* =================================
-   LAYOUT PRINCIPAL
+   LAYOUT PRINCIPAL CORRIGÉ
 ================================= */
 
 .cgv-content {
     padding: var(--space-8, 32px) 0;
     background: var(--bg-primary);
-    /* Important: ne pas utiliser overflow:hidden sur les parents du sticky */
+    overflow: visible !important;
 }
 
 .cgv-layout {
     display: grid;
     grid-template-columns: 250px 1fr;
     gap: var(--space-8, 32px);
-    align-items: start;
-    /* Important: le parent ne doit pas avoir overflow:hidden */
+    align-items: start; /* Critique: ne pas utiliser stretch */
     position: relative;
-    /* S'assurer que le layout a une hauteur suffisante */
-    min-height: 100vh;
+    min-height: 100%;
 }
 
 /* =================================
-   NAVIGATION LATÉRALE AMÉLIORÉE
+   NAVIGATION LATÉRALE STICKY CORRIGÉE
 ================================= */
 
 .cgv-nav {
     position: relative;
-    /* Important: assurer une hauteur suffisante pour le sticky */
-    min-height: 100px;
-    /* Pas d'overflow hidden qui pourrait bloquer le sticky */
-    overflow: visible;
+    /* CRITIQUE: Retirer toute contrainte de hauteur */
+    height: auto !important;
+    min-height: 100% !important;
+    /* S'étendre avec le contenu principal */
+    align-self: stretch;
+    /* Permettre au sticky de fonctionner sur toute la hauteur */
+    display: flex;
+    flex-direction: column;
 }
 
 .nav-sticky {
-    /* Position sticky avec fallbacks */
-    position: -webkit-sticky;
-    position: sticky;
+    /* Position sticky avec support complet */
+    position: -webkit-sticky !important;
+    position: sticky !important;
     
-    /* Calcul correct du top avec fallback */
-    --sticky-offset: calc(var(--navbar-height, 70px) + var(--space-4, 16px));
-    top: var(--sticky-offset);
-    /* Fallback en dur si les variables ne fonctionnent pas */
-    top: 86px;
+    /* Position depuis le haut */
+    top: calc(var(--navbar-height, 70px) + var(--space-4, 16px));
+    top: 86px; /* Fallback */
+    
+    /* Hauteur maximale pour scroll interne si nécessaire */
+    max-height: calc(100vh - 106px);
+    overflow-y: auto;
+    overflow-x: hidden;
     
     /* Styles visuels */
     background: var(--bg-card, rgba(255, 255, 255, 0.05));
@@ -154,24 +177,17 @@ body.page-cgv.demo-mode {
     border-radius: var(--radius-xl, 16px);
     padding: var(--space-6, 24px);
     
-    /* Transition et animations */
+    /* Améliorer la visibilité */
+    z-index: 100;
+    
+    /* Transition pour les effets */
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     
-    /* Hauteur maximale avec calcul correct */
-    --menu-max-height: calc(100vh - var(--navbar-height, 70px) - var(--space-8, 32px));
-    max-height: var(--menu-max-height);
-    /* Fallback si le calcul échoue */
-    max-height: calc(100vh - 102px);
-    
-    /* Scroll interne */
-    overflow-y: auto;
-    overflow-x: hidden;
-    
-    /* Z-index pour passer au-dessus */
-    z-index: var(--z-sticky, 100);
-    
-    /* Propriétés pour la progression du scroll */
-    --scroll-progress: 0%;
+    /* Forcer le rendu */
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     
     /* Animation de chargement */
     animation: menuLoadIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
@@ -179,42 +195,46 @@ body.page-cgv.demo-mode {
 
 /* Ajustement pour le mode démo avec banner */
 body.demo-mode .nav-sticky,
-.has-demo-banner .nav-sticky,
-#demo-search-banner.active ~ * .nav-sticky {
-    --sticky-offset: calc(var(--navbar-height, 70px) + var(--demo-banner-height, 80px) + var(--space-4, 16px));
-    top: var(--sticky-offset);
-    /* Fallback */
-    top: 166px;
-    
-    --menu-max-height: calc(100vh - var(--navbar-height, 70px) - var(--demo-banner-height, 80px) - var(--space-8, 32px));
-    max-height: var(--menu-max-height);
-    /* Fallback */
-    max-height: calc(100vh - 182px);
+.has-demo-banner .nav-sticky {
+    top: calc(var(--navbar-height, 70px) + var(--demo-banner-height, 80px) + var(--space-4, 16px));
+    top: 166px; /* Fallback */
+    max-height: calc(100vh - 186px);
+}
+
+/* États visuels du sticky */
+.nav-sticky {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* État collé (sticky actif) */
+.nav-sticky.is-stuck {
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.25);
+    border-color: rgba(0, 212, 255, 0.5);
+    background: rgba(26, 26, 46, 0.98);
 }
 
 /* Indicateur de progression sur le côté du menu */
-.nav-sticky::after {
+.nav-sticky::before {
     content: '';
     position: absolute;
     right: -1px;
     top: 0;
     width: 3px;
-    height: var(--scroll-progress);
+    height: var(--scroll-progress, 0%);
     background: linear-gradient(
         to bottom,
         var(--primary-color) 0%,
         var(--secondary-color) 50%,
         var(--primary-color) 100%
     );
-    border-radius: 0 var(--radius-md, 8px) var(--radius-md, 8px) 0;
-    transition: height 0.1s ease-out;
+    border-radius: 0 2px 2px 0;
+    transition: height 0.1s linear;
     opacity: 0.8;
 }
 
 /* États du menu selon la position de scroll */
 .nav-sticky.at-top {
-    border-top-color: var(--primary-color);
-    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.1);
+    border-top: 2px solid var(--primary-color);
 }
 
 .nav-sticky.in-middle {
@@ -223,30 +243,11 @@ body.demo-mode .nav-sticky,
 }
 
 .nav-sticky.at-bottom {
-    border-bottom-color: var(--secondary-color);
-    box-shadow: 0 -4px 12px rgba(124, 58, 237, 0.1);
-}
-
-.nav-sticky::after {
-    transition: height 0.05s linear, opacity 0.2s ease;
+    border-bottom: 2px solid var(--secondary-color);
 }
 
 .nav-sticky.scrolling {
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    border-color: rgba(0, 212, 255, 0.3);
-}
-
-.nav-sticky.at-top::after {
-    opacity: 0.3;
-}
-
-.nav-sticky.in-middle::after {
-    opacity: 0.8;
-}
-
-.nav-sticky.at-bottom::after {
-    opacity: 1;
-    box-shadow: 0 0 8px rgba(124, 58, 237, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.15);
 }
 
 /* Animation lors de la navigation */
@@ -256,15 +257,6 @@ body.demo-mode .nav-sticky,
         0 8px 32px rgba(0, 212, 255, 0.2),
         0 0 0 2px rgba(0, 212, 255, 0.1);
     transform: scale(1.01);
-}
-
-/* États de scroll directionnels */
-.nav-sticky.scrolling[data-scroll-direction="down"] {
-    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
-}
-
-.nav-sticky.scrolling[data-scroll-direction="up"] {
-    box-shadow: 0 -4px 32px rgba(124, 58, 237, 0.1);
 }
 
 /* Titre de navigation */
@@ -295,19 +287,12 @@ body.demo-mode .nav-sticky,
     left: -12px;
     top: var(--indicator-top, 0);
     width: 4px;
-    height: var(--indicator-height, 0);
+    height: var(--indicator-height, 32px);
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     border-radius: var(--radius-full);
-    transition: var(--indicator-transition, all 0.3s cubic-bezier(0.4, 0, 0.2, 1));
-    transform: translateY(0);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     opacity: 1;
     box-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
-}
-
-/* Animation de l'indicateur lors des transitions */
-.toc.has-active.updating::before {
-    opacity: 0.7;
-    transform: scale(1.1);
 }
 
 /* Liens de navigation */
@@ -320,7 +305,7 @@ body.demo-mode .nav-sticky,
     border-radius: var(--radius-md, 8px);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    margin-left: 8px; /* Espace pour l'indicateur */
+    margin-left: 8px;
 }
 
 .toc-link:hover {
@@ -336,7 +321,6 @@ body.demo-mode .nav-sticky,
     font-weight: 600;
     transform: translateX(6px);
     padding-left: var(--space-4, 16px);
-    border-left: 2px solid transparent; /* Pour éviter le shift lors de l'activation */
 }
 
 /* Animation lors du clic/navigation */
@@ -344,14 +328,6 @@ body.demo-mode .nav-sticky,
     background: rgba(0, 212, 255, 0.2);
     transform: translateX(8px) scale(1.02);
     box-shadow: 0 2px 8px rgba(0, 212, 255, 0.2);
-}
-
-/* Amélioration de l'accessibilité */
-.toc-link:focus-visible {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
-    border-radius: var(--radius-sm, 4px);
-    background: rgba(0, 212, 255, 0.1);
 }
 
 /* Actions CGV */
@@ -399,13 +375,15 @@ body.demo-mode .nav-sticky,
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-xl, 16px);
-    overflow: hidden;
+    overflow: visible !important;
+    min-height: 100%;
 }
 
 .cgv-document {
     padding: var(--space-8, 32px);
     color: var(--text-secondary);
     line-height: 1.8;
+    overflow: visible !important;
 }
 
 /* =================================
@@ -437,7 +415,7 @@ body.demo-mode .nav-sticky,
 
 .cgv-section {
     margin-bottom: var(--space-12, 48px);
-    scroll-margin-top: calc(var(--navbar-height, 70px) + var(--space-8, 32px));
+    scroll-margin-top: calc(var(--navbar-height, 70px) + var(--space-8, 32px) + 20px);
     padding-top: var(--space-4, 16px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     opacity: 0.9;
@@ -667,33 +645,20 @@ body.demo-mode .nav-sticky,
     }
 }
 
-/* État de chargement du menu */
-.nav-sticky.loading {
-    opacity: 0.5;
-    pointer-events: none;
-}
-
-.nav-sticky.loading::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    margin: -10px 0 0 -10px;
-    border: 2px solid var(--border-light);
-    border-top: 2px solid var(--primary-color);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+/* Animation de slide */
+@keyframes menuSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 /* =================================
-   BOUTONS (pour les actions CGV)
+   BOUTONS
 ================================= */
 
 .btn {
@@ -735,6 +700,37 @@ body.demo-mode .nav-sticky,
 }
 
 /* =================================
+   FIX WEBKIT/SAFARI
+================================= */
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .nav-sticky {
+        -webkit-transform: translateZ(0);
+    }
+    
+    .cgv-nav {
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+}
+
+/* =================================
+   FALLBACK SI STICKY NE FONCTIONNE PAS
+================================= */
+
+@supports not (position: sticky) {
+    .nav-sticky {
+        position: fixed !important;
+        top: 86px !important;
+        left: auto;
+        width: 250px;
+    }
+    
+    .cgv-layout {
+        padding-left: 270px;
+    }
+}
+
+/* =================================
    RESPONSIVE DESIGN
 ================================= */
 
@@ -755,19 +751,6 @@ body.demo-mode .nav-sticky,
     .cgv-meta {
         flex-direction: column;
         gap: var(--space-3, 12px);
-    }
-    
-    /* Masquer l'indicateur sur tablette/mobile */
-    .toc.has-active::before {
-        display: none;
-    }
-    
-    .nav-sticky::after {
-        display: none;
-    }
-    
-    .toc-link {
-        margin-left: 0;
     }
 }
 
@@ -837,14 +820,12 @@ body.demo-mode .nav-sticky,
    OPTIMISATIONS PERFORMANCE
 ================================= */
 
-/* Optimisations de performance pour les transitions */
 .toc-link,
 .cgv-section,
 .nav-sticky {
     will-change: transform;
 }
 
-/* Amélioration de la lisibilité lors du scroll */
 .nav-sticky.scrolling .toc-link:not(.active) {
     opacity: 0.7;
 }
@@ -858,7 +839,6 @@ body.demo-mode .nav-sticky,
    ACCESSIBILITÉ
 ================================= */
 
-/* Réduire les animations sur les appareils qui préfèrent moins de mouvement */
 @media (prefers-reduced-motion: reduce) {
     .toc-link,
     .cgv-section,
@@ -890,18 +870,9 @@ body.demo-mode .nav-sticky,
         margin-bottom: 2cm;
     }
     
-    .cgv-meta {
-        display: none;
-    }
-    
-    .page-breadcrumb {
-        display: none;
-    }
-    
-    .cgv-nav {
-        display: none;
-    }
-    
+    .cgv-meta,
+    .page-breadcrumb,
+    .cgv-nav,
     .cgv-mobile-toc {
         display: none;
     }
@@ -931,11 +902,7 @@ body.demo-mode .nav-sticky,
         margin-left: 0 !important;
     }
     
-    .cgv-section h2 {
-        page-break-after: avoid;
-        color: black;
-    }
-    
+    .cgv-section h2,
     .cgv-section h3,
     .cgv-section h4 {
         page-break-after: avoid;
@@ -957,11 +924,20 @@ body.demo-mode .nav-sticky,
         text-decoration: underline;
     }
     
-    /* Ajout de l'URL après les liens */
     a[href^="http"]:after,
     a[href^="mailto"]:after {
         content: " (" attr(href) ")";
         font-size: 0.8em;
         color: #666;
     }
+}
+
+/* =================================
+   ASSURER LA VISIBILITÉ
+================================= */
+
+.cgv-page .nav-sticky {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
