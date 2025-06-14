@@ -336,4 +336,3 @@ class ComponentManager {
         });
     }
 }
-window.ComponentManager = ComponentManager;
