@@ -5,79 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oweo - Expert ERP Charpente Métallique</title>
     
-    <!-- ========================================
-         CSS ARCHITECTURE THÉMATIQUE CENTRALISÉE
-         ======================================== -->
-    
-    <!-- 1. SYSTÈME DE BASE -->
-    <!-- Variables centralisées - Toutes les couleurs, espacements, typographie -->
-    <link rel="stylesheet" href="css/template-variables.css">
-    
-    <!-- Base et utilitaires - Reset, layout, flexbox, grilles, utilities -->
-    <link rel="stylesheet" href="css/template-utilities.css">
+    <!-- CSS Variables et Base -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/utilities.css">
+    <link rel="stylesheet" href="css/layout.css">
 
-    <!-- ========================================
-         2. COMPOSANTS THÉMATIQUES
-         ======================================== -->
-    
-    <!-- Navigation et footer - Navbar, menu mobile, footer -->
-    <link rel="stylesheet" href="css/template-navigation.css">
-    
-    <!-- Modales et notifications - Système de modales, alertes, auth -->
-    <link rel="stylesheet" href="css/template-modals.css">
-    
-    <!-- Composants UI - Boutons, cartes, formulaires, icônes -->
-    <link rel="stylesheet" href="css/template-components.css">
-    
-    <!-- Pages complètes - Home, services, contact, CGV, erreurs -->
-    <link rel="stylesheet" href="css/template-pages.css">
-    
-    <!-- Démos spécialisées - Search, chiffrage, DSTV, auth modal -->
-    <link rel="stylesheet" href="css/template-demos.css">
+    <!-- Composants -->
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/notifications.css">
+    <link rel="stylesheet" href="css/demo-search.css">
 
-    <!-- ========================================
-         3. BIBLIOTHÈQUES EXTERNES
-         ======================================== -->
-    
-    <!-- Icônes Font Awesome -->
+    <!-- Pages -->
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/home-pages.css">
+    <link rel="stylesheet" href="css/services-page.css">
+    <link rel="stylesheet" href="css/demos-page.css">
+    <link rel="stylesheet" href="css/contact-page.css">
+    <link rel="stylesheet" href="css/cgv-page.css">
+    <link rel="stylesheet" href="css/error-pages.css">
+
+    <!-- Démos -->
+    <link rel="stylesheet" href="css/demo-components.css">
+    <link rel="stylesheet" href="css/auth-modal.css">
+    <link rel="stylesheet" href="css/dstv-demo.css">
+
+    <!-- Icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Widget Calendly -->
     <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-    
-    <!-- ========================================
-         META ET SEO
-         ======================================== -->
-    
-    <meta name="description" content="Oweo - Solutions ERP spécialisées pour la charpente métallique. Outils de chiffrage, gestion de projets et intégration DSTV.">
-    <meta name="keywords" content="ERP, charpente métallique, chiffrage, DSTV, gestion projet">
-    <meta name="author" content="Oweo">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="Oweo - Expert ERP Charpente Métallique">
-    <meta property="og:description" content="Solutions ERP spécialisées pour la charpente métallique">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://oweo.fr">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    
-    <!-- Thème couleur pour les navigateurs mobiles -->
-    <meta name="theme-color" content="#00d4ff">
-    <meta name="msapplication-TileColor" content="#00d4ff">
 </head>
 <body>
-    <!-- ========================================
-         STRUCTURE PRINCIPALE
-         ======================================== -->
+    <!-- Navigation -->
+    <nav id="navbar" class="navbar"></nav>
     
-    <!-- Navigation fixe -->
-    <nav id="navbar" class="navbar">
-        <!-- Contenu généré par navbar.js -->
-    </nav>
-    
-    <!-- Banner de recherche démos (mode démo uniquement) -->
+    <!-- Demo Search Banner (visible seulement en mode démo) -->
     <div id="demo-search-banner" class="demo-search-banner" style="display: none;">
         <div class="demo-search-container">
             <div class="demo-search-content">
@@ -86,252 +52,299 @@
                     <span>Navigation Démos</span>
                 </div>
                 <div class="demo-search-input-container">
-                    <input 
-                        type="text" 
-                        id="demo-search-input" 
-                        class="demo-search-input" 
-                        placeholder="Rechercher une démo ou fonctionnalité... (ex: 'chiffrage', 'DSTV', 'métrage')"
-                        autocomplete="off"
-                    >
-                    <div id="demo-search-results" class="demo-search-results"></div>
+                    <div class="search-input-wrapper">
+                        <input 
+                            type="text" 
+                            id="demo-search-input" 
+                            class="demo-search-input" 
+                            placeholder="Rechercher une démo ou fonctionnalité... (ex: 'chiffrage', 'DSTV', 'métrage')"
+                            autocomplete="off"
+                            spellcheck="false"
+                        >
+                        <div class="search-input-actions">
+                            <button class="search-clear-btn" id="search-clear" style="display: none;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <div class="search-loading" id="search-loading" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Résultats de recherche -->
+                    <div id="demo-search-results" class="demo-search-results">
+                        <div class="search-empty-state">
+                            <i class="fas fa-search"></i>
+                            <p>Tapez pour rechercher parmi les démonstrations disponibles</p>
+                            <div class="search-suggestions">
+                                <span class="suggestion-label">Suggestions :</span>
+                                <button class="suggestion-pill" data-query="chiffrage">Chiffrage</button>
+                                <button class="suggestion-pill" data-query="dstv">DSTV</button>
+                                <button class="suggestion-pill" data-query="stock">Stock</button>
+                                <button class="suggestion-pill" data-query="planning">Planning</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                
                 <div class="demo-search-actions">
-                    <button id="demo-search-help" class="demo-search-help-btn" title="Aide">
+                    <button id="demo-search-help" class="demo-search-help-btn" title="Aide et raccourcis">
                         <i class="fas fa-question-circle"></i>
                     </button>
-                    <button id="demo-search-close" class="demo-search-close-btn" title="Fermer">
+                    <button id="demo-search-close" class="demo-search-close-btn" title="Fermer (Échap)">
                         <i class="fas fa-times"></i>
                     </button>
+                </div>
+            </div>
+            
+            <!-- Barre de statut -->
+            <div class="demo-search-status" id="demo-search-status" style="display: none;">
+                <div class="status-content">
+                    <span class="status-text"></span>
+                    <div class="status-shortcuts">
+                        <kbd>↑↓</kbd> naviguer
+                        <kbd>↵</kbd> sélectionner
+                        <kbd>Échap</kbd> fermer
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Conteneur principal de l'application -->
+    <!-- Main App Container -->
     <main id="app" class="app-container">
-        <!-- État de chargement initial -->
         <div class="loading-container">
             <div class="loading-spinner"></div>
-            <p class="loading-text">Chargement de l'application...</p>
+            <p>Chargement de l'application...</p>
         </div>
     </main>
     
     <!-- Footer -->
-    <footer id="footer" class="footer">
-        <!-- Contenu généré par footer.js -->
-    </footer>
+    <footer id="footer" class="footer"></footer>
     
-    <!-- Conteneur pour les modales -->
-    <div id="modals-container" class="modals-container"></div>
+    <!-- Modals Container -->
+    <div id="modals-container"></div>
     
-    <!-- Conteneur pour les notifications -->
-    <div id="notifications-container" class="notifications-container"></div>
-
-    <!-- ========================================
-         SCRIPTS JAVASCRIPT - ARCHITECTURE MODULAIRE
-         ======================================== -->
+    <!-- Scripts - Architecture Modulaire -->
     
-    <!-- 1. CORE SYSTEM (chargé en premier) -->
+    <!-- 0. Configuration société (EN PREMIER) -->
+    <script src="js/config/company-info.js"></script>
+    
+    <!-- 1. Core Classes de base -->
     <script src="js/core/event-bus.js"></script>
     <script src="js/core/component-manager.js"></script>
     
-    <!-- 2. UTILITIES (dépendances de base) -->
+    <!-- 2. Utilities -->
     <script src="js/utils/dom-utils.js"></script>
-    <script src="js/config/company-info.js"></script>
+    <script src="js/utils/animation-utils.js"></script>
+    <script src="js/utils/client-access.js"></script>
+    <script src="js/utils/notifications.js"></script>
     
-    <!-- ========================================
-         3. TEMPLATE SYSTEM CENTRALISÉ
-         ======================================== -->
-    <script src="js/config/template-config.js"></script>
-    <script src="js/components/template-manager.js"></script>
-    
-    <!-- 4. BASE COMPONENTS (architecture) -->
+    <!-- 3. Base Components -->
     <script src="js/components/base-component.js"></script>
     <script src="js/pages/base-page.js"></script>
     <script src="js/demos/base-demo.js"></script>
     
-    <!-- 5. CORE APPLICATION -->
+    <!-- 4. Core System -->
     <script src="js/core/router.js"></script>
     <script src="js/core/app.js"></script>
     
-    <!-- ========================================
-         6. UI COMPONENTS (interface utilisateur)
-         ======================================== -->
+    <!-- 5. Components -->
     <script src="js/components/navbar.js"></script>
     <script src="js/components/footer.js"></script>
     <script src="js/components/demo-search.js"></script>
     <script src="js/components/modal.js"></script>
     
-    <!-- ========================================
-         7. PAGES APPLICATION (contenu)
-         ======================================== -->
+    <!-- 6. Pages -->
     <script src="js/pages/home.js"></script>
     <script src="js/pages/services.js"></script>
     <script src="js/pages/demos.js"></script>
     <script src="js/pages/contact.js"></script>
     <script src="js/pages/cgv.js"></script>
     
-    <!-- ========================================
-         8. DEMO APPLICATIONS (fonctionnalités)
-         ======================================== -->
+    <!-- 7. Demo Pages -->
     <script src="js/demos/chiffrage-demo.js"></script>
     <script src="js/demos/dstv-demo.js"></script>
     
-    <!-- ========================================
-         9. CONFIGURATION (paramètres)
-         ======================================== -->
+    <!-- 8. Configuration APRÈS CompanyInfo -->
     <script src="js/config/environment.js"></script>
     <script src="js/config/demo-config.js"></script>
     <script src="js/config/app-config.js"></script>
     
-    <!-- ========================================
-         10. DEVELOPMENT TOOLS (développement)
-         ======================================== -->
+    <!-- 9. Tools (développement uniquement) -->
     <script src="js/tools/consistency-checker.js"></script>
-    <!-- Migration helper chargé seulement en dev -->
-    <script>
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            const script = document.createElement('script');
-            script.src = 'js/tools/migration-helper.js';
-            document.head.appendChild(script);
-        }
-    </script>
-    
-    <!-- ========================================
-         11. BIBLIOTHÈQUES EXTERNES
-         ======================================== -->
-    
-    <!-- PDF Generation -->
+    <!-- Bibliothèques pour la génération PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
-    <!-- Calendar Integration -->
+    <!-- 10. Services externes -->
     <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
     
-    <!-- ========================================
-         12. INITIALISATION ET DEBUG
-         ======================================== -->
-    
+    <!-- 11. App Initialization -->
     <script>
-        // Configuration globale
-        window.OWEO_CONFIG = {
-            version: '2.0.0',
-            environment: window.location.hostname === 'localhost' ? 'development' : 'production',
-            features: {
-                templateSystem: true,
-                thematicCSS: true,
-                devTools: window.location.hostname === 'localhost',
-                analytics: false // Activé en production
-            }
-        };
-        
-        // Initialisation automatique en mode debug
-        if (window.OWEO_CONFIG.environment === 'development') {
-            document.addEventListener('DOMContentLoaded', () => {
-                setTimeout(() => {
-                    console.log(`
-🎨 Oweo Template System v${window.OWEO_CONFIG.version}
-=============================================
-
-Architecture CSS Thématique:
-• template-variables.css    - Variables centralisées
-• template-utilities.css     - Base, layout, utilities  
-• template-navigation.css    - Navigation et footer
-• template-modals.css        - Modales et notifications
-• template-components.css    - Composants UI
-• template-pages.css         - Pages complètes
-• template-demos.css         - Démos spécialisées
-
-API Disponible:
-• Template.toggleThemeSelector()  - Interface thème
-• Template.toggleMode()           - Mode clair/sombre
-• TemplateDevTools.*             - Outils développement
-
-Raccourcis Clavier:
-• Ctrl+Shift+T : Sélecteur de thème
-• Ctrl+Shift+M : Toggle mode
-• Ctrl+Shift+D : Outils dev
-• Ctrl+Shift+P : Mode performance
-
-Architecture Modulaire:
-✅ ${Object.keys(window.OWEO_CONFIG.features).length} fonctionnalités activées
-✅ CSS thématique centralisé
-✅ JavaScript modulaire
-✅ Template system unifié
-                    `);
-                    
-                    // Validation automatique
-                    if (window.TemplateDevTools) {
-                        window.TemplateDevTools.validateStructure();
+        // Initialisation de l'application
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                console.log('🔍 Checking dependencies...');
+                
+                // Vérifier que les configurations sont cohérentes
+                if (window.CompanyInfo) {
+                    const validation = window.CompanyInfo.validate();
+                    if (!validation.valid) {
+                        console.error('❌ Configuration société invalide:', validation.issues);
+                    } else {
+                        console.log('✅ Company info validated');
                     }
-                }, 1500);
-            });
-        }
-        
-        // Gestion des erreurs globales
-        window.addEventListener('error', (e) => {
-            if (window.OWEO_CONFIG.environment === 'development') {
-                console.error('Erreur Oweo:', e.error);
+                } else {
+                    console.warn('⚠️ CompanyInfo not loaded');
+                }
+                
+                // Vérifier AppConfig
+                if (window.AppConfig) {
+                    if (typeof window.AppConfig.validateCompanyInfo === 'function') {
+                        window.AppConfig.validateCompanyInfo();
+                    }
+                    console.log('✅ App config loaded');
+                } else {
+                    console.warn('⚠️ AppConfig not loaded');
+                }
+                
+                // Vérifier que toutes les dépendances sont chargées
+                const requiredClasses = [
+                    'EventBus', 'ComponentManager', 'DOMUtils', 'AnimationUtils',
+                    'BaseComponent', 'OweoRouter', 'OweoApp'
+                ];
+                
+                const missingClasses = requiredClasses.filter(className => {
+                    return typeof window[className] === 'undefined';
+                });
+                
+                if (missingClasses.length > 0) {
+                    throw new Error(`Classes manquantes: ${missingClasses.join(', ')}`);
+                }
+                
+                console.log('✅ All dependencies loaded');
+                
+                // Vérifier les pages importantes
+                const pageClasses = ['HomePage', 'ServicesPage', 'DemosPage', 'ContactPage'];
+                const missingPages = pageClasses.filter(className => {
+                    return typeof window[className] === 'undefined';
+                });
+                
+                if (missingPages.length > 0) {
+                    console.warn('⚠️ Pages manquantes:', missingPages.join(', '));
+                } else {
+                    console.log('✅ All pages loaded');
+                }
+                
+                // Initialiser l'application
+                if (typeof window.OweoApp !== 'undefined') {
+                    window.app = new window.OweoApp();
+                    window.app.init();
+                } else {
+                    console.error('OweoApp not found');
+                }
+                
+            } catch (error) {
+                console.error('App initialization failed:', error);
+                document.getElementById('app').innerHTML = `
+                    <div class="error-container">
+                        <div class="error-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h1>Erreur de chargement</h1>
+                        <p>Une erreur est survenue lors du chargement de l'application.</p>
+                        <details>
+                            <summary>Détails de l'erreur</summary>
+                            <pre>${error.message}</pre>
+                        </details>
+                        <button onclick="location.reload()" class="btn btn-primary">
+                            Recharger la page
+                        </button>
+                    </div>
+                    
+                    <style>
+                    .error-container {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        min-height: 60vh;
+                        text-align: center;
+                        padding: 2rem;
+                    }
+                    
+                    .error-icon {
+                        font-size: 4rem;
+                        color: #ef4444;
+                        margin-bottom: 1rem;
+                    }
+                    
+                    .error-container h1 {
+                        font-size: 2rem;
+                        margin-bottom: 1rem;
+                        color: #1f2937;
+                    }
+                    
+                    .error-container p {
+                        margin-bottom: 2rem;
+                        color: #6b7280;
+                        max-width: 500px;
+                    }
+                    
+                    .btn {
+                        padding: 0.75rem 1.5rem;
+                        border-radius: 8px;
+                        font-weight: 600;
+                        background: #3b82f6;
+                        color: white;
+                        border: none;
+                        cursor: pointer;
+                        transition: all 0.2s;
+                    }
+                    
+                    .btn:hover {
+                        background: #2563eb;
+                    }
+                    </style>
+                `;
             }
         });
         
-        // Performance monitoring
-        if (window.OWEO_CONFIG.environment === 'production') {
-            window.addEventListener('load', () => {
-                const loadTime = performance.now();
-                console.log(`Oweo chargé en ${Math.round(loadTime)}ms`);
-            });
+        // Validation périodique de cohérence (développement uniquement)
+        if (window.location.hostname === 'localhost') {
+            setTimeout(() => {
+                if (window.ConsistencyChecker) {
+                    console.log('🔍 Lancement de la vérification de cohérence...');
+                    window.checkConsistency = () => new window.ConsistencyChecker().checkAll();
+                    window.startMonitoring = () => new window.ConsistencyChecker().startMonitoring();
+                    
+                    // Vérification initiale
+                    window.checkConsistency();
+                    
+                    console.log('💡 Commandes disponibles en dev:');
+                    console.log('  - checkConsistency() : Vérifier la cohérence');
+                    console.log('  - startMonitoring() : Surveillance continue');
+                }
+            }, 3000);
         }
         
-        // Détection des fonctionnalités du navigateur
-        const browserFeatures = {
-            supportsCSS: 'CSS' in window,
-            supportsGrids: CSS.supports('display', 'grid'),
-            supportsCustomProperties: CSS.supports('--custom', 'property'),
-            supportsBackdropFilter: CSS.supports('backdrop-filter', 'blur(1px)'),
-            supportsFetch: 'fetch' in window,
-            supportsIntersectionObserver: 'IntersectionObserver' in window
-        };
+        // Gestion des erreurs JavaScript globales
+        window.addEventListener('error', (event) => {
+            // Ne pas traiter les erreurs Calendly
+            if (event.filename && event.filename.includes('calendly')) {
+                console.warn('Calendly script error (non-critical):', event.message);
+                event.preventDefault();
+                return;
+            }
+            
+            console.error('Erreur JavaScript:', event.error);
+        });
         
-        // Log des fonctionnalités en dev
-        if (window.OWEO_CONFIG.environment === 'development') {
-            console.log('🔧 Fonctionnalités navigateur:', browserFeatures);
-        }
-        
-        // Fallbacks pour les anciennes versions
-        if (!browserFeatures.supportsCustomProperties) {
-            console.warn('⚠️ CSS Custom Properties non supportées - fallback activé');
-            document.documentElement.classList.add('no-css-custom-properties');
-        }
-        
-        if (!browserFeatures.supportsGrids) {
-            console.warn('⚠️ CSS Grid non supporté - fallback flexbox activé');
-            document.documentElement.classList.add('no-css-grid');
-        }
+        // Gestion des promesses rejetées
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('Promise rejetée:', event.reason);
+        });
     </script>
-    
-    <!-- Analytics et tracking (production uniquement) -->
-    <script>
-        if (window.OWEO_CONFIG.environment === 'production' && window.OWEO_CONFIG.features.analytics) {
-            // Google Analytics ou autre solution de tracking
-            // À configurer selon les besoins
-        }
-    </script>
-    
-    <!-- Service Worker (PWA - optionnel) -->
-    <script>
-        if ('serviceWorker' in navigator && window.OWEO_CONFIG.environment === 'production') {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(registration => {
-                        console.log('SW registered: ', registration);
-                    })
-                    .catch(registrationError => {
-                        console.log('SW registration failed: ', registrationError);
-                    });
-            });
-        }
-    </script>
-    
 </body>
 </html>
