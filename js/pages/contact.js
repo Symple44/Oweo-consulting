@@ -437,7 +437,7 @@ class ContactPage extends BasePage {
                                                 <div class="method-value">${this.contactInfo.getFullAddress ? this.contactInfo.getFullAddress() : this.contactInfo.address.full}</div>
                                             </div>
                                         </div>
-                                        
+                                        <!--
                                         <div class="contact-method">
                                             <div class="method-icon">
                                                 <i class="fas fa-clock"></i>
@@ -451,6 +451,7 @@ class ContactPage extends BasePage {
                                                 </div>
                                             </div>
                                         </div>
+                                        -->
                                     </div>
                                     
                                     ${this.renderSocialLinks()}

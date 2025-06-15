@@ -92,10 +92,10 @@ window.CompanyInfo = {
     // Réseaux sociaux
     social: {
         linkedin: 'https://linkedin.com/company/oweo-consulting',
-        twitter: 'https://twitter.com/oweo_consulting',
-        facebook: 'https://facebook.com/oweoconsulting',
-        youtube: 'https://youtube.com/c/oweoconsulting',
-        github: 'https://github.com/oweo-consulting'
+        //twitter: 'https://twitter.com/oweo_consulting',
+        //facebook: 'https://facebook.com/oweoconsulting',
+        //youtube: 'https://youtube.com/c/oweoconsulting',
+        //github: 'https://github.com/oweo-consulting'
     },
     
     // Informations légales

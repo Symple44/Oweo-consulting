@@ -10,8 +10,8 @@ class DemosPage extends BasePage {
             description: 'Découvrez nos solutions ERP en action avec des démonstrations interactives'
         });
         
-        // Configuration des démos depuis la config centralisée
-        this.demosConfig = window.AppConfig?.demos || {};
+        // Configuration des démos depuis la config centralisée avec des valeurs par défaut
+        this.demosConfig = this.getCompleteDeomosConfig();
         this.searchTerm = '';
         this.selectedCategory = 'all';
         
@@ -31,23 +31,59 @@ class DemosPage extends BasePage {
                 title: 'Analytics Avancés',
                 description: 'Tableaux de bord et analyses prédictives',
                 icon: 'fas fa-chart-line',
-                estimatedRelease: 'Q2 2024'
+                estimatedRelease: '2026'
             },
             {
                 id: 'mobile-app-demo',
                 title: 'Application Mobile',
                 description: 'Suivi terrain et saisie nomade',
                 icon: 'fas fa-mobile-alt',
-                estimatedRelease: 'Q3 2024'
+                estimatedRelease: '2026'
             },
             {
                 id: 'ai-assistant-demo',
                 title: 'Assistant IA',
                 description: 'Intelligence artificielle pour optimiser vos processus',
                 icon: 'fas fa-robot',
-                estimatedRelease: 'Q4 2024'
+                estimatedRelease: '2026'
             }
         ];
+    }
+    
+    getCompleteDeomosConfig() {
+        // Récupérer la config de base depuis AppConfig
+        const baseConfig = window.AppConfig?.demos || {};
+        
+        // Configuration complète avec toutes les démos et leurs propriétés
+        const fullDemosConfig = {
+            chiffrageDemo: {
+                enabled: true,
+                requiresAuth: true,
+                title: 'Démo Chiffrage',
+                description: 'Outil de chiffrage automatisé pour la charpente métallique',
+                features: ['Calcul automatique', 'Export PDF', 'Base de données matériaux'],
+                estimatedDuration: '15-20 minutes',
+                icon: 'fas fa-calculator'
+            },
+            dstvDemo: {
+                enabled: true,
+                requiresAuth: true,
+                title: 'Démo DSTV',
+                description: 'Interface DSTV pour machines CNC',
+                features: ['Import DSTV', 'Validation automatique', 'Export machines'],
+                estimatedDuration: '10-15 minutes',
+                icon: 'fas fa-cog'
+            }
+        };
+        
+        // Fusionner avec la config existante en préservant les valeurs de AppConfig
+        Object.keys(fullDemosConfig).forEach(key => {
+            if (baseConfig[key]) {
+                fullDemosConfig[key] = { ...fullDemosConfig[key], ...baseConfig[key] };
+            }
+        });
+        
+        return fullDemosConfig;
     }
     
     getTemplate() {
@@ -120,13 +156,13 @@ class DemosPage extends BasePage {
                 <!-- Access Notice -->
                 <section class="access-notice">
                     <div class="container">
-                        <div class="notice-card">
+                        <div class="notice-content">
                             <div class="notice-icon">
-                                <i class="fas fa-user-lock"></i>
+                                <i class="fas fa-info-circle"></i>
                             </div>
-                            <div class="notice-content">
-                                <h4>Accès Client Requis</h4>
-                                <p>Ces démonstrations nécessitent un code d'accès client. 
+                            <div class="notice-text">
+                                <h3>Accès aux démonstrations</h3>
+                                <p>Certaines démos nécessitent un accès client. 
                                 Utilisez <strong>DEMO-CLIENT</strong> pour tester ou contactez-nous pour un accès personnalisé.</p>
                             </div>
                             <div class="notice-actions">
@@ -191,12 +227,9 @@ class DemosPage extends BasePage {
                             <div class="contact-actions">
                                 <button class="btn btn-primary btn-lg" id="schedule-demo-btn">
                                     <i class="fas fa-calendar"></i>
-                                    Planifier une démo
-                                </button>
-                                <button class="btn btn-outline btn-lg" id="contact-expert-btn">
-                                    <i class="fas fa-user-tie"></i>
                                     Parler à un expert
                                 </button>
+
                             </div>
                         </div>
                     </div>
@@ -216,8 +249,8 @@ class DemosPage extends BasePage {
     }
     
     renderDemoCard(demo) {
-        const isAvailable = demo.enabled;
-        const requiresAuth = demo.requiresAuth;
+        const isAvailable = demo.enabled !== false;
+        const requiresAuth = demo.requiresAuth !== false;
         
         return `
             <div class="demo-card fade-in-up ${!isAvailable ? 'disabled' : ''}" data-demo="${demo.id}">
@@ -226,7 +259,7 @@ class DemosPage extends BasePage {
                         <i class="${demo.icon || 'fas fa-cog'}"></i>
                     </div>
                     <div class="demo-meta">
-                        <div class="demo-duration">${demo.estimatedDuration}</div>
+                        <div class="demo-duration">${demo.estimatedDuration || '15-20 minutes'}</div>
                         <div class="demo-status">
                             ${requiresAuth ? '<i class="fas fa-lock" title="Accès client requis"></i>' : ''}
                             ${!isAvailable ? '<i class="fas fa-clock" title="Bientôt disponible"></i>' : ''}
@@ -241,7 +274,7 @@ class DemosPage extends BasePage {
                     <div class="demo-features">
                         <h4>Fonctionnalités :</h4>
                         <ul class="features-list">
-                            ${demo.features.map(feature => `
+                            ${(demo.features || []).map(feature => `
                                 <li>
                                     <i class="fas fa-check"></i>
                                     <span>${feature}</span>
@@ -253,22 +286,18 @@ class DemosPage extends BasePage {
                 
                 <div class="demo-actions">
                     ${isAvailable ? `
-                        <button class="btn btn-primary demo-launch-btn" data-demo="${demo.id}">
+                        <button class="btn btn-primary demo-start-btn" data-demo="${demo.id}">
                             <i class="fas fa-play"></i>
-                            Lancer la démonstration
+                            Démarrer la démo
                         </button>
-                        <button class="btn btn-outline demo-details-btn" data-demo="${demo.id}">
+                        <button class="btn btn-outline demo-info-btn" data-demo="${demo.id}">
                             <i class="fas fa-info-circle"></i>
-                            Détails
+                            Plus d'infos
                         </button>
                     ` : `
-                        <button class="btn btn-outline" disabled>
+                        <button class="btn btn-disabled" disabled>
                             <i class="fas fa-clock"></i>
-                            ${demo.comingSoon ? 'Bientôt disponible' : 'En développement'}
-                        </button>
-                        <button class="btn btn-outline demo-notify-btn" data-demo="${demo.id}">
-                            <i class="fas fa-bell"></i>
-                            Me notifier
+                            Bientôt disponible
                         </button>
                     `}
                 </div>
@@ -278,32 +307,44 @@ class DemosPage extends BasePage {
     
     renderComingSoonCard(demo) {
         return `
-            <div class="coming-soon-card fade-in-up" data-demo-id="${demo.id}">
+            <div class="coming-soon-card fade-in-up">
                 <div class="coming-soon-icon">
                     <i class="${demo.icon}"></i>
                 </div>
-                <div class="coming-soon-content">
-                    <h4>${demo.title}</h4>
-                    <p>${demo.description}</p>
-                    <div class="release-date">
-                        <i class="fas fa-calendar"></i>
-                        Prévu ${demo.estimatedRelease}
-                    </div>
+                <h3>${demo.title}</h3>
+                <p>${demo.description}</p>
+                <div class="release-date">
+                    <i class="fas fa-calendar"></i>
+                    ${demo.estimatedRelease}
                 </div>
-                <button class="btn btn-outline btn-sm">
-                    <i class="fas fa-bell"></i>
-                    Me prévenir
-                </button>
             </div>
         `;
     }
     
-    bindEvents() {
-        super.bindEvents();
+    onAfterRender() {
+        // Vérifier que le DOM est prêt
+        const container = document.querySelector('.demos-page');
+        if (!container) {
+            console.error('DemosPage: Container not found in DOM');
+            return;
+        }
         
-        // Navigation - utiliser une délégation plus spécifique
-        const breadcrumbLinks = document.querySelectorAll('.page-breadcrumb [data-page]');
-        breadcrumbLinks.forEach(link => {
+        this.bindEvents();
+        this.initializeAnimations();
+        this.initializeFromURL();
+    }
+    
+    bindEvents() {
+        // Utiliser document au lieu de this.container qui peut être null
+        const container = document.querySelector('.demos-page');
+        if (!container) {
+            console.warn('DemosPage container not found');
+            return;
+        }
+        
+        // Navigation interne
+        const navLinks = container.querySelectorAll('[data-page]');
+        navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -408,9 +449,9 @@ class DemosPage extends BasePage {
         if (this.searchTerm) {
             const term = this.searchTerm.toLowerCase();
             demos = demos.filter(demo => 
-                demo.title.toLowerCase().includes(term) ||
-                demo.description.toLowerCase().includes(term) ||
-                demo.features.some(feature => feature.toLowerCase().includes(term))
+                (demo.title && demo.title.toLowerCase().includes(term)) ||
+                (demo.description && demo.description.toLowerCase().includes(term)) ||
+                (demo.features && demo.features.some(feature => feature.toLowerCase().includes(term)))
             );
         }
         
@@ -430,76 +471,22 @@ class DemosPage extends BasePage {
     }
     
     getAvailableDemosCount() {
-        return Object.values(this.demosConfig).filter(demo => demo.enabled).length;
+        return Object.values(this.demosConfig).filter(demo => demo.enabled !== false).length;
     }
     
     updateSearchClear() {
         const clearBtn = document.getElementById('search-clear');
         if (clearBtn) {
-            clearBtn.style.display = this.searchTerm ? 'block' : 'none';
+            clearBtn.style.display = this.searchTerm ? 'flex' : 'none';
         }
     }
     
     debounceSearch() {
-        clearTimeout(this.searchTimeout);
-        this.searchTimeout = setTimeout(() => {
+        clearTimeout(this.searchDebounce);
+        this.searchDebounce = setTimeout(() => {
             this.updateDemosGrid();
+            this.updateURL();
         }, 300);
-    }
-    
-    clearSearch() {
-        this.searchTerm = '';
-        const searchInput = document.getElementById('demos-search');
-        if (searchInput) {
-            searchInput.value = '';
-        }
-        this.updateSearchClear();
-        this.updateDemosGrid();
-    }
-    
-    selectCategory(category) {
-        this.selectedCategory = category;
-        
-        // Mettre à jour l'UI
-        document.querySelectorAll('.category-filter').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        
-        const activeBtn = document.querySelector(`[data-category="${category}"]`);
-        if (activeBtn) {
-            activeBtn.classList.add('active');
-        }
-        
-        this.updateDemosGrid();
-    }
-    
-    clearFilters() {
-        this.searchTerm = '';
-        this.selectedCategory = 'all';
-        
-        // Reset UI
-        const searchInput = document.getElementById('demos-search');
-        if (searchInput) {
-            searchInput.value = '';
-        }
-        
-        this.selectCategory('all');
-        this.updateSearchClear();
-    }
-    
-    bindHoverEffects() {
-        const demoCards = document.querySelectorAll('.demo-card:not(.disabled)');
-        demoCards.forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                if (!card.classList.contains('disabled')) {
-                    card.style.transform = 'translateY(-8px)';
-                }
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'translateY(0)';
-            });
-        });
     }
     
     updateDemosGrid() {
@@ -512,23 +499,89 @@ class DemosPage extends BasePage {
         
         if (filteredDemos.length === 0) {
             grid.innerHTML = '';
-            grid.style.display = 'none';
             noResults.style.display = 'block';
         } else {
-            grid.innerHTML = this.renderDemosGrid();
-            grid.style.display = 'grid';
+            grid.innerHTML = filteredDemos.map(demo => this.renderDemoCard(demo)).join('');
             noResults.style.display = 'none';
             
-            // Re-bind events for new elements
+            // Réappliquer les événements et animations
             this.bindDemoCardEvents();
             this.bindHoverEffects();
+            
+            // Animer l'apparition des cartes
+            const cards = grid.querySelectorAll('.demo-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('visible');
+                }, index * 50);
+            });
         }
     }
     
+    selectCategory(categoryId) {
+        this.selectedCategory = categoryId;
+        
+        // Mettre à jour les boutons
+        const filters = document.querySelectorAll('.category-filter');
+        filters.forEach(filter => {
+            const isActive = filter.dataset.category === categoryId;
+            filter.classList.toggle('active', isActive);
+        });
+        
+        // Mettre à jour l'affichage
+        this.updateDemosGrid();
+        this.updateURL();
+    }
+    
+    clearSearch() {
+        this.searchTerm = '';
+        const searchInput = document.getElementById('demos-search');
+        if (searchInput) {
+            searchInput.value = '';
+        }
+        this.updateSearchClear();
+        this.updateDemosGrid();
+        this.updateURL();
+    }
+    
+    clearFilters() {
+        this.searchTerm = '';
+        this.selectedCategory = 'all';
+        
+        const searchInput = document.getElementById('demos-search');
+        if (searchInput) {
+            searchInput.value = '';
+        }
+        
+        this.updateSearchClear();
+        this.selectCategory('all');
+    }
+    
+    updateURL() {
+        const params = new URLSearchParams();
+        
+        if (this.searchTerm) {
+            params.set('search', this.searchTerm);
+        }
+        
+        if (this.selectedCategory && this.selectedCategory !== 'all') {
+            params.set('category', this.selectedCategory);
+        }
+        
+        const newURL = params.toString() 
+            ? `${window.location.pathname}?${params.toString()}`
+            : window.location.pathname;
+            
+        window.history.replaceState({}, '', newURL);
+    }
+    
     bindDemoCardEvents() {
-        // Boutons de lancement
-        const launchBtns = document.querySelectorAll('.demo-launch-btn');
-        launchBtns.forEach(btn => {
+        const container = document.querySelector('.demos-page');
+        if (!container) return;
+        
+        // Boutons de démarrage
+        const startButtons = container.querySelectorAll('.demo-start-btn');
+        startButtons.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 const demoId = btn.dataset.demo;
@@ -536,61 +589,57 @@ class DemosPage extends BasePage {
             });
         });
         
-        // Boutons de détails
-        const detailsBtns = document.querySelectorAll('.demo-details-btn');
-        detailsBtns.forEach(btn => {
+        // Boutons d'info
+        const infoButtons = container.querySelectorAll('.demo-info-btn');
+        infoButtons.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 const demoId = btn.dataset.demo;
                 this.showDemoDetails(demoId);
             });
         });
+    }
+    
+    bindHoverEffects() {
+        const container = document.querySelector('.demos-page');
+        if (!container) return;
         
-        // Boutons de notification
-        const notifyBtns = document.querySelectorAll('.demo-notify-btn');
-        notifyBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const demoId = btn.dataset.demo;
-                this.notifyWhenReady(demoId);
+        const cards = container.querySelectorAll('.demo-card:not(.disabled)');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.classList.add('hover');
             });
-        });
-        
-        // Boutons dans les cartes coming soon
-        const comingSoonNotifyBtns = document.querySelectorAll('.coming-soon-card .btn');
-        comingSoonNotifyBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const card = btn.closest('.coming-soon-card');
-                const demoId = card.dataset.demoId;
-                this.notifyWhenReady(demoId);
+            
+            card.addEventListener('mouseleave', () => {
+                card.classList.remove('hover');
             });
         });
     }
     
-    onMount() {
-        super.onMount();
+    initializeAnimations() {
+        const container = document.querySelector('.demos-page');
+        if (!container) return;
         
-        // Animation des stats
-        this.animateStats();
-        
-        // Initialiser depuis l'URL si nécessaire
-        this.initializeFromURL();
-    }
-    
-    animateStats() {
-        const stats = document.querySelectorAll('.stat-number');
+        // Observer pour les animations au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '50px'
+        };
         
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('animate');
+                    entry.target.classList.add('visible');
                 }
             });
-        }, {
-            threshold: 0.5
-        });
+        }, observerOptions);
         
+        // Observer les éléments avec animation
+        const animatedElements = container.querySelectorAll('.fade-in-up');
+        animatedElements.forEach(el => observer.observe(el));
+        
+        // Animation des stats
+        const stats = container.querySelectorAll('.stat-number');
         stats.forEach(stat => {
             observer.observe(stat);
         });
@@ -694,18 +743,21 @@ class DemosPage extends BasePage {
                     <div class="details-section">
                         <h4><i class="fas fa-list"></i> Fonctionnalités</h4>
                         <ul>
-                            ${demoData.features.map(feature => `<li>${feature}</li>`).join('')}
+                            ${(demoData.features || []).map(feature => `<li>${feature}</li>`).join('')}
                         </ul>
                     </div>
                     
                     <div class="details-section">
                         <h4><i class="fas fa-clock"></i> Durée estimée</h4>
-                        <p>${demoData.estimatedDuration}</p>
+                        <p>${demoData.estimatedDuration || '15-20 minutes'}</p>
                     </div>
                     
                     <div class="details-section">
                         <h4><i class="fas fa-info-circle"></i> Prérequis</h4>
-                        <p>${demoData.requiresAuth ? 'Code d\'accès client requis' : 'Accès libre'}</p>
+                        <p>${demoData.requiresAuth ? 
+                            'Cette démonstration nécessite un accès client. Utilisez le code <strong>DEMO-CLIENT</strong> ou contactez-nous pour obtenir un accès personnalisé.' :
+                            'Aucun prérequis, démonstration accessible librement.'
+                        }</p>
                     </div>
                 </div>
             </div>
@@ -714,129 +766,83 @@ class DemosPage extends BasePage {
     
     showAccessInfo() {
         if (window.modalSystem) {
-            const contactInfo = window.CompanyInfo || { contact: { email: 'contact@oweo-consulting.fr', phoneFormatted: '06 86 76 81 31' } };
-            
             const modal = window.modalSystem.create({
-                title: 'Accès aux Démonstrations',
+                title: 'Accès aux démonstrations',
                 content: `
-                    <div class="access-info">
-                        <h4>🔑 Comment accéder aux démos ?</h4>
-                        <div class="access-methods">
-                            <div class="method">
-                                <h5>📱 Accès démo</h5>
-                                <p>Utilisez le code <strong>DEMO-CLIENT</strong> pour tester toutes nos démonstrations.</p>
-                            </div>
-                            <div class="method">
-                                <h5>🏢 Accès client</h5>
-                                <p>Contactez-nous pour obtenir vos codes d'accès personnalisés :</p>
-                                <p>📧 ${contactInfo.contact.email}<br>
-                                   📞 ${contactInfo.contact.phoneFormatted}</p>
-                            </div>
+                    <div class="access-info-content">
+                        <p>Nos démonstrations interactives vous permettent de tester nos solutions en conditions réelles.</p>
+                        
+                        <h4><i class="fas fa-lock"></i> Démonstrations avec accès</h4>
+                        <p>Certaines démos nécessitent une authentification pour protéger les données sensibles et offrir une expérience personnalisée.</p>
+                        
+                        <div class="access-code-box">
+                            <p><strong>Code d'accès de test :</strong></p>
+                            <code>DEMO-CLIENT</code>
                         </div>
+                        
+                        <h4><i class="fas fa-user-tie"></i> Accès personnalisé</h4>
+                        <p>Pour obtenir un accès personnalisé avec vos propres données de test, contactez notre équipe commerciale.</p>
                     </div>
                 `,
-                size: 'sm'
+                size: 'md'
             });
             
             window.modalSystem.addActions(modal.id, [
                 {
-                    id: 'ok',
-                    label: 'Compris',
+                    id: 'contact',
+                    label: 'Demander un accès',
                     class: 'btn-primary',
+                    icon: 'fas fa-envelope',
+                    handler: () => {
+                        window.modalSystem.close(modal.id);
+                        this.navigateTo('contact');
+                        return false;
+                    }
+                },
+                {
+                    id: 'close',
+                    label: 'Fermer',
+                    class: 'btn-outline',
                     handler: () => true
                 }
             ]);
             
             window.modalSystem.show(modal.id);
-        }
-    }
-    
-    notifyWhenReady(demoId) {
-        if (window.modalSystem) {
-            const modal = window.modalSystem.create({
-                title: 'Notification activée',
-                content: `
-                    <div class="notification-success">
-                        <i class="fas fa-bell" style="font-size: 3rem; color: var(--success-color); margin-bottom: 1rem;"></i>
-                        <p>Nous vous préviendrons dès que cette démonstration sera disponible !</p>
-                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 1rem;">
-                            Un email sera envoyé à l'adresse associée à votre compte client.
-                        </p>
-                    </div>
-                `,
-                size: 'sm'
-            });
-            
-            window.modalSystem.addActions(modal.id, [
-                {
-                    id: 'ok',
-                    label: 'OK',
-                    class: 'btn-primary',
-                    handler: () => true
-                }
-            ]);
-            
-            window.modalSystem.show(modal.id);
-        }
-        
-        // Analytics
-        if (window.oweoAnalytics) {
-            window.oweoAnalytics.track('demo_notification_requested', {
-                demo_id: demoId
-            });
         }
     }
     
     scheduleDemo() {
-        const config = window.AppConfig || {};
-        const calendlyUrl = config.calendlyUrl || 'https://calendly.com/nicolas-dubain/30min';
-        
-        if (typeof window.Calendly !== 'undefined') {
-            window.Calendly.initPopupWidget({
-                url: calendlyUrl,
-                text: 'Planifier une démonstration',
-                color: '#00d4ff',
-                textColor: '#ffffff',
-                branding: false
+        if (window.Calendly) {
+            Calendly.initPopupWidget({
+                url: window.AppConfig?.calendlyUrl || 'https://calendly.com/nicolas-dubain/30min',
+                prefill: {
+                    name: '',
+                    email: '',
+                    customAnswers: {
+                        a1: 'Démonstration personnalisée'
+                    }
+                }
             });
         } else {
-            window.open(calendlyUrl, '_blank', 'width=800,height=700,scrollbars=yes,resizable=yes');
-        }
-        
-        // Analytics
-        if (window.oweoAnalytics) {
-            window.oweoAnalytics.track('demo_scheduled_from_catalog');
+            this.navigateTo('contact');
         }
     }
     
     contactExpert() {
-        const contactInfo = window.CompanyInfo || { contact: { email: 'contact@oweo-consulting.fr' } };
-        const subject = encodeURIComponent('Demande d\'expertise - Démonstrations Oweo');
-        const body = encodeURIComponent('Bonjour,\n\nJe souhaiterais échanger avec un expert concernant vos solutions ERP.\n\nCordialement,');
-        
-        window.location.href = `mailto:${contactInfo.contact.email}?subject=${subject}&body=${body}`;
-        
-        // Analytics
-        if (window.oweoAnalytics) {
-            window.oweoAnalytics.track('expert_contact_from_demos');
-        }
+        this.navigateTo('contact');
     }
     
-    navigateTo(page) {
-        if (window.app && window.app.router) {
-            window.app.router.navigate(page);
-        }
-    }
-    
+    // Méthode pour détruire la page
     destroy() {
-        // Nettoyer les timeouts
-        if (this.searchTimeout) {
-            clearTimeout(this.searchTimeout);
+        // Nettoyer les timers
+        if (this.searchDebounce) {
+            clearTimeout(this.searchDebounce);
         }
         
+        // Appeler la méthode parent
         super.destroy();
     }
 }
 
-// Exposer la classe
+// Enregistrer la page globalement si nécessaire
 window.DemosPage = DemosPage;

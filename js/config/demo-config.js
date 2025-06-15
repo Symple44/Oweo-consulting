@@ -21,24 +21,6 @@ window.DEMO_SEARCH_CONFIG = {
             keywords: ['dstv', 'cnc', 'usinage', 'fichier', 'machine', 'production', 'export'],
             icon: 'fas fa-cog',
             requireAccess: true
-        },
-        {
-            id: 'gestion-stocks',
-            title: 'Gestion des Stocks',
-            description: 'Suivi en temps réel des matériaux et composants',
-            category: 'Logistique',
-            keywords: ['stock', 'inventaire', 'matériaux', 'gestion', 'suivi'],
-            icon: 'fas fa-boxes',
-            requireAccess: true
-        },
-        {
-            id: 'planning-production',
-            title: 'Planning de Production',
-            description: 'Planification et suivi des opérations de production',
-            category: 'Production',
-            keywords: ['planning', 'production', 'ordonnancement', 'suivi', 'délais'],
-            icon: 'fas fa-calendar-alt',
-            requireAccess: true
         }
     ],
     

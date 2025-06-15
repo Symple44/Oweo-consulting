@@ -137,10 +137,12 @@ class OweoFooter extends BaseComponent {
                                     <i class="fas fa-envelope"></i>
                                     <a href="mailto:${this.companyInfo.contact.email}">${this.companyInfo.contact.email}</a>
                                 </div>
+                                <!-- 
                                 <div class="contact-item">
                                     <i class="fas fa-clock"></i>
                                     <div>${this.companyInfo.businessHours.days} ${this.companyInfo.businessHours.hours}</div>
                                 </div>
+                                -->
                             </div>
                         </div>
                     </div>

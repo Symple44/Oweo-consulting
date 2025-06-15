@@ -136,7 +136,7 @@ class OweoClientAccess {
                             <input type="text" 
                                    id="client-code-input" 
                                    class="form-control" 
-                                   placeholder="Ex: DEMO-CLIENT"
+                                   placeholder=""
                                    autocomplete="off"
                                    required>
                             <div class="form-help">
@@ -161,11 +161,12 @@ class OweoClientAccess {
                     </form>
                     
                     <div class="demo-access-info">
+                        <!-- Ca sert à rien, les démos sont accessibles sur un autre domaine
                         <div class="info-card">
                             <h4>🚀 Accès démo disponible</h4>
                             <p>Utilisez le code <strong>DEMO-CLIENT</strong> pour accéder aux démonstrations.</p>
                         </div>
-                        
+                        -->
                         <div class="contact-info">
                             <h5>Besoin d'un accès ?</h5>
                             <p>Contactez-nous pour obtenir vos codes d'accès personnalisés :</p>
