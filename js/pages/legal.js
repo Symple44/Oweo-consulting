@@ -1,5 +1,5 @@
 // ========================================
-// js/pages/legal.js - Pages légales (Mentions, Confidentialité, CGU, Cookies)
+// js/pages/legal.js 
 // ========================================
 
 class LegalPage extends BasePage {
@@ -16,6 +16,9 @@ class LegalPage extends BasePage {
         this.lastUpdate = '1er janvier 2024';
         this.companyInfo = window.CompanyInfo || {};
         this._eventListeners = [];
+        
+        // ⭐ AJOUT: Debug du type de page
+        console.log(`📄 Creating LegalPage with type: ${this.pageType}`);
     }
     
     static getPageConfig(pageType) {
@@ -80,19 +83,20 @@ class LegalPage extends BasePage {
                                 <div class="nav-sticky">
                                     <h3>Navigation</h3>
                                     <nav class="legal-nav-links">
-                                        <a href="#legal" class="legal-nav-link ${this.pageType === 'legal' ? 'active' : ''}" data-page="legal">
+                                        <!-- ⭐ CORRECTION: Liens simplifiés avec data-page uniquement -->
+                                        <a href="#" class="legal-nav-link ${this.pageType === 'legal' ? 'active' : ''}" data-page="legal">
                                             <i class="fas fa-info-circle"></i>
                                             Mentions légales
                                         </a>
-                                        <a href="#privacy" class="legal-nav-link ${this.pageType === 'privacy' ? 'active' : ''}" data-page="privacy">
+                                        <a href="#" class="legal-nav-link ${this.pageType === 'privacy' ? 'active' : ''}" data-page="privacy">
                                             <i class="fas fa-shield-alt"></i>
                                             Confidentialité
                                         </a>
-                                        <a href="#terms" class="legal-nav-link ${this.pageType === 'terms' ? 'active' : ''}" data-page="terms">
+                                        <a href="#" class="legal-nav-link ${this.pageType === 'terms' ? 'active' : ''}" data-page="terms">
                                             <i class="fas fa-file-contract"></i>
                                             CGU
                                         </a>
-                                        <a href="#cookies" class="legal-nav-link ${this.pageType === 'cookies' ? 'active' : ''}" data-page="cookies">
+                                        <a href="#" class="legal-nav-link ${this.pageType === 'cookies' ? 'active' : ''}" data-page="cookies">
                                             <i class="fas fa-cookie-bite"></i>
                                             Cookies
                                         </a>
@@ -121,6 +125,8 @@ class LegalPage extends BasePage {
     }
     
     getContentByType() {
+        console.log(`📄 Getting content for type: ${this.pageType}`); // ⭐ AJOUT: Debug
+        
         switch (this.pageType) {
             case 'legal':
                 return this.getLegalContent();
@@ -131,6 +137,7 @@ class LegalPage extends BasePage {
             case 'cookies':
                 return this.getCookiesContent();
             default:
+                console.warn(`⚠️ Unknown page type: ${this.pageType}, falling back to legal`);
                 return this.getLegalContent();
         }
     }
@@ -255,7 +262,7 @@ class LegalPage extends BasePage {
                 <ul>
                     <li><strong>Données de navigation :</strong> adresse IP, pages visitées, durée de visite</li>
                     <li><strong>Données techniques :</strong> type de navigateur, système d'exploitation, résolution d'écran</li>
-                    <li><strong>Cookies :</strong> voir notre politique des cookies</li>
+                    <li><strong>Cookies :</strong> voir notre <a href="#" class="internal-link" data-page="cookies">politique des cookies</a></li>
                 </ul>
             </section>
 
@@ -422,7 +429,7 @@ class LegalPage extends BasePage {
                 <h2>Données personnelles</h2>
                 <p>
                     Le traitement de vos données personnelles est régi par notre 
-                    <a href="#privacy" class="internal-link">Politique de Confidentialité</a>.
+                    <a href="#" class="internal-link" data-page="privacy">Politique de Confidentialité</a>.
                 </p>
                 <p>
                     En utilisant le Site, vous consentez à la collecte et au traitement de vos données 
@@ -466,7 +473,7 @@ class LegalPage extends BasePage {
                 <h2>Cookies</h2>
                 <p>
                     Le Site utilise des cookies pour améliorer l'expérience utilisateur et réaliser des statistiques de visite. 
-                    Pour plus d'informations, consultez notre <a href="#cookies" class="internal-link">Politique des Cookies</a>.
+                    Pour plus d'informations, consultez notre <a href="#" class="internal-link" data-page="cookies">Politique des Cookies</a>.
                 </p>
             </section>
 
@@ -651,76 +658,52 @@ class LegalPage extends BasePage {
     bindEvents() {
         super.bindEvents();
         
-        // IMPORTANT: Nettoyer les anciens écouteurs d'abord (comme CGV)
+        // ⭐ CORRECTION: Simplification de la gestion des événements
         this.cleanupEventListeners();
         
-        // Navigation entre pages légales (inspiré du pattern CGV)
-        const handleLegalNavClick = (e) => {
+        // Handler unifié pour tous les liens avec data-page
+        const handlePageNavigation = (e) => {
             e.preventDefault();
             e.stopPropagation();
             
             const link = e.currentTarget;
-            const href = link.getAttribute('href');
+            const page = link.dataset.page;
             
-            if (href && href.startsWith('#')) {
-                const page = href.substring(1);
+            if (page) {
+                console.log(`📄 Legal page navigation to: ${page}`);
                 this.navigateTo(page);
             }
             
             return false;
         };
         
-        // Sélecteur spécifique pour les liens de navigation légale
-        const legalNavLinks = document.querySelectorAll('.legal-page .legal-nav-link');
-        legalNavLinks.forEach(link => {
-            link.addEventListener('click', handleLegalNavClick);
-            this._eventListeners.push({ element: link, event: 'click', handler: handleLegalNavClick });
+        // Appliquer à tous les liens avec data-page
+        const pageLinks = document.querySelectorAll('.legal-page [data-page]');
+        pageLinks.forEach(link => {
+            link.addEventListener('click', handlePageNavigation);
+            this._eventListeners.push({ element: link, event: 'click', handler: handlePageNavigation });
         });
         
-        // Handler pour le breadcrumb (copié exactement de CGV)
-        const handleBreadcrumbClick = (e) => {
+        // Handler pour le breadcrumb vers home
+        const handleHomeNavigation = (e) => {
             const link = e.currentTarget;
             const href = link.getAttribute('href');
             
-            // Vérifier que c'est bien un lien de navigation et pas un lien de nav latéral
-            if (href && href.startsWith('#') && !link.classList.contains('legal-nav-link')) {
+            if (href === '#home') {
                 e.preventDefault();
                 e.stopPropagation();
-                
-                const page = href.substring(1);
-                this.navigateTo(page);
+                this.navigateTo('home');
             }
         };
         
-        // Sélecteur spécifique pour le breadcrumb
-        const breadcrumbLinks = document.querySelectorAll('.legal-page .page-breadcrumb .nav-link');
-        breadcrumbLinks.forEach(link => {
-            link.addEventListener('click', handleBreadcrumbClick);
-            this._eventListeners.push({ element: link, event: 'click', handler: handleBreadcrumbClick });
-        });
-        
-        // Liens internes dans le contenu
-        const handleInternalClick = (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const link = e.currentTarget;
-            const href = link.getAttribute('href');
-            
-            if (href && href.startsWith('#')) {
-                const pageType = href.substring(1);
-                this.navigateTo(pageType);
-            }
-        };
-        
-        const internalLinks = document.querySelectorAll('.legal-page .internal-link');
-        internalLinks.forEach(link => {
-            link.addEventListener('click', handleInternalClick);
-            this._eventListeners.push({ element: link, event: 'click', handler: handleInternalClick });
+        const homeLinks = document.querySelectorAll('.legal-page .page-breadcrumb .nav-link[href="#home"]');
+        homeLinks.forEach(link => {
+            link.addEventListener('click', handleHomeNavigation);
+            this._eventListeners.push({ element: link, event: 'click', handler: handleHomeNavigation });
         });
     }
 
-    // Méthode pour nettoyer les écouteurs (copié de CGV)
+    // Méthode pour nettoyer les écouteurs
     cleanupEventListeners() {
         this._eventListeners.forEach(({ element, event, handler }) => {
             if (element) {
@@ -731,13 +714,19 @@ class LegalPage extends BasePage {
     }
     
     navigateTo(page) {
+        console.log(`📄 LegalPage navigating to: ${page}`);
         if (window.app && window.app.router) {
             window.app.router.navigate(page);
+        } else {
+            console.error('❌ Router not available');
         }
     }
     
     async onMount() {
         await super.onMount();
+        
+        // ⭐ AJOUT: Debug au montage
+        console.log(`📄 LegalPage mounted with type: ${this.pageType}`);
         
         // Ajouter une classe au body pour les styles spécifiques
         document.body.classList.add('page-legal', `page-${this.pageType}`);
@@ -750,7 +739,7 @@ class LegalPage extends BasePage {
     }
     
     destroy() {
-        // Nettoyer tous les écouteurs d'événements (comme CGV)
+        // Nettoyer tous les écouteurs d'événements
         this.cleanupEventListeners();
         
         // Retirer la classe du body

@@ -1,5 +1,5 @@
 // ========================================
-// js/components/footer.js - Footer corrigé avec informations cohérentes
+// js/components/footer.js 
 // ========================================
 
 class OweoFooter extends BaseComponent {
@@ -137,12 +137,6 @@ class OweoFooter extends BaseComponent {
                                     <i class="fas fa-envelope"></i>
                                     <a href="mailto:${this.companyInfo.contact.email}">${this.companyInfo.contact.email}</a>
                                 </div>
-                                <!-- 
-                                <div class="contact-item">
-                                    <i class="fas fa-clock"></i>
-                                    <div>${this.companyInfo.businessHours.days} ${this.companyInfo.businessHours.hours}</div>
-                                </div>
-                                -->
                             </div>
                         </div>
                     </div>
@@ -154,11 +148,11 @@ class OweoFooter extends BaseComponent {
                                 © ${this.year} ${this.companyInfo.name}. Tous droits réservés.
                             </p>
                             <div class="footer-legal">
-                                <li><a href="#" data-page="cgv">CGV</a></li>
-                                <a href="#legal" data-page="legal">Mentions légales</a>
-                                <a href="#privacy" data-page="privacy">Politique de confidentialité</a>
-                                <a href="#terms" data-page="terms">CGU</a>
-                                <a href="#cookies" data-page="cookies">Cookies</a>
+                                <a href="#" data-page="cgv">CGV</a>
+                                <a href="#" data-page="legal">Mentions légales</a>
+                                <a href="#" data-page="privacy">Politique de confidentialité</a>
+                                <a href="#" data-page="terms">CGU</a>
+                                <a href="#" data-page="cookies">Cookies</a>
                             </div>
                         </div>
                     </div>
@@ -176,6 +170,7 @@ class OweoFooter extends BaseComponent {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const page = link.dataset.page;
+                console.log(`🔗 Footer navigation to: ${page}`); // ⭐ AJOUT: Debug
                 this.navigateTo(page);
             });
         });
@@ -236,7 +231,10 @@ class OweoFooter extends BaseComponent {
     
     navigateTo(page) {
         if (window.app && window.app.router) {
+            console.log(`📄 Footer navigating to: ${page}`); // ⭐ AJOUT: Debug
             window.app.router.navigate(page);
+        } else {
+            console.error('❌ Router not available'); // ⭐ AJOUT: Debug
         }
     }
     

@@ -143,14 +143,7 @@ class OweoApp {
         if (typeof DSTVDemo !== 'undefined') {
             this.router.register('dstv-demo', new DSTVDemo());
         }
-        
-        // Pages légales (si elles existent)
-        if (typeof LegalPage !== 'undefined') {
-            this.router.register('legal', new LegalPage());
-            this.router.register('privacy', new LegalPage());
-            this.router.register('terms', new LegalPage());
-            this.router.register('cookies', new LegalPage());
-        }
+    
     }
     
     async start() {
