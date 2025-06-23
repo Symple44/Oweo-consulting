@@ -1,5 +1,5 @@
 // ========================================
-// js/pages/contact.js - Page de contact avec sécurité complète
+// js/pages/contact.js - Page contact avec EmailJS configuré
 // ========================================
 
 class ContactPage extends BasePage {
@@ -10,157 +10,86 @@ class ContactPage extends BasePage {
             description: 'Prenez contact avec nos experts pour transformer votre industrie métallique'
         });
         
+        // Configuration EmailJS - VOS IDENTIFIANTS
+        this.emailJS = {
+            serviceId: 'service_vdnsgqj',           // Votre Service ID
+            templateId: 'template_lv2fw9h',         // À REMPLACER par votre Template ID
+            publicKey: 'cKnhoAohUfIlxaoKg',         // Votre clé publique
+            initialized: false
+        };
+
+        this.recaptcha = {
+            siteKey: '6LfwlFwrAAAAAGqiSXVELtmshYK8MrpAYbmyMc8a', // Votre clé site reCAPTCHA
+            action: 'contact_form',
+            minimumScore: 0.5,
+            loaded: false,
+            enabled: true // Mettre à false pour désactiver temporairement
+        };
+        
         // État du formulaire
         this.formState = {
             isSubmitting: false,
             hasSubmitted: false,
-            errors: {},
-            data: {},
-            formDisplayTime: null,
-            isSpam: false,
-            isSuspicious: false
+            errors: {}
         };
-        
-        // Rate limiting
-        this.rateLimit = {
-            attempts: 0,
-            lastAttempt: null
-        };
-        
-        // Charger la configuration
-        this.loadConfiguration();
         
         // Informations de contact
         this.contactInfo = this.getContactInfo();
+        
+        // Initialiser les services
+        this.initEmailJS();
+        this.initRecaptcha();
     }
     
-    loadConfiguration() {
-        // Vérifier que AppConfig existe
-        if (!window.AppConfig) {
-            console.warn('AppConfig non disponible, utilisation des valeurs par défaut');
-            this.useDefaultConfiguration();
+    initEmailJS() {
+        // Charger le script EmailJS si pas déjà chargé
+        if (!window.emailjs) {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+            script.onload = () => {
+                emailjs.init(this.emailJS.publicKey);
+                this.emailJS.initialized = true;
+                console.log('✅ EmailJS initialized');
+            };
+            script.onerror = () => {
+                console.error('❌ Erreur chargement EmailJS');
+            };
+            document.head.appendChild(script);
+        } else {
+            emailjs.init(this.emailJS.publicKey);
+            this.emailJS.initialized = true;
+        }
+    }
+
+    initRecaptcha() {
+        if (!this.recaptcha.enabled) {
+            console.log('🔒 reCAPTCHA désactivé');
             return;
         }
         
-        // Charger la configuration de sécurité
-        this.security = window.AppConfig.getContactFormSecurity ? 
-            window.AppConfig.getContactFormSecurity() : 
-            window.AppConfig.contactForm?.security || this.getDefaultSecurity();
-        
-        // Charger la configuration de validation
-        const validationConfig = window.AppConfig.contactForm?.validation || {};
-        this.validation = {
-            required: validationConfig.requiredFields || ['name', 'email', 'company', 'message', 'consent'],
-            patterns: window.AppConfig.getValidationPatterns ? 
-                window.AppConfig.getValidationPatterns() : 
-                validationConfig.patterns || this.getDefaultPatterns()
-        };
-        
-        // Configuration API
-        this.apiConfig = window.AppConfig.api || {
-            baseUrl: '/api/v1',
-            endpoints: { contact: '/contact' }
-        };
-        
-        // Messages
-        this.messages = window.AppConfig.contactForm || {};
-    }
-    
-    useDefaultConfiguration() {
-        this.security = this.getDefaultSecurity();
-        this.validation = {
-            required: ['name', 'email', 'company', 'message', 'consent'],
-            patterns: this.getDefaultPatterns()
-        };
-        this.apiConfig = {
-            baseUrl: '/api/v1',
-            endpoints: { contact: '/contact' }
-        };
-        this.messages = {
-            errorMessages: {},
-            successMessages: {}
-        };
-    }
-    
-    getDefaultSecurity() {
-        return {
-            honeypotFieldName: 'website_url',
-            honeypotEnabled: true,
-            recaptcha: {
-                enabled: false,
-                siteKey: '',
-                action: 'contact_form'
-            },
-            minSubmitDelay: 3000,
-            maxMessageLength: 5000,
-            maxNameLength: 100,
-            maxCompanyLength: 100,
-            spamPatterns: [
-                /\b(viagra|cialis|casino|lottery|click here|buy now)\b/i,
-                /(.)\1{5,}/,
-                /<[^>]*>/
-            ],
-            maxUrlsInMessage: 3,
-            rateLimit: {
-                enabled: true,
-                maxAttempts: 3,
-                cooldownMinutes: 1,
-                storageKey: 'oweo_contact_rate_limit'
-            }
-        };
-    }
-    
-    getDefaultPatterns() {
-        return {
-            email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            phone: /^[\+]?[(]?[\d\s\-\(\)]{10,}$/,
-            name: /^[a-zA-ZÀ-ÿ\s\-']{2,}$/,
-            company: /^[a-zA-ZÀ-ÿ0-9\s\-'&.,]{2,}$/
-        };
+        // Charger reCAPTCHA v3
+        if (!window.grecaptcha) {
+            const script = document.createElement('script');
+            script.src = `https://www.google.com/recaptcha/api.js?render=${this.recaptcha.siteKey}`;
+            script.onload = () => {
+                this.recaptcha.loaded = true;
+                console.log('✅ reCAPTCHA v3 chargé');
+            };
+            script.onerror = () => {
+                console.error('❌ Erreur chargement reCAPTCHA');
+                this.recaptcha.enabled = false;
+            };
+            document.head.appendChild(script);
+        } else {
+            this.recaptcha.loaded = true;
+        }
     }
     
     getContactInfo() {
-        // Utiliser CompanyInfo en priorité
         if (window.CompanyInfo) {
             return window.CompanyInfo;
         }
         
-        // Fallback
-        return this.getFallbackContactInfo();
-    }
-    
-    getFallbackContactInfo() {
-        if (window.AppConfig && window.AppConfig.contact) {
-            const appContact = window.AppConfig.contact;
-            return {
-                contact: {
-                    email: appContact.email,
-                    phone: appContact.phone,
-                    phoneFormatted: appContact.phoneFormatted
-                },
-                address: {
-                    city: appContact.address?.split(',')[0]?.trim() || 'Nantes',
-                    full: appContact.address
-                },
-                businessHours: {
-                    days: 'Lundi - Vendredi',
-                    hours: '8h30 - 18h30'
-                },
-                urls: {
-                    calendly: window.AppConfig.calendlyUrl,
-                    linkedin: appContact.linkedin
-                },
-                social: {
-                    linkedin: appContact.linkedin
-                },
-                getFormattedPhone: function() { return this.contact.phoneFormatted; },
-                getContactEmail: function() { return this.contact.email; },
-                getCalendlyUrl: function() { return this.urls.calendly; },
-                getFullAddress: function() { return this.address.full; }
-            };
-        }
-        
-        // Fallback par défaut
         return {
             contact: {
                 email: 'contact@oweo-consulting.fr',
@@ -179,9 +108,6 @@ class ContactPage extends BasePage {
                 calendly: 'https://calendly.com/nicolas-dubain/30min',
                 linkedin: 'https://linkedin.com/company/oweo-consulting'
             },
-            social: {
-                linkedin: 'https://linkedin.com/company/oweo-consulting'
-            },
             getFormattedPhone: function() { return this.contact.phoneFormatted; },
             getContactEmail: function() { return this.contact.email; },
             getCalendlyUrl: function() { return this.urls.calendly; },
@@ -189,44 +115,14 @@ class ContactPage extends BasePage {
         };
     }
     
-    getBusinessStatusHTML() {
-        if (!this.contactInfo.isOpenNow || !this.contactInfo.getBusinessStatus) {
-            return '';
-        }
-        
-        const isOpen = this.contactInfo.isOpenNow();
-        const status = this.contactInfo.getBusinessStatus();
-        
-        return `
-            <div class="business-status ${isOpen ? 'open' : 'closed'}">
-                <span class="status-indicator"></span>
-                <span class="status-text">${status}</span>
-            </div>
-        `;
-    }
-    
     getTemplate() {
-        // Honeypot field
-        const honeypotField = this.security.honeypotEnabled ? `
-            <!-- Honeypot field - Hidden from users -->
-            <div class="form-group col-span-2" style="position: absolute; left: -9999px;">
-                <label for="${this.security.honeypotFieldName}">Website URL (leave empty)</label>
-                <input type="text" 
-                       id="${this.security.honeypotFieldName}" 
-                       name="${this.security.honeypotFieldName}"
-                       class="form-control" 
-                       tabindex="-1"
-                       autocomplete="off">
-            </div>
-        ` : '';
-        
         return `
             <div class="page-container contact-page">
                 <!-- Page Header -->
                 <section class="page-header">
                     <div class="container">
                         <div class="page-breadcrumb">
-                            <a href="javascript:void(0)" onclick="contactPageInstance.navigateTo('home')">Accueil</a>
+                            <a href="#home">Accueil</a>
                             <i class="fas fa-chevron-right"></i>
                             <span>Contact</span>
                         </div>
@@ -238,13 +134,13 @@ class ContactPage extends BasePage {
                         </p>
                         
                         <div class="contact-quick-actions fade-in-up">
-                            <button type="button" class="btn btn-primary btn-lg" onclick="contactPageInstance.openCalendly()">
+                            <button type="button" class="btn btn-primary btn-lg" onclick="window.contactPageInstance.openCalendly()">
                                 <i class="fas fa-calendar"></i>
                                 Planifier un appel
                             </button>
                             <a href="tel:${this.contactInfo.contact.phone}" class="btn btn-outline btn-lg">
                                 <i class="fas fa-phone"></i>
-                                ${this.contactInfo.getFormattedPhone ? this.contactInfo.getFormattedPhone() : this.contactInfo.contact.phoneFormatted}
+                                ${this.contactInfo.getFormattedPhone()}
                             </a>
                         </div>
                     </div>
@@ -259,15 +155,21 @@ class ContactPage extends BasePage {
                                 <div class="form-header">
                                     <h2>Envoyez-nous un message</h2>
                                     <p>Décrivez-nous votre projet et nous vous recontacterons rapidement.</p>
+                                    ${this.recaptcha.enabled ? `
+                                        <div class="recaptcha-info">
+                                            <i class="fas fa-shield-alt"></i>
+                                            <span>Ce formulaire est protégé par reCAPTCHA</span>
+                                        </div>
+                                    ` : ''}
                                 </div>
                                 
-                                <form id="contact-form" class="contact-form" onsubmit="return false;" novalidate>
+                                <form id="contact-form" class="contact-form">
                                     <div class="form-grid">
                                         <div class="form-group">
                                             <label for="contact-name">Nom complet *</label>
                                             <input type="text" 
                                                    id="contact-name" 
-                                                   name="name"
+                                                   name="from_name"
                                                    class="form-control" 
                                                    placeholder="Votre nom et prénom"
                                                    required>
@@ -278,7 +180,7 @@ class ContactPage extends BasePage {
                                             <label for="contact-email">Email *</label>
                                             <input type="email" 
                                                    id="contact-email" 
-                                                   name="email"
+                                                   name="from_email"
                                                    class="form-control" 
                                                    placeholder="votre@email.com"
                                                    required>
@@ -292,7 +194,6 @@ class ContactPage extends BasePage {
                                                    name="phone"
                                                    class="form-control" 
                                                    placeholder="06 12 34 56 78">
-                                            <div class="field-error" id="phone-error"></div>
                                         </div>
                                         
                                         <div class="form-group">
@@ -310,12 +211,12 @@ class ContactPage extends BasePage {
                                             <label for="contact-role">Fonction</label>
                                             <select id="contact-role" name="role" class="form-control">
                                                 <option value="">Sélectionnez votre fonction</option>
-                                                <option value="dirigeant">Dirigeant / CEO</option>
-                                                <option value="directeur-technique">Directeur technique</option>
-                                                <option value="chef-projet">Chef de projet</option>
-                                                <option value="responsable-production">Responsable production</option>
-                                                <option value="responsable-informatique">Responsable informatique</option>
-                                                <option value="autre">Autre</option>
+                                                <option value="Dirigeant / CEO">Dirigeant / CEO</option>
+                                                <option value="Directeur technique">Directeur technique</option>
+                                                <option value="Chef de projet">Chef de projet</option>
+                                                <option value="Responsable production">Responsable production</option>
+                                                <option value="Responsable informatique">Responsable informatique</option>
+                                                <option value="Autre">Autre</option>
                                             </select>
                                         </div>
                                         
@@ -323,10 +224,10 @@ class ContactPage extends BasePage {
                                             <label for="contact-company-size">Taille de l'entreprise</label>
                                             <select id="contact-company-size" name="company_size" class="form-control">
                                                 <option value="">Sélectionnez</option>
-                                                <option value="tpe">TPE (1-10 salariés)</option>
-                                                <option value="pme">PME (11-250 salariés)</option>
-                                                <option value="eti">ETI (251-5000 salariés)</option>
-                                                <option value="ge">Grande entreprise (5000+ salariés)</option>
+                                                <option value="TPE (1-10 salariés)">TPE (1-10 salariés)</option>
+                                                <option value="PME (11-250 salariés)">PME (11-250 salariés)</option>
+                                                <option value="ETI (251-5000 salariés)">ETI (251-5000 salariés)</option>
+                                                <option value="Grande entreprise (5000+ salariés)">Grande entreprise (5000+ salariés)</option>
                                             </select>
                                         </div>
                                         
@@ -334,13 +235,13 @@ class ContactPage extends BasePage {
                                             <label for="contact-subject">Sujet</label>
                                             <select id="contact-subject" name="subject" class="form-control">
                                                 <option value="">Choisissez un sujet</option>
-                                                <option value="demo">Demande de démonstration</option>
-                                                <option value="diagnostic">Diagnostic gratuit</option>
-                                                <option value="conseil">Conseil stratégique</option>
-                                                <option value="implementation">Implémentation ERP</option>
-                                                <option value="support">Support technique</option>
-                                                <option value="partenariat">Partenariat</option>
-                                                <option value="autre">Autre demande</option>
+                                                <option value="Demande de démonstration">Demande de démonstration</option>
+                                                <option value="Diagnostic gratuit">Diagnostic gratuit</option>
+                                                <option value="Conseil stratégique">Conseil stratégique</option>
+                                                <option value="Implémentation ERP">Implémentation ERP</option>
+                                                <option value="Support technique">Support technique</option>
+                                                <option value="Partenariat">Partenariat</option>
+                                                <option value="Autre demande">Autre demande</option>
                                             </select>
                                         </div>
                                         
@@ -374,19 +275,27 @@ class ContactPage extends BasePage {
                                                 <span>Je souhaite recevoir les actualités et conseils d'Oweo</span>
                                             </label>
                                         </div>
-                                        
-                                        ${honeypotField}
                                     </div>
                                     
                                     <div class="form-actions">
-                                        <button type="button" 
+                                        <button type="submit" 
                                                 class="btn btn-primary btn-lg" 
-                                                id="contact-submit"
-                                                onclick="contactPageInstance.handleFormSubmit(event)">
+                                                id="contact-submit">
                                             <i class="fas fa-paper-plane"></i>
                                             Envoyer le message
                                         </button>
                                     </div>
+                                    
+                                    ${this.recaptcha.enabled ? `
+                                        <div class="recaptcha-notice">
+                                            <small>
+                                                Ce site est protégé par reCAPTCHA et les 
+                                                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Règles de confidentialité</a> 
+                                                et <a href="https://policies.google.com/terms" target="_blank" rel="noopener">Conditions d'utilisation</a> 
+                                                de Google s'appliquent.
+                                            </small>
+                                        </div>
+                                    ` : ''}
                                     
                                     <div class="form-success" id="form-success" style="display: none;">
                                         <div class="success-content">
@@ -410,8 +319,8 @@ class ContactPage extends BasePage {
                                             </div>
                                             <div class="method-content">
                                                 <div class="method-label">Email</div>
-                                                <a href="mailto:${this.contactInfo.getContactEmail ? this.contactInfo.getContactEmail() : this.contactInfo.contact.email}" class="method-value">
-                                                    ${this.contactInfo.getContactEmail ? this.contactInfo.getContactEmail() : this.contactInfo.contact.email}
+                                                <a href="mailto:${this.contactInfo.getContactEmail()}" class="method-value">
+                                                    ${this.contactInfo.getContactEmail()}
                                                 </a>
                                             </div>
                                         </div>
@@ -423,7 +332,7 @@ class ContactPage extends BasePage {
                                             <div class="method-content">
                                                 <div class="method-label">Téléphone</div>
                                                 <a href="tel:${this.contactInfo.contact.phone}" class="method-value">
-                                                    ${this.contactInfo.getFormattedPhone ? this.contactInfo.getFormattedPhone() : this.contactInfo.contact.phoneFormatted}
+                                                    ${this.contactInfo.getFormattedPhone()}
                                                 </a>
                                             </div>
                                         </div>
@@ -434,27 +343,21 @@ class ContactPage extends BasePage {
                                             </div>
                                             <div class="method-content">
                                                 <div class="method-label">Localisation</div>
-                                                <div class="method-value">${this.contactInfo.getFullAddress ? this.contactInfo.getFullAddress() : this.contactInfo.address.full}</div>
+                                                <div class="method-value">${this.contactInfo.getFullAddress()}</div>
                                             </div>
                                         </div>
-                                        <!--
-                                        <div class="contact-method">
-                                            <div class="method-icon">
-                                                <i class="fas fa-clock"></i>
-                                            </div>
-                                            <div class="method-content">
-                                                <div class="method-label">Horaires</div>
-                                                <div class="method-value">
-                                                    ${this.contactInfo.businessHours.days}<br>
-                                                    ${this.contactInfo.businessHours.hours}
-                                                    ${this.getBusinessStatusHTML()}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        -->
                                     </div>
                                     
-                                    ${this.renderSocialLinks()}
+                                    <div class="social-links">
+                                        <h4>Suivez-nous</h4>
+                                        <a href="${this.contactInfo.urls.linkedin}" 
+                                           class="social-link" 
+                                           target="_blank" 
+                                           rel="noopener"
+                                           title="LinkedIn">
+                                            <i class="fab fa-linkedin-in"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -478,24 +381,6 @@ class ContactPage extends BasePage {
                 </section>
             </div>
         `;
-    }
-    
-    renderSocialLinks() {
-        if (this.contactInfo.social?.linkedin || this.contactInfo.urls?.linkedin) {
-            return `
-                <div class="social-links">
-                    <h4>Suivez-nous</h4>
-                    <a href="${this.contactInfo.social?.linkedin || this.contactInfo.urls.linkedin}" 
-                       class="social-link" 
-                       target="_blank" 
-                       rel="noopener"
-                       title="LinkedIn">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                </div>
-            `;
-        }
-        return '';
     }
     
     renderFAQ() {
@@ -528,7 +413,7 @@ class ContactPage extends BasePage {
         
         return faqs.map((faq, index) => `
             <div class="faq-item fade-in-up">
-                <button type="button" class="faq-question" onclick="contactPageInstance.toggleFAQ(${index})">
+                <button type="button" class="faq-question" onclick="window.contactPageInstance.toggleFAQ(${index})">
                     <span>${faq.question}</span>
                     <i class="fas fa-chevron-down"></i>
                 </button>
@@ -542,29 +427,19 @@ class ContactPage extends BasePage {
     async onMount() {
         await super.onMount();
         
-        // Enregistrer le temps d'affichage
-        this.formState.formDisplayTime = Date.now();
-        
-        // Charger reCAPTCHA si configuré
-        if (window.AppConfig?.isRecaptchaEnabled && window.AppConfig.isRecaptchaEnabled()) {
-            this.loadRecaptcha();
-        }
-        
-        // Restaurer l'état du rate limiting
-        this.restoreRateLimitState();
-        
-        // Exposer l'instance
+        // Exposer l'instance pour les événements onclick
         window.contactPageInstance = this;
         
-        // Pré-remplir depuis l'URL
-        this.prefillFromURL();
-        
-        // Mettre à jour le statut business si disponible
-        if (this.contactInfo.isOpenNow) {
-            this.statusInterval = setInterval(() => {
-                this.updateBusinessStatus();
-            }, 60000);
-        }
+        // Attendre un peu que les services se chargent
+        setTimeout(() => {
+            if (!this.emailJS.initialized) {
+                console.warn('⚠️ EmailJS non initialisé, vérifiez votre connection internet');
+            }
+            
+            if (this.recaptcha.enabled && !this.recaptcha.loaded) {
+                console.warn('⚠️ reCAPTCHA non chargé, vérifiez votre connection internet');
+            }
+        }, 3000);
     }
     
     bindEvents() {
@@ -572,7 +447,10 @@ class ContactPage extends BasePage {
         
         const form = document.getElementById('contact-form');
         if (form) {
-            const inputs = form.querySelectorAll('input, textarea, select');
+            form.addEventListener('submit', (e) => this.handleFormSubmit(e));
+            
+            // Validation en temps réel
+            const inputs = form.querySelectorAll('input[required], textarea[required]');
             inputs.forEach(input => {
                 input.addEventListener('blur', () => this.validateField(input));
                 input.addEventListener('input', () => this.clearFieldError(input));
@@ -580,328 +458,198 @@ class ContactPage extends BasePage {
         }
     }
     
-    loadRecaptcha() {
-        if (window.grecaptcha) return;
-        
-        const siteKey = this.security.recaptcha.siteKey;
-        if (!siteKey || siteKey === 'YOUR_RECAPTCHA_SITE_KEY') {
-            console.warn('reCAPTCHA site key non configurée');
-            return;
-        }
-        
-        const script = document.createElement('script');
-        script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
-        script.async = true;
-        script.defer = true;
-        document.head.appendChild(script);
-    }
-    
-    handleFormSubmit(e) {
-        if (e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
+    async handleFormSubmit(e) {
+        e.preventDefault();
         
         if (this.formState.isSubmitting) return;
         
-        const form = document.getElementById('contact-form');
-        if (!form) return;
+        const form = e.target;
         
-        if (!this.validateForm()) {
+        if (!this.validateForm(form)) {
             return;
         }
         
-        const formData = new FormData(form);
-        this.formState.data = Object.fromEntries(formData);
-        
-        this.submitForm();
+        await this.submitForm(form);
     }
     
-    validateForm() {
-        const form = document.getElementById('contact-form');
-        const formData = new FormData(form);
+    validateForm(form) {
         let isValid = true;
-        
         this.formState.errors = {};
         this.clearAllErrors();
         
         // Validation des champs requis
-        this.validation.required.forEach(field => {
-            const value = formData.get(field);
-            if (!value || value.trim() === '') {
-                const message = this.getErrorMessage('required');
-                this.formState.errors[field] = message;
-                this.showFieldError(field, message);
+        const requiredFields = form.querySelectorAll('[required]');
+        requiredFields.forEach(field => {
+            if (field.type === 'checkbox' && !field.checked) {
+                this.showFieldError(field, 'Ce champ est requis');
+                isValid = false;
+            } else if (field.type !== 'checkbox' && !field.value.trim()) {
+                this.showFieldError(field, 'Ce champ est requis');
                 isValid = false;
             }
         });
         
-        // Validation des patterns
-        Object.entries(this.validation.patterns).forEach(([field, pattern]) => {
-            const value = formData.get(field);
-            if (value && value.trim() && !pattern.test(value)) {
-                const message = this.getErrorMessage(field);
-                this.formState.errors[field] = message;
-                this.showFieldError(field, message);
+        // Validation email
+        const emailField = form.querySelector('[name="from_email"]');
+        if (emailField && emailField.value) {
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(emailField.value)) {
+                this.showFieldError(emailField, 'Format d\'email invalide');
                 isValid = false;
             }
-        });
-        
-        // Vérifier le honeypot
-        if (this.security.honeypotEnabled) {
-            const honeypotValue = formData.get(this.security.honeypotFieldName);
-            if (honeypotValue && honeypotValue.trim() !== '') {
-                console.warn('🍯 Honeypot triggered');
-                this.formState.isSpam = true;
-            }
-        }
-        
-        // Vérifier la longueur du message
-        const message = formData.get('message');
-        if (message && message.length > this.security.maxMessageLength) {
-            const errorMsg = this.getErrorMessage('messageTooLong');
-            this.formState.errors.message = errorMsg;
-            this.showFieldError('message', errorMsg);
-            isValid = false;
-        }
-        
-        // Vérifier le timing
-        const timeSinceDisplay = Date.now() - this.formState.formDisplayTime;
-        if (timeSinceDisplay < this.security.minSubmitDelay) {
-            console.warn('⚡ Form submitted too quickly');
-            this.formState.isSuspicious = true;
-        }
-        
-        // Détecter les patterns de spam
-        if (this.detectSpamPatterns(formData)) {
-            this.formState.isSpam = true;
-        }
-        
-        // Vérifier le consentement
-        const consent = formData.get('consent');
-        if (!consent) {
-            this.formState.errors.consent = this.getErrorMessage('consentRequired');
-            this.showFieldError('consent', this.formState.errors.consent);
-            isValid = false;
         }
         
         return isValid;
     }
     
-    detectSpamPatterns(formData) {
-        const message = formData.get('message') || '';
-        const name = formData.get('name') || '';
-        const company = formData.get('company') || '';
-        const textToCheck = `${name} ${company} ${message}`;
-        
-        // Vérifier les patterns
-        for (const pattern of this.security.spamPatterns) {
-            if (pattern.test(textToCheck)) {
-                return true;
-            }
+    async getRecaptchaToken() {
+        if (!this.recaptcha.enabled || !this.recaptcha.loaded || !window.grecaptcha) {
+            console.log('🔒 reCAPTCHA désactivé ou non chargé');
+            return null;
         }
         
-        // Vérifier le nombre d'URLs
-        const urlMatches = textToCheck.match(/\bhttps?:\/\/\S+/gi) || [];
-        if (urlMatches.length > this.security.maxUrlsInMessage) {
-            return true;
+        try {
+            const token = await window.grecaptcha.execute(this.recaptcha.siteKey, {
+                action: this.recaptcha.action
+            });
+            
+            console.log('🔒 Token reCAPTCHA obtenu');
+            return token;
+            
+        } catch (error) {
+            console.error('❌ Erreur reCAPTCHA:', error);
+            this.showNotification('Erreur de vérification de sécurité. Veuillez réessayer.', 'warning');
+            return null;
+        }
+    }
+    
+    async submitForm(form) {
+        // Vérifier que EmailJS est prêt
+        if (!this.emailJS.initialized) {
+            this.showNotification('Service d\'email en cours d\'initialisation, veuillez patienter...', 'warning');
+            return;
         }
         
-        return false;
-    }
-    
-    checkRateLimit() {
-        if (!this.security.rateLimit.enabled) return true;
-        
-        const now = Date.now();
-        const storageKey = this.security.rateLimit.storageKey;
-        const savedState = sessionStorage.getItem(storageKey);
-        
-        if (savedState) {
-            const state = JSON.parse(savedState);
-            const timeSinceLastAttempt = now - state.lastAttempt;
-            const cooldownMs = this.security.rateLimit.cooldownMinutes * 60 * 1000;
-            
-            if (timeSinceLastAttempt < cooldownMs && 
-                state.attempts >= this.security.rateLimit.maxAttempts) {
-                
-                const remainingMinutes = Math.ceil((cooldownMs - timeSinceLastAttempt) / 60000);
-                const message = this.getErrorMessage('rateLimited', { minutes: remainingMinutes });
-                
-                if (window.notifications) {
-                    window.notifications.warning(message);
-                }
-                
-                return false;
-            }
-            
-            if (timeSinceLastAttempt > cooldownMs) {
-                state.attempts = 0;
-            }
-            
-            this.rateLimit = state;
-        } else {
-            this.rateLimit = { attempts: 0, lastAttempt: null };
+        if (!window.emailjs) {
+            this.showNotification('Service d\'email non disponible. Veuillez réessayer.', 'error');
+            return;
         }
-        
-        return true;
-    }
-    
-    updateRateLimit() {
-        this.rateLimit.attempts++;
-        this.rateLimit.lastAttempt = Date.now();
-        
-        const storageKey = this.security.rateLimit.storageKey;
-        sessionStorage.setItem(storageKey, JSON.stringify(this.rateLimit));
-    }
-    
-    async submitForm() {
-        if (!this.checkRateLimit()) return;
         
         const submitBtn = document.getElementById('contact-submit');
-        const form = document.getElementById('contact-form');
         const successDiv = document.getElementById('form-success');
         
         this.formState.isSubmitting = true;
-        this.updateRateLimit();
         
+        // UI Loading
         submitBtn.disabled = true;
         submitBtn.classList.add('loading');
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Vérification...';
         
         try {
-            // Obtenir le token reCAPTCHA si activé
+            // 1. Obtenir le token reCAPTCHA
             let recaptchaToken = null;
-            if (window.AppConfig?.isRecaptchaEnabled && window.AppConfig.isRecaptchaEnabled() && window.grecaptcha) {
-                recaptchaToken = await window.grecaptcha.execute(
-                    this.security.recaptcha.siteKey,
-                    { action: this.security.recaptcha.action }
-                );
-            }
-            
-            // Préparer les données
-            const formData = new FormData(form);
-            const data = {
-                ...Object.fromEntries(formData),
-                // Métadonnées
-                source_page: window.location.pathname,
-                user_agent: navigator.userAgent,
-                timestamp: new Date().toISOString(),
-                // Sécurité
-                recaptcha_token: recaptchaToken,
-                time_to_submit: Date.now() - this.formState.formDisplayTime,
-                is_spam_suspected: this.formState.isSpam || false,
-                is_suspicious: this.formState.isSuspicious || false
-            };
-            
-            // Supprimer le honeypot
-            if (this.security.honeypotEnabled) {
-                delete data[this.security.honeypotFieldName];
-            }
-            
-            // Envoyer au backend
-            const response = await this.sendToBackend(data);
-            
-            if (response.success) {
-                form.style.display = 'none';
-                successDiv.style.display = 'block';
-                this.formState.hasSubmitted = true;
+            if (this.recaptcha.enabled) {
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Vérification de sécurité...';
+                recaptchaToken = await this.getRecaptchaToken();
                 
-                const successMessage = this.getSuccessMessage('formSubmitted');
-                if (window.notifications) {
-                    window.notifications.success(successMessage);
+                if (this.recaptcha.enabled && !recaptchaToken) {
+                    throw new Error('Échec de la vérification de sécurité');
                 }
-                
-                // Reset rate limiting
-                sessionStorage.removeItem(this.security.rateLimit.storageKey);
-                
-                this.trackFormSubmission();
-            } else {
-                throw new Error(response.message || this.getErrorMessage('submitError'));
             }
-        } catch (error) {
-            console.error('Erreur envoi formulaire:', error);
             
+            // 2. Préparer les données pour EmailJS
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+            
+            const formData = new FormData(form);
+            const templateParams = {};
+            
+            // Convertir FormData en objet
+            for (let [key, value] of formData.entries()) {
+                if (key === 'consent' || key === 'newsletter') {
+                    templateParams[key] = form.querySelector(`[name="${key}"]`).checked ? 'Oui' : 'Non';
+                } else {
+                    templateParams[key] = value || 'Non renseigné';
+                }
+            }
+            
+            // Ajouter des informations supplémentaires
+            templateParams.date = new Date().toLocaleString('fr-FR');
+            templateParams.source_page = window.location.href;
+            templateParams.user_agent = navigator.userAgent;
+            templateParams.recaptcha_token = recaptchaToken || 'Non disponible';
+            templateParams.recaptcha_score = 'Analysé côté serveur';
+            
+            console.log('📧 Envoi email avec les paramètres:', templateParams);
+            
+            // 3. Envoyer via EmailJS
+            const response = await emailjs.send(
+                this.emailJS.serviceId,
+                this.emailJS.templateId,
+                templateParams,
+                this.emailJS.publicKey
+            );
+            
+            console.log('✅ Email envoyé avec succès:', response);
+            
+            // 4. Afficher le succès
+            form.style.display = 'none';
+            successDiv.style.display = 'block';
+            this.formState.hasSubmitted = true;
+            
+            this.showNotification('Votre message a été envoyé avec succès !', 'success');
+            
+            // 5. Analytics
+            this.trackFormSubmission(recaptchaToken ? 'with_recaptcha' : 'without_recaptcha');
+            
+        } catch (error) {
+            console.error('❌ Erreur envoi email:', error);
+            
+            let errorMessage = 'Erreur lors de l\'envoi du message. ';
+            
+            if (error.status === 400) {
+                errorMessage += 'Paramètres invalides.';
+            } else if (error.status === 401) {
+                errorMessage += 'Service non autorisé.';
+            } else if (error.status === 402) {
+                errorMessage += 'Quota d\'emails dépassé.';
+            } else if (error.status === 403) {
+                errorMessage += 'Accès refusé.';
+            } else if (error.status === 404) {
+                errorMessage += 'Service ou template non trouvé.';
+            } else if (error.text) {
+                errorMessage += error.text;
+            } else {
+                errorMessage += 'Veuillez réessayer ou nous contacter directement.';
+            }
+            
+            this.showNotification(errorMessage, 'error');
+            
+            // Restaurer le bouton
             submitBtn.disabled = false;
             submitBtn.classList.remove('loading');
             submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer le message';
             
-            if (window.notifications) {
-                window.notifications.error(error.message || this.getErrorMessage('submitError'));
-            }
         } finally {
             this.formState.isSubmitting = false;
         }
     }
     
-    async sendToBackend(data) {
-        const endpoint = `${this.apiConfig.baseUrl}${this.apiConfig.endpoints.contact}`;
-        
-        try {
-            const response = await fetch(endpoint, {
-                method: 'POST',
-                headers: this.apiConfig.headers || {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                body: JSON.stringify(data)
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            return await response.json();
-        } catch (error) {
-            // Mode développement
-            if (window.location.hostname === 'localhost') {
-                console.log('📧 Contact form data (dev mode):', data);
-                return { success: true, message: 'Message envoyé (mode dev)' };
-            }
-            
-            throw error;
-        }
-    }
-    
-    validateField(field) {
-        const value = field.value.trim();
-        const name = field.name;
-        
-        if (this.validation.required.includes(name) && !value) {
-            this.showFieldError(name, this.getErrorMessage('required'));
-            return false;
-        }
-        
-        if (this.validation.patterns[name] && value && !this.validation.patterns[name].test(value)) {
-            this.showFieldError(name, this.getErrorMessage(name));
-            return false;
-        }
-        
-        if (name === 'consent' && field.type === 'checkbox' && !field.checked) {
-            this.showFieldError(name, this.getErrorMessage('consentRequired'));
-            return false;
-        }
-        
-        this.clearFieldError(field);
-        return true;
-    }
-    
-    showFieldError(fieldName, message) {
-        const field = document.querySelector(`[name="${fieldName}"]`);
+    showFieldError(field, message) {
+        const fieldName = field.name.replace('from_', '');
         const errorDiv = document.getElementById(`${fieldName}-error`);
         
-        if (field) {
-            field.classList.add('error');
-        }
+        field.classList.add('error');
         
         if (errorDiv) {
             errorDiv.textContent = message;
             errorDiv.style.display = 'block';
         }
+        
+        this.formState.errors[field.name] = message;
     }
     
     clearFieldError(field) {
-        const fieldName = field.name || field.id.replace('contact-', '');
+        const fieldName = field.name.replace('from_', '');
         const errorDiv = document.getElementById(`${fieldName}-error`);
         
         field.classList.remove('error');
@@ -909,6 +657,8 @@ class ContactPage extends BasePage {
         if (errorDiv) {
             errorDiv.style.display = 'none';
         }
+        
+        delete this.formState.errors[field.name];
     }
     
     clearAllErrors() {
@@ -920,81 +670,38 @@ class ContactPage extends BasePage {
         
         fields.forEach(field => field.classList.remove('error'));
         errors.forEach(error => error.style.display = 'none');
+        
+        this.formState.errors = {};
     }
     
-    getErrorMessage(key, params = {}) {
-        if (window.AppConfig?.getErrorMessage) {
-            return window.AppConfig.getErrorMessage(key, params);
+    validateField(field) {
+        if (field.hasAttribute('required') && !field.value.trim()) {
+            this.showFieldError(field, 'Ce champ est requis');
+            return false;
         }
         
-        const defaultMessages = {
-            required: 'Ce champ est requis',
-            email: 'Format d\'email invalide',
-            phone: 'Format de téléphone invalide',
-            name: 'Le nom contient des caractères invalides',
-            company: 'Le nom d\'entreprise contient des caractères invalides',
-            messageTooLong: 'Le message est trop long',
-            tooManyUrls: 'Le message contient trop de liens',
-            spamDetected: 'Votre message a été détecté comme spam',
-            rateLimited: 'Trop de tentatives. Veuillez attendre %minutes% minute(s).',
-            submitError: 'Erreur lors de l\'envoi. Veuillez réessayer.',
-            consentRequired: 'Vous devez accepter d\'être contacté'
-        };
-        
-        const messages = this.messages.errorMessages || defaultMessages;
-        let message = messages[key] || defaultMessages[key] || 'Erreur';
-        
-        Object.keys(params).forEach(param => {
-            message = message.replace(`%${param}%`, params[param]);
-        });
-        
-        return message;
-    }
-    
-    getSuccessMessage(key) {
-        const defaultMessages = {
-            formSubmitted: 'Votre message a été envoyé avec succès !'
-        };
-        
-        const messages = this.messages.successMessages || defaultMessages;
-        return messages[key] || defaultMessages[key] || 'Succès';
-    }
-    
-    restoreRateLimitState() {
-        if (!this.security.rateLimit.enabled) return;
-        
-        const storageKey = this.security.rateLimit.storageKey;
-        const savedState = sessionStorage.getItem(storageKey);
-        
-        if (savedState) {
-            try {
-                this.rateLimit = JSON.parse(savedState);
-            } catch (error) {
-                console.error('Error restoring rate limit state:', error);
+        if (field.type === 'email' && field.value) {
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(field.value)) {
+                this.showFieldError(field, 'Format d\'email invalide');
+                return false;
             }
         }
+        
+        this.clearFieldError(field);
+        return true;
     }
     
-    updateBusinessStatus() {
-        const statusElements = document.querySelectorAll('.business-status');
-        if (!statusElements.length || !this.contactInfo.isOpenNow) return;
-        
-        const isOpen = this.contactInfo.isOpenNow();
-        const status = this.contactInfo.getBusinessStatus();
-        
-        statusElements.forEach(element => {
-            element.className = `business-status ${isOpen ? 'open' : 'closed'}`;
-            const statusText = element.querySelector('.status-text');
-            if (statusText) {
-                statusText.textContent = status;
-            }
-        });
+    showNotification(message, type = 'info') {
+        if (window.notifications) {
+            window.notifications[type](message);
+        } else {
+            alert(message);
+        }
     }
     
     openCalendly() {
-        const calendlyUrl = this.contactInfo.getCalendlyUrl ? 
-            this.contactInfo.getCalendlyUrl() : 
-            this.contactInfo.urls?.calendly || 'https://calendly.com/nicolas-dubain/30min';
+        const calendlyUrl = this.contactInfo.getCalendlyUrl();
         
         if (typeof window.Calendly !== 'undefined') {
             window.Calendly.initPopupWidget({
@@ -1009,7 +716,6 @@ class ContactPage extends BasePage {
         }
         
         this.trackCalendlyOpen();
-        return false;
     }
     
     toggleFAQ(index) {
@@ -1037,11 +743,11 @@ class ContactPage extends BasePage {
         return false;
     }
     
-    trackFormSubmission() {
+    trackFormSubmission(method = 'default') {
         if (window.AppConfig?.analytics?.enabled && typeof gtag !== 'undefined') {
             gtag('event', 'contact_form_submitted', {
                 event_category: 'contact',
-                event_label: this.formState.data.subject || 'general',
+                event_label: `emailjs_${method}`,
                 value: 1
             });
         }
@@ -1056,52 +762,7 @@ class ContactPage extends BasePage {
         }
     }
     
-    navigateTo(page) {
-        if (window.app && window.app.router) {
-            window.app.router.navigate(page);
-        }
-        return false;
-    }
-    
-    prefillFromURL() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const subject = urlParams.get('subject');
-        const source = urlParams.get('source');
-        
-        if (subject) {
-            const subjectSelect = document.getElementById('contact-subject');
-            if (subjectSelect) {
-                subjectSelect.value = subject;
-            }
-        }
-        
-        if (source) {
-            const messageTextarea = document.getElementById('contact-message');
-            if (messageTextarea && !messageTextarea.value.trim()) {
-                let prefillMessage = '';
-                
-                switch (source) {
-                    case 'demo':
-                        prefillMessage = 'Je suis intéressé par vos solutions après avoir vu les démonstrations.';
-                        break;
-                    case 'services':
-                        prefillMessage = 'Je souhaite en savoir plus sur vos services.';
-                        break;
-                    default:
-                        prefillMessage = `Contact depuis ${source}.`;
-                }
-                
-                messageTextarea.value = prefillMessage;
-            }
-        }
-    }
-    
     destroy() {
-        // Nettoyer le timer de statut
-        if (this.statusInterval) {
-            clearInterval(this.statusInterval);
-        }
-        
         // Nettoyer l'instance globale
         if (window.contactPageInstance === this) {
             delete window.contactPageInstance;

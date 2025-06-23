@@ -425,6 +425,23 @@ class ServicesPage extends BasePage {
         this.animateServiceCards();
     }
     
+    navigateTo(page) {
+        // Option 1: Si le router est accessible via window.app
+        if (window.app && window.app.router) {
+            window.app.router.navigate(page);
+            return;
+        }
+        
+        // Option 2: Utiliser l'eventBus si disponible
+        if (window.app && window.app.eventBus) {
+            window.app.eventBus.emit('navigate', { page });
+            return;
+        }
+        
+        // Option 3: Navigation manuelle par hash
+        window.location.hash = `#${page}`;
+    }
+    
     animateMethodologySteps() {
         const steps = document.querySelectorAll('.methodology-step');
         
