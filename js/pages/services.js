@@ -1,5 +1,5 @@
 // ========================================
-// js/pages/services.js - Page services
+// js/pages/services.js - Page services corrigée avec coordonnées cohérentes
 // ========================================
 
 class ServicesPage extends BasePage {
@@ -9,6 +9,10 @@ class ServicesPage extends BasePage {
             title: 'Nos Services',
             description: 'Découvrez notre gamme complète de services pour transformer votre industrie métallique'
         });
+        
+        // Charger les informations société
+        this.companyInfo = null;
+        this.loadCompanyInfo();
         
         this.services = [
             {
@@ -151,7 +155,38 @@ class ServicesPage extends BasePage {
         ];
     }
     
+    loadCompanyInfo() {
+        // Vérifier si CompanyInfo est disponible
+        if (window.CompanyInfo) {
+            this.companyInfo = window.CompanyInfo;
+        } else {
+            // Attendre un peu que CompanyInfo se charge
+            setTimeout(() => {
+                this.companyInfo = window.CompanyInfo || this.getFallbackInfo();
+            }, 100);
+        }
+    }
+    
+    getFallbackInfo() {
+        // Informations de fallback si CompanyInfo n'est pas disponible
+        return {
+            contact: {
+                email: 'contact@oweo-consulting.fr',
+                phone: '+33 6 86 76 81 31',
+                phoneFormatted: '06 86 76 81 31'
+            },
+            urls: {
+                calendly: 'https://calendly.com/nicolas-dubain/30min'
+            }
+        };
+    }
+    
     getTemplate() {
+        // S'assurer que les infos société sont disponibles
+        if (!this.companyInfo) {
+            this.companyInfo = window.CompanyInfo || this.getFallbackInfo();
+        }
+        
         return `
             <div class="page-container services-page">
                 <!-- Page Header -->
@@ -211,11 +246,11 @@ class ServicesPage extends BasePage {
                             <div class="contact-actions">
                                 <button type="button" class="btn btn-primary btn-lg" id="contact-phone-btn">
                                     <i class="fas fa-phone"></i>
-                                    01 23 45 67 89
+                                    ${this.companyInfo.contact.phoneFormatted}
                                 </button>
                                 <button type="button" class="btn btn-outline btn-lg" id="contact-email-btn">
                                     <i class="fas fa-envelope"></i>
-                                    contact@oweo.fr
+                                    ${this.companyInfo.contact.email}
                                 </button>
                                 <button type="button" class="btn btn-outline btn-lg" id="schedule-meeting-btn">
                                     <i class="fas fa-calendar"></i>
@@ -363,7 +398,7 @@ class ServicesPage extends BasePage {
             });
         }
         
-        // Contact buttons
+        // Contact buttons avec coordonnées cohérentes
         const phoneBtn = document.getElementById('contact-phone-btn');
         if (phoneBtn) {
             phoneBtn.addEventListener('click', (e) => {
@@ -407,6 +442,11 @@ class ServicesPage extends BasePage {
     
     onMount() {
         super.onMount();
+        
+        // S'assurer que CompanyInfo est chargé
+        if (!this.companyInfo) {
+            this.companyInfo = window.CompanyInfo || this.getFallbackInfo();
+        }
         
         // Animation séquentielle des étapes de méthodologie AMÉLIORÉE
         this.animateMethodologySteps();
@@ -551,7 +591,6 @@ class ServicesPage extends BasePage {
         }
     }
     
-    // Le reste des méthodes reste identique...
     getQuoteFormContent(service) {
         return `
             <div class="quote-form">
@@ -735,20 +774,26 @@ class ServicesPage extends BasePage {
     }
     
     handlePhoneContact() {
+        // Utiliser les coordonnées de CompanyInfo
+        const phone = this.companyInfo?.contact?.phone || '+33686768131';
+        
         // Tenter d'ouvrir l'application téléphone
-        window.location.href = 'tel:+33123456789';
+        window.location.href = `tel:${phone}`;
         
         if (window.notifications) {
-            window.notifications.info('Appel en cours vers le 01 23 45 67 89...');
+            window.notifications.info(`Appel en cours vers ${this.companyInfo?.contact?.phoneFormatted || '06 86 76 81 31'}...`);
         }
     }
     
     handleEmailContact() {
+        // Utiliser l'email de CompanyInfo
+        const email = this.companyInfo?.contact?.email || 'contact@oweo-consulting.fr';
+        
         // Ouvrir le client email
         const subject = encodeURIComponent('Demande d\'information - Services Oweo');
         const body = encodeURIComponent('Bonjour,\n\nJe souhaite obtenir plus d\'informations sur vos services.\n\nCordialement,');
         
-        window.location.href = `mailto:contact@oweo.fr?subject=${subject}&body=${body}`;
+        window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
         
         if (window.notifications) {
             window.notifications.info('Ouverture de votre client email...');
@@ -756,11 +801,16 @@ class ServicesPage extends BasePage {
     }
     
     scheduleMeeting() {
+        // Utiliser l'URL Calendly de CompanyInfo
+        const calendlyUrl = this.companyInfo?.urls?.calendly || 'https://calendly.com/nicolas-dubain/30min';
+        
         if (window.notifications) {
             window.notifications.info('Redirection vers le système de prise de rendez-vous...');
         }
         
-        // Ici vous pourriez intégrer Calendly ou un autre système
+        // Ouvrir Calendly dans un nouvel onglet
+        window.open(calendlyUrl, '_blank', 'noopener,noreferrer');
+        
         console.log('📅 Planification de rendez-vous demandée');
     }
     
@@ -768,6 +818,29 @@ class ServicesPage extends BasePage {
         if (window.app && window.app.router) {
             window.app.router.navigate(page);
         }
+    }
+    
+    // Méthode pour valider la cohérence des informations
+    validateCompanyInfo() {
+        if (!this.companyInfo) {
+            console.warn('⚠️ ServicesPage: CompanyInfo non disponible');
+            return false;
+        }
+        
+        // Vérifications de base
+        const checks = [
+            { test: this.companyInfo.contact?.email?.includes('@'), msg: 'Email invalide' },
+            { test: this.companyInfo.contact?.phone?.startsWith('+33'), msg: 'Téléphone invalide' },
+            { test: this.companyInfo.urls?.calendly?.includes('calendly.com'), msg: 'URL Calendly invalide' }
+        ];
+        
+        const failures = checks.filter(check => !check.test);
+        if (failures.length > 0) {
+            console.warn('⚠️ ServicesPage: Validation échouée:', failures.map(f => f.msg));
+            return false;
+        }
+        
+        return true;
     }
     
     destroy() {

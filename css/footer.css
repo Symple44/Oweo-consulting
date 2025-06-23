@@ -1,5 +1,5 @@
 /* ========================================
-   css/footer.css - Styles du footer
+   css/footer.css - Footer responsive amélioré
 ======================================== */
 
 .footer {
@@ -205,19 +205,44 @@
     opacity: 0.7;
 }
 
-/* Responsive Design */
+/* ========================================
+   RESPONSIVE DESIGN AMÉLIORÉ
+======================================== */
+
+/* Tablette */
 @media (max-width: 1024px) {
     .footer-main {
         grid-template-columns: 1fr 1fr;
-        gap: 2rem;
+        gap: 2.5rem;
+        padding: 2.5rem 0;
     }
     
     .footer-brand {
         grid-column: 1 / -1;
+        text-align: center;
+        max-width: none;
+    }
+    
+    .footer-logo {
+        justify-content: center;
+    }
+    
+    .footer-tagline {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    
+    .footer-social {
+        justify-content: center;
     }
 }
 
+/* Mobile large (768px et moins) */
 @media (max-width: 768px) {
+    .footer-container {
+        padding: 0 1rem;
+    }
+    
     .footer-main {
         grid-template-columns: 1fr;
         gap: 2rem;
@@ -227,30 +252,129 @@
     .footer-brand {
         text-align: center;
         grid-column: 1;
+        order: 1;
     }
     
     .footer-logo {
         justify-content: center;
+        margin-bottom: 1rem;
+    }
+    
+    .footer-tagline {
+        font-size: 0.95rem;
+        max-width: 400px;
+        margin: 0 auto;
     }
     
     .footer-social {
         justify-content: center;
+        margin-top: 1rem;
+    }
+    
+    /* Réorganisation des sections sur mobile */
+    .footer-section:nth-child(2) { order: 4; } /* Contact en dernier */
+    .footer-section:nth-child(3) { order: 2; } /* Services en 2e */
+    .footer-section:nth-child(4) { order: 3; } /* Solutions en 3e */
+    
+    /* Sections footer mobile */
+    .footer-section {
+        text-align: center;
+    }
+    
+    .footer-section-title {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .footer-section-title::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .footer-links {
+        gap: 1rem;
+        align-items: center;
+    }
+    
+    .footer-links a {
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        justify-content: center;
+        min-height: 44px; /* Touch target */
+    }
+    
+    .footer-links a:hover {
+        background: rgba(255, 255, 255, 0.1);
+        padding-left: 1rem; /* Override desktop hover */
+    }
+    
+    /* Contact mobile amélioré */
+    .footer-contact {
+        gap: 1.5rem;
+        align-items: center;
+    }
+    
+    .contact-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        min-height: 44px; /* Touch target */
+        align-items: center;
+        width: 100%;
+        max-width: 280px;
+    }
+    
+    .contact-item i {
+        margin-top: 0;
+        font-size: 1.2rem;
+        width: auto;
+    }
+    
+    .contact-item a {
+        font-weight: 500;
+        font-size: 1rem;
+    }
+    
+    /* Footer bottom mobile */
+    .footer-bottom {
+        padding: 1.5rem 0;
     }
     
     .footer-bottom-content {
         flex-direction: column;
         text-align: center;
+        gap: 1.5rem;
     }
     
     .footer-legal {
         flex-wrap: wrap;
         justify-content: center;
+        gap: 1.5rem;
+    }
+    
+    .footer-legal a {
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        min-height: 44px; /* Touch target */
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+    }
+    
+    .footer-legal a:hover {
+        background: rgba(255, 255, 255, 0.1);
     }
 }
 
+/* Mobile petit (480px et moins) */
 @media (max-width: 480px) {
     .footer-container {
-        padding: 0 0.5rem;
+        padding: 0 0.75rem;
     }
     
     .footer-main {
@@ -263,27 +387,110 @@
     }
     
     .footer-logo-text {
-        font-size: 1.25rem;
+        font-size: 1.3rem;
     }
     
     .footer-logo-icon {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
+    }
+    
+    .footer-tagline {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        max-width: 320px;
     }
     
     .footer-social {
-        gap: 0.75rem;
+        gap: 1rem;
+        margin-top: 1.5rem;
     }
     
     .social-link {
-        width: 35px;
-        height: 35px;
+        width: 44px; /* Touch target */
+        height: 44px;
+        font-size: 1.1rem;
+    }
+    
+    /* Sections sur très petit mobile */
+    .footer-section {
+        padding: 0.5rem;
+    }
+    
+    .footer-section-title {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .footer-links a {
+        font-size: 0.95rem;
+        padding: 0.75rem 1rem;
+        margin: 0.25rem 0;
+    }
+    
+    /* Contact très petit mobile */
+    .contact-item {
+        padding: 1rem 0.75rem;
+        font-size: 0.9rem;
+        max-width: 100%;
+    }
+    
+    .contact-item i {
+        font-size: 1.1rem;
+    }
+    
+    /* Footer bottom très petit mobile */
+    .footer-bottom {
+        padding: 1rem 0;
+    }
+    
+    .footer-copyright {
+        font-size: 0.85rem;
+        line-height: 1.4;
     }
     
     .footer-legal {
         gap: 1rem;
-        font-size: 0.8rem;
+    }
+    
+    .footer-legal a {
+        font-size: 0.85rem;
+        padding: 0.75rem;
+        min-width: 44px; /* Touch target minimum */
     }
 }
+
+/* Mobile très petit (360px et moins) */
+@media (max-width: 360px) {
+    .footer-container {
+        padding: 0 0.5rem;
+    }
+    
+    .footer-tagline {
+        font-size: 0.85rem;
+        max-width: 280px;
+    }
+    
+    .footer-legal {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+    }
+    
+    .footer-legal a {
+        width: 200px;
+        text-align: center;
+        justify-content: center;
+    }
+    
+    .contact-item {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* ========================================
+   AMÉLIORATIONS SUPPLÉMENTAIRES
+======================================== */
 
 /* Animation d'entrée */
 @keyframes footerSlideUp {
@@ -307,10 +514,33 @@
     transition: width 0.3s ease;
 }
 
+/* Focus states pour l'accessibilité */
+.footer-links a:focus,
+.footer-legal a:focus,
+.contact-item a:focus,
+.social-link:focus {
+    outline: 2px solid #00d4ff;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
     .footer {
         /* Déjà optimisé pour le mode sombre */
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .footer.animate {
+        animation: none;
+    }
+    
+    .footer-links a,
+    .footer-legal a,
+    .social-link {
+        transition: none;
     }
 }
 
@@ -320,10 +550,43 @@
         background: none !important;
         color: black !important;
         border-top: 1px solid #ccc;
+        padding: 1rem 0 !important;
+    }
+    
+    .footer-main {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 1rem !important;
+        padding: 1rem 0 !important;
     }
     
     .footer-social,
     .footer-legal {
         display: none;
+    }
+    
+    .footer-tagline {
+        display: none;
+    }
+    
+    .contact-item a::after {
+        content: " (" attr(href) ")";
+        font-size: 0.8em;
+        color: #666;
+    }
+}
+
+/* States pour les touch devices */
+@media (hover: none) and (pointer: coarse) {
+    .footer-links a:hover,
+    .footer-legal a:hover,
+    .social-link:hover {
+        transform: none; /* Disable hover transforms on touch */
+    }
+    
+    .footer-links a:active,
+    .footer-legal a:active,
+    .social-link:active {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(0.98);
     }
 }
