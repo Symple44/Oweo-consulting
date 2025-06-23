@@ -122,9 +122,17 @@ class OweoApp {
             this.router.register('contact', new ContactPage());
         }
 
-        // Page de contact
+        // Page de CGV
         if (typeof CGVPage !== 'undefined') {
             this.router.register('cgv', new CGVPage());
+        }
+
+        // Page Legal
+        if (typeof LegalPage !== 'undefined') {
+            this.router.register('legal', new LegalPage('legal'));
+            this.router.register('privacy', new LegalPage('privacy'));
+            this.router.register('terms', new LegalPage('terms'));
+            this.router.register('cookies', new LegalPage('cookies'));
         }
         
         // Pages démo individuelles

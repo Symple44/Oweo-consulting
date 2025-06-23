@@ -155,10 +155,10 @@ class OweoFooter extends BaseComponent {
                             </p>
                             <div class="footer-legal">
                                 <li><a href="#" data-page="cgv">CGV</a></li>
-                                <a href="#" data-page="legal">Mentions légales</a>
-                                <a href="#" data-page="privacy">Politique de confidentialité</a>
-                                <a href="#" data-page="terms">CGU</a>
-                                <a href="#" data-page="cookies">Cookies</a>
+                                <a href="#legal" data-page="legal">Mentions légales</a>
+                                <a href="#privacy" data-page="privacy">Politique de confidentialité</a>
+                                <a href="#terms" data-page="terms">CGU</a>
+                                <a href="#cookies" data-page="cookies">Cookies</a>
                             </div>
                         </div>
                     </div>
