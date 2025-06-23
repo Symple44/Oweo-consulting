@@ -83,6 +83,8 @@ class ServicesPage extends BasePage {
                 title: 'Diagnostic & Analyse',
                 description: 'Nous analysons vos processus actuels et identifions les opportunités d\'amélioration.',
                 duration: '1-2 semaines',
+                icon: 'fas fa-search',
+                color: '#3b82f6',
                 activities: [
                     'Audit des processus métier',
                     'Analyse du système existant',
@@ -95,6 +97,8 @@ class ServicesPage extends BasePage {
                 title: 'Conception & Planification',
                 description: 'Nous concevons la solution optimale et planifions sa mise en œuvre.',
                 duration: '2-3 semaines',
+                icon: 'fas fa-drafting-compass',
+                color: '#10b981',
                 activities: [
                     'Architecture de la solution',
                     'Spécifications fonctionnelles',
@@ -107,6 +111,8 @@ class ServicesPage extends BasePage {
                 title: 'Développement & Configuration',
                 description: 'Nous développons ou configurons la solution selon vos besoins spécifiques.',
                 duration: '4-16 semaines',
+                icon: 'fas fa-code',
+                color: '#f59e0b',
                 activities: [
                     'Développement/paramétrage',
                     'Tests unitaires',
@@ -119,6 +125,8 @@ class ServicesPage extends BasePage {
                 title: 'Déploiement & Formation',
                 description: 'Nous déployons la solution et formons vos équipes à son utilisation.',
                 duration: '2-4 semaines',
+                icon: 'fas fa-rocket',
+                color: '#8b5cf6',
                 activities: [
                     'Migration des données',
                     'Mise en production',
@@ -131,6 +139,8 @@ class ServicesPage extends BasePage {
                 title: 'Suivi & Optimisation',
                 description: 'Nous assurons le suivi et l\'optimisation continue de votre solution.',
                 duration: 'Continu',
+                icon: 'fas fa-chart-line',
+                color: '#ef4444',
                 activities: [
                     'Monitoring performance',
                     'Support technique',
@@ -148,7 +158,7 @@ class ServicesPage extends BasePage {
                 <section class="page-header">
                     <div class="container">
                         <div class="page-breadcrumb">
-                            <a href="#" data-page="home">Accueil</a>
+                            <button type="button" class="breadcrumb-link" data-page="home">Accueil</button>
                             <i class="fas fa-chevron-right"></i>
                             <span>Services</span>
                         </div>
@@ -199,15 +209,15 @@ class ServicesPage extends BasePage {
                             </div>
                             
                             <div class="contact-actions">
-                                <button class="btn btn-primary btn-lg" id="contact-phone-btn">
+                                <button type="button" class="btn btn-primary btn-lg" id="contact-phone-btn">
                                     <i class="fas fa-phone"></i>
                                     01 23 45 67 89
                                 </button>
-                                <button class="btn btn-outline btn-lg" id="contact-email-btn">
+                                <button type="button" class="btn btn-outline btn-lg" id="contact-email-btn">
                                     <i class="fas fa-envelope"></i>
                                     contact@oweo.fr
                                 </button>
-                                <button class="btn btn-outline btn-lg" id="schedule-meeting-btn">
+                                <button type="button" class="btn btn-outline btn-lg" id="schedule-meeting-btn">
                                     <i class="fas fa-calendar"></i>
                                     Planifier un RDV
                                 </button>
@@ -259,11 +269,11 @@ class ServicesPage extends BasePage {
                 </div>
                 
                 <div class="service-actions">
-                    <button class="btn btn-primary" onclick="servicesPageInstance.requestQuote('${service.id}')">
+                    <button type="button" class="btn btn-primary quote-btn" data-service-id="${service.id}">
                         <i class="fas fa-paper-plane"></i>
                         Demander un devis
                     </button>
-                    <button class="btn btn-outline" onclick="servicesPageInstance.learnMore('${service.id}')">
+                    <button type="button" class="btn btn-outline learn-more-btn" data-service-id="${service.id}">
                         <i class="fas fa-info-circle"></i>
                         En savoir plus
                     </button>
@@ -274,19 +284,39 @@ class ServicesPage extends BasePage {
     
     renderMethodologyStep(step) {
         return `
-            <div class="methodology-step fade-in-up">
-                <div class="step-number">${step.step}</div>
+            <div class="methodology-step fade-in-up" data-step="${step.step}">
+                <div class="step-timeline-connector"></div>
+                <div class="step-number" style="--step-color: ${step.color}">
+                    <div class="step-number-inner">
+                        <span class="step-digit">${step.step}</span>
+                        <i class="${step.icon}" style="--step-icon-color: ${step.color}"></i>
+                    </div>
+                    <div class="step-number-ring"></div>
+                </div>
+                
                 <div class="step-content">
-                    <h3 class="step-title">${step.title}</h3>
+                    <div class="step-header">
+                        <h3 class="step-title">${step.title}</h3>
+                        <div class="step-duration" style="--duration-color: ${step.color}">
+                            <i class="fas fa-clock"></i>
+                            <span>${step.duration}</span>
+                        </div>
+                    </div>
+                    
                     <p class="step-description">${step.description}</p>
-                    <div class="step-duration">Durée : ${step.duration}</div>
+                    
                     <div class="step-activities">
-                        ${step.activities.map(activity => `
-                            <div class="activity-item">
-                                <i class="fas fa-check"></i>
-                                <span>${activity}</span>
-                            </div>
-                        `).join('')}
+                        <h5>Activités clés :</h5>
+                        <div class="activities-grid">
+                            ${step.activities.map((activity, index) => `
+                                <div class="activity-item" style="--activity-delay: ${index * 0.1}s">
+                                    <div class="activity-icon" style="--activity-color: ${step.color}">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <span>${activity}</span>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -296,37 +326,77 @@ class ServicesPage extends BasePage {
     bindEvents() {
         super.bindEvents();
         
-        // Navigation
-        const pageLinks = document.querySelectorAll('[data-page]');
-        pageLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const page = link.dataset.page;
-                this.navigateTo(page);
+        // CORRECTION DU BUG : Navigation sécurisée
+        const container = document.querySelector('.services-page');
+        if (container) {
+            // Navigation breadcrumb
+            const breadcrumbLinks = container.querySelectorAll('.breadcrumb-link[data-page]');
+            breadcrumbLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const page = link.dataset.page;
+                    this.navigateTo(page);
+                });
             });
-        });
+            
+            // Boutons de demande de devis
+            const quoteButtons = container.querySelectorAll('.quote-btn');
+            quoteButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const serviceId = btn.dataset.serviceId;
+                    this.requestQuote(serviceId);
+                });
+            });
+            
+            // Boutons "En savoir plus"
+            const learnMoreButtons = container.querySelectorAll('.learn-more-btn');
+            learnMoreButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const serviceId = btn.dataset.serviceId;
+                    this.learnMore(serviceId);
+                });
+            });
+        }
         
         // Contact buttons
         const phoneBtn = document.getElementById('contact-phone-btn');
         if (phoneBtn) {
-            phoneBtn.addEventListener('click', () => this.handlePhoneContact());
+            phoneBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.handlePhoneContact();
+            });
         }
         
         const emailBtn = document.getElementById('contact-email-btn');
         if (emailBtn) {
-            emailBtn.addEventListener('click', () => this.handleEmailContact());
+            emailBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.handleEmailContact();
+            });
         }
         
         const meetingBtn = document.getElementById('schedule-meeting-btn');
         if (meetingBtn) {
-            meetingBtn.addEventListener('click', () => this.scheduleMeeting());
+            meetingBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.scheduleMeeting();
+            });
         }
         
-        // Hover effects sur les cartes de service
+        // Hover effects améliorés pour les cartes de service
         const serviceCards = document.querySelectorAll('.service-card');
         serviceCards.forEach(card => {
             card.addEventListener('mouseenter', () => {
                 card.style.transform = 'translateY(-8px)';
+                card.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
             });
             
             card.addEventListener('mouseleave', () => {
@@ -338,11 +408,11 @@ class ServicesPage extends BasePage {
     onMount() {
         super.onMount();
         
-        // Exposer l'instance pour les événements onclick
-        window.servicesPageInstance = this;
-        
-        // Animation séquentielle des étapes de méthodologie
+        // Animation séquentielle des étapes de méthodologie AMÉLIORÉE
         this.animateMethodologySteps();
+        
+        // Animation des cartes de service
+        this.animateServiceCards();
     }
     
     animateMethodologySteps() {
@@ -351,13 +421,25 @@ class ServicesPage extends BasePage {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
+                    const stepNumber = entry.target.dataset.step;
+                    const delay = (stepNumber - 1) * 200;
+                    
                     setTimeout(() => {
                         entry.target.classList.add('animate');
-                    }, 200);
+                        
+                        // Animer les activités avec délai
+                        const activities = entry.target.querySelectorAll('.activity-item');
+                        activities.forEach((activity, index) => {
+                            setTimeout(() => {
+                                activity.classList.add('animate');
+                            }, index * 100);
+                        });
+                    }, delay);
                 }
             });
         }, {
-            threshold: 0.3
+            threshold: 0.3,
+            rootMargin: '0px 0px -100px 0px'
         });
         
         steps.forEach(step => {
@@ -365,10 +447,33 @@ class ServicesPage extends BasePage {
         });
     }
     
+    animateServiceCards() {
+        const cards = document.querySelectorAll('.service-card');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('animate');
+                    }, index * 150);
+                }
+            });
+        }, {
+            threshold: 0.2
+        });
+        
+        cards.forEach(card => {
+            observer.observe(card);
+        });
+    }
+    
     requestQuote(serviceId) {
         const service = this.services.find(s => s.id === serviceId);
         
-        if (!service) return;
+        if (!service) {
+            console.error('Service non trouvé:', serviceId);
+            return;
+        }
         
         // Créer le modal de demande de devis
         if (window.modalSystem) {
@@ -406,6 +511,47 @@ class ServicesPage extends BasePage {
         }
     }
     
+    learnMore(serviceId) {
+        const service = this.services.find(s => s.id === serviceId);
+        
+        if (!service) {
+            console.error('Service non trouvé:', serviceId);
+            return;
+        }
+        
+        // Afficher les détails dans un modal
+        if (window.modalSystem) {
+            const modal = window.modalSystem.create({
+                title: service.title,
+                content: this.getServiceDetailsContent(service),
+                size: 'lg'
+            });
+            
+            window.modalSystem.addActions(modal.id, [
+                {
+                    id: 'quote',
+                    label: 'Demander un devis',
+                    class: 'btn-primary',
+                    icon: 'fas fa-paper-plane',
+                    handler: () => {
+                        window.modalSystem.close(modal.id);
+                        this.requestQuote(serviceId);
+                        return false;
+                    }
+                },
+                {
+                    id: 'close',
+                    label: 'Fermer',
+                    class: 'btn-outline',
+                    handler: () => true
+                }
+            ]);
+            
+            window.modalSystem.show(modal.id);
+        }
+    }
+    
+    // Le reste des méthodes reste identique...
     getQuoteFormContent(service) {
         return `
             <div class="quote-form">
@@ -492,12 +638,15 @@ class ServicesPage extends BasePage {
     
     submitQuoteRequest(modalId, service) {
         const form = document.getElementById('quote-form');
+        if (!form) return false;
+        
         const formData = new FormData(form);
         
         // Validation simple
         const requiredFields = ['company-name', 'contact-name', 'contact-email'];
         for (const field of requiredFields) {
-            if (!document.getElementById(field).value.trim()) {
+            const element = document.getElementById(field);
+            if (!element || !element.value.trim()) {
                 if (window.notifications) {
                     window.notifications.error('Veuillez remplir tous les champs obligatoires');
                 }
@@ -523,43 +672,6 @@ class ServicesPage extends BasePage {
         });
         
         return true; // Fermer le modal
-    }
-    
-    learnMore(serviceId) {
-        const service = this.services.find(s => s.id === serviceId);
-        
-        if (!service) return;
-        
-        // Afficher les détails dans un modal
-        if (window.modalSystem) {
-            const modal = window.modalSystem.create({
-                title: service.title,
-                content: this.getServiceDetailsContent(service),
-                size: 'lg'
-            });
-            
-            window.modalSystem.addActions(modal.id, [
-                {
-                    id: 'quote',
-                    label: 'Demander un devis',
-                    class: 'btn-primary',
-                    icon: 'fas fa-paper-plane',
-                    handler: () => {
-                        window.modalSystem.close(modal.id);
-                        this.requestQuote(serviceId);
-                        return false;
-                    }
-                },
-                {
-                    id: 'close',
-                    label: 'Fermer',
-                    class: 'btn-outline',
-                    handler: () => true
-                }
-            ]);
-            
-            window.modalSystem.show(modal.id);
-        }
     }
     
     getServiceDetailsContent(service) {
@@ -659,11 +771,6 @@ class ServicesPage extends BasePage {
     }
     
     destroy() {
-        // Nettoyer l'instance globale
-        if (window.servicesPageInstance === this) {
-            delete window.servicesPageInstance;
-        }
-        
         super.destroy();
     }
 }

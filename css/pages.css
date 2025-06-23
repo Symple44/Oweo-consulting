@@ -64,6 +64,21 @@
 .page-breadcrumb a:hover {
     text-decoration: underline;
 }
+.page-breadcrumb .breadcrumb-link {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    text-decoration: none;
+    cursor: pointer;
+    padding: var(--space-1) 0;
+    font-family: inherit;
+    font-size: inherit;
+    transition: all 0.2s ease;
+}
+.page-breadcrumb .breadcrumb-link:hover {
+    text-decoration: underline;
+    color: var(--primary-light);
+}
 
 /* =================================
    CONTENT SECTIONS
