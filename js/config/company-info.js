@@ -70,7 +70,7 @@ window.CompanyInfo = {
     // Horaires d'ouverture
     businessHours: {
         days: 'Lundi - Vendredi',
-        hours: '8h30 - 18h30',
+        hours: '14h00 - 18h00',
         timezone: 'Europe/Paris',
         
         // Détail par jour

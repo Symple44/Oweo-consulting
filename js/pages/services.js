@@ -231,30 +231,25 @@ class ServicesPage extends BasePage {
                     </div>
                 </section>
                 
-                <!-- Contact CTA -->
-                <section class="section-lg">
+                <!-- Contact CTA Section -->
+                <section class="contact-cta">
                     <div class="container">
-                        <div class="contact-cta fade-in-up">
-                            <div class="contact-content">
-                                <h2>Prêt à démarrer votre projet ?</h2>
-                                <p>
-                                    Contactez-nous pour un diagnostic gratuit et découvrez comment 
-                                    nous pouvons transformer votre entreprise.
-                                </p>
-                            </div>
-                            
-                            <div class="contact-actions">
-                                <button type="button" class="btn btn-primary btn-lg" id="contact-phone-btn">
-                                    <i class="fas fa-phone"></i>
-                                    ${this.companyInfo.contact.phoneFormatted}
-                                </button>
-                                <button type="button" class="btn btn-outline btn-lg" id="contact-email-btn">
-                                    <i class="fas fa-envelope"></i>
-                                    ${this.companyInfo.contact.email}
-                                </button>
-                                <button type="button" class="btn btn-outline btn-lg" id="schedule-meeting-btn">
+                        <div class="contact-content">
+                            <h2 class="contact-title fade-in-up">
+                                Prêt à démarrer votre transformation ?
+                            </h2>
+                            <p class="fade-in-up">
+                                Échangeons sur vos enjeux et découvrons ensemble comment nous pouvons 
+                                vous accompagner dans votre évolution numérique.
+                            </p>
+                            <div class="contact-actions fade-in-up">
+                                <button class="btn btn-primary btn-lg" id="schedule-meeting-btn">
                                     <i class="fas fa-calendar"></i>
-                                    Planifier un RDV
+                                    Planifier un échange
+                                </button>
+                                <button class="btn btn-outline btn-lg" id="contact-direct-btn">
+                                    <i class="fas fa-phone"></i>
+                                    Nous contacter
                                 </button>
                             </div>
                         </div>
@@ -361,7 +356,7 @@ class ServicesPage extends BasePage {
     bindEvents() {
         super.bindEvents();
         
-        // CORRECTION DU BUG : Navigation sécurisée
+        // Navigation sécurisée
         const container = document.querySelector('.services-page');
         if (container) {
             // Navigation breadcrumb
@@ -396,34 +391,9 @@ class ServicesPage extends BasePage {
                     this.learnMore(serviceId);
                 });
             });
-        }
-        
-        // Contact buttons avec coordonnées cohérentes
-        const phoneBtn = document.getElementById('contact-phone-btn');
-        if (phoneBtn) {
-            phoneBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                this.handlePhoneContact();
-            });
-        }
-        
-        const emailBtn = document.getElementById('contact-email-btn');
-        if (emailBtn) {
-            emailBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                this.handleEmailContact();
-            });
-        }
-        
-        const meetingBtn = document.getElementById('schedule-meeting-btn');
-        if (meetingBtn) {
-            meetingBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                this.scheduleMeeting();
-            });
+
+            // Actions spécifiques
+            this.handleSpecificActions();
         }
         
         // Hover effects améliorés pour les cartes de service
@@ -773,74 +743,170 @@ class ServicesPage extends BasePage {
         `;
     }
     
-    handlePhoneContact() {
-        // Utiliser les coordonnées de CompanyInfo
-        const phone = this.companyInfo?.contact?.phone || '+33686768131';
+
+    handleSpecificActions() {
+        // Bouton planifier entretien -> Calendly
+        const scheduleMeetingBtn = document.getElementById('schedule-meeting-btn');
+        if (scheduleMeetingBtn) {
+            scheduleMeetingBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.openCalendly();
+            });
+        }
         
-        // Tenter d'ouvrir l'application téléphone
-        window.location.href = `tel:${phone}`;
-        
-        if (window.notifications) {
-            window.notifications.info(`Appel en cours vers ${this.companyInfo?.contact?.phoneFormatted || '06 86 76 81 31'}...`);
+        // Bouton contact direct
+        const contactDirectBtn = document.getElementById('contact-direct-btn');
+        if (contactDirectBtn) {
+            contactDirectBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.handleDirectContact();
+            });
         }
     }
     
-    handleEmailContact() {
-        // Utiliser l'email de CompanyInfo
-        const email = this.companyInfo?.contact?.email || 'contact@oweo-consulting.fr';
+    openCalendly() {
+        // Configuration Calendly depuis app-config
+        const config = window.AppConfig || {};
+        const calendlyUrl = config.calendlyUrl || 'https://calendly.com/nicolas-dubain/30min';
         
-        // Ouvrir le client email
-        const subject = encodeURIComponent('Demande d\'information - Services Oweo');
-        const body = encodeURIComponent('Bonjour,\n\nJe souhaite obtenir plus d\'informations sur vos services.\n\nCordialement,');
+        // Vérifier si le widget Calendly est disponible
+        if (typeof window.Calendly !== 'undefined') {
+            // Utiliser le widget popup officiel
+            window.Calendly.initPopupWidget({
+                url: calendlyUrl,
+                text: 'Planifier un échange',
+                color: '#00d4ff',
+                textColor: '#ffffff',
+                branding: false
+            });
+        } else {
+            // Fallback : ouvrir dans une nouvelle fenêtre
+            console.warn('Widget Calendly non disponible, fallback vers nouvelle fenêtre');
+            window.open(calendlyUrl, '_blank', 'width=800,height=700,scrollbars=yes,resizable=yes');
+        }
         
-        window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+        // Tracking optionnel
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'calendly_opened', {
+                event_category: 'engagement',
+                event_label: 'home_page'
+            });
+        }
         
-        if (window.notifications) {
-            window.notifications.info('Ouverture de votre client email...');
+        // Notification de succès
+        if (window.app && window.app.showNotification) {
+            window.app.showNotification('Ouverture de la planification de rendez-vous', 'info');
         }
     }
     
-    scheduleMeeting() {
-        // Utiliser l'URL Calendly de CompanyInfo
-        const calendlyUrl = this.companyInfo?.urls?.calendly || 'https://calendly.com/nicolas-dubain/30min';
+    handleDirectContact() {
+        // Récupérer les informations de contact depuis CompanyInfo
+        const companyInfo = window.CompanyInfo || {};
+        const phone = companyInfo.contact?.phone || '+33686768131';
+        const email = companyInfo.contact?.email || 'contact@oweo-consulting.fr';
         
-        if (window.notifications) {
-            window.notifications.info('Redirection vers le système de prise de rendez-vous...');
+        // Créer un modal avec les options de contact
+        if (window.modalSystem) {
+            const modal = window.modalSystem.create({
+                title: 'Nous contacter',
+                content: this.getContactModalContent(companyInfo),
+                size: 'md'
+            });
+            
+            window.modalSystem.addActions(modal.id, [
+                {
+                    id: 'close',
+                    label: 'Fermer',
+                    class: 'btn-outline',
+                    handler: () => true
+                }
+            ]);
+            
+            window.modalSystem.show(modal.id);
+            
+            // Ajouter les événements aux boutons de contact
+            setTimeout(() => {
+                const phoneBtn = document.querySelector('[data-contact="phone"]');
+                const emailBtn = document.querySelector('[data-contact="email"]');
+                
+                if (phoneBtn) {
+                    phoneBtn.addEventListener('click', () => {
+                        window.location.href = `tel:${phone}`;
+                        window.modalSystem.close(modal.id);
+                    });
+                }
+                
+                if (emailBtn) {
+                    emailBtn.addEventListener('click', () => {
+                        window.location.href = `mailto:${email}?subject=Demande d'information`;
+                        window.modalSystem.close(modal.id);
+                    });
+                }
+            }, 100);
+        } else {
+            // Fallback si pas de système de modal
+            this.navigateTo('contact');
         }
-        
-        // Ouvrir Calendly dans un nouvel onglet
-        window.open(calendlyUrl, '_blank', 'noopener,noreferrer');
-        
-        console.log('📅 Planification de rendez-vous demandée');
     }
     
-    navigateTo(page) {
-        if (window.app && window.app.router) {
-            window.app.router.navigate(page);
-        }
-    }
-    
-    // Méthode pour valider la cohérence des informations
-    validateCompanyInfo() {
-        if (!this.companyInfo) {
-            console.warn('⚠️ ServicesPage: CompanyInfo non disponible');
-            return false;
-        }
+    getContactModalContent(companyInfo) {
+        const phone = companyInfo.contact?.phoneFormatted || '06 86 76 81 31';
+        const email = companyInfo.contact?.email || 'contact@oweo-consulting.fr';
+        const address = companyInfo.address?.full || 'Nantes, France';
+        const hours = companyInfo.businessHours?.days && companyInfo.businessHours?.hours 
+            ? `${companyInfo.businessHours.days} ${companyInfo.businessHours.hours}` 
+            : 'Lun-Ven 8h30-18h30';
         
-        // Vérifications de base
-        const checks = [
-            { test: this.companyInfo.contact?.email?.includes('@'), msg: 'Email invalide' },
-            { test: this.companyInfo.contact?.phone?.startsWith('+33'), msg: 'Téléphone invalide' },
-            { test: this.companyInfo.urls?.calendly?.includes('calendly.com'), msg: 'URL Calendly invalide' }
-        ];
-        
-        const failures = checks.filter(check => !check.test);
-        if (failures.length > 0) {
-            console.warn('⚠️ ServicesPage: Validation échouée:', failures.map(f => f.msg));
-            return false;
-        }
-        
-        return true;
+        return `
+            <div class="contact-modal">
+                <div class="contact-intro">
+                    <p>Contactez-nous dès maintenant pour discuter de votre projet de transformation numérique.</p>
+                </div>
+                
+                <div class="contact-options">
+                    <div class="contact-option" data-contact="phone">
+                        <div class="contact-option-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-option-content">
+                            <h4>Téléphone</h4>
+                            <p class="contact-value">${phone}</p>
+                            <p class="contact-note">Appelez-nous directement</p>
+                        </div>
+                        <div class="contact-option-action">
+                            <i class="fas fa-external-link-alt"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-option" data-contact="email">
+                        <div class="contact-option-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-option-content">
+                            <h4>Email</h4>
+                            <p class="contact-value">${email}</p>
+                            <p class="contact-note">Envoyez-nous un message</p>
+                        </div>
+                        <div class="contact-option-action">
+                            <i class="fas fa-external-link-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-info">
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>${address}</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <span>${hours}</span>
+                    </div>
+                </div>
+            </div>
+        `;
     }
     
     destroy() {
