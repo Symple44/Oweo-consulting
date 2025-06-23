@@ -1,5 +1,5 @@
 // ========================================
-// js/core/app.js - Application principale CORRIGÉE avec page contact
+// js/core/app.js - Application principale avec intégration SEO
 // ========================================
 
 class OweoApp {
@@ -12,11 +12,18 @@ class OweoApp {
         // Event Bus pour la communication entre composants
         this.eventBus = new EventBus();
         
+        // SEO Manager
+        this.seoManager = null;
+        
+        // Google Services
+        this.googleServices = null;
+        
         // Configuration
         this.config = {
             enableAnalytics: true,
             enableClientAccess: true,
             enableDemoSearch: true,
+            enableSEO: true,
             debugMode: false
         };
     }
@@ -28,13 +35,19 @@ class OweoApp {
             // 1. Initialiser les utilitaires
             await this.initUtils();
             
-            // 2. Initialiser les composants
+            // 2. Initialiser le SEO
+            await this.initSEO();
+            
+            // 3. Initialiser Google Services
+            await this.initGoogleServices();
+            
+            // 4. Initialiser les composants
             await this.initComponents();
             
-            // 3. Initialiser le routeur
+            // 5. Initialiser le routeur
             await this.initRouter();
             
-            // 4. Démarrer l'application
+            // 6. Démarrer l'application
             await this.start();
             
             this.initialized = true;
@@ -56,6 +69,84 @@ class OweoApp {
         if (typeof AnimationUtils !== 'undefined') {
             this.animations = new AnimationUtils();
         }
+    }
+    
+    async initSEO() {
+        if (!this.config.enableSEO || typeof SEOManager === 'undefined') {
+            console.warn('⚠️ SEO disabled or SEOManager not available');
+            return;
+        }
+        
+        try {
+            this.seoManager = new SEOManager();
+            this.seoManager.init();
+            
+            // Définir le SEO de la page d'accueil par défaut
+            if (window.SEOPagesConfig?.home) {
+                this.seoManager.updatePageSEO(window.SEOPagesConfig.home);
+            }
+            
+            console.log('✅ SEO Manager initialized');
+        } catch (error) {
+            console.error('❌ SEO initialization failed:', error);
+        }
+    }
+    
+    async initGoogleServices() {
+        if (!this.config.enableAnalytics || typeof GoogleServices === 'undefined') {
+            console.warn('⚠️ Analytics disabled or GoogleServices not available');
+            return;
+        }
+        
+        try {
+            this.googleServices = window.googleServices || new GoogleServices();
+            
+            // Écouter les événements de l'app pour le tracking
+            this.setupAnalyticsEvents();
+            
+            console.log('✅ Google Services ready');
+        } catch (error) {
+            console.error('❌ Google Services initialization failed:', error);
+        }
+    }
+    
+    setupAnalyticsEvents() {
+        if (!this.googleServices) return;
+        
+        // Écouter les événements de navigation
+        this.eventBus.on('routeChanged', (data) => {
+            if (this.googleServices) {
+                this.googleServices.onRouteChange(data.route);
+            }
+        });
+        
+        // Écouter les accès aux démos
+        this.eventBus.on('demoAccessed', (data) => {
+            if (this.googleServices) {
+                this.googleServices.onDemoAccess(data.demoId);
+            }
+        });
+        
+        // Écouter les soumissions de formulaires
+        this.eventBus.on('formSubmitted', (data) => {
+            if (this.googleServices) {
+                this.googleServices.onFormSubmit(data.formType);
+            }
+        });
+        
+        // Écouter les téléchargements
+        this.eventBus.on('brochureDownloaded', () => {
+            if (this.googleServices) {
+                this.googleServices.onBrochureDownload();
+            }
+        });
+        
+        // Écouter les ouvertures Calendly
+        this.eventBus.on('calendlyOpened', () => {
+            if (this.googleServices) {
+                this.googleServices.onCalendlyOpen();
+            }
+        });
     }
     
     async initComponents() {
@@ -143,7 +234,6 @@ class OweoApp {
         if (typeof DSTVDemo !== 'undefined') {
             this.router.register('dstv-demo', new DSTVDemo());
         }
-    
     }
     
     async start() {
@@ -174,14 +264,44 @@ class OweoApp {
             this.toggleDemoMode();
         }
         
+        // ⭐ NOUVEAU: Mettre à jour le SEO pour la nouvelle page
+        this.updatePageSEO(route.path);
+        
         // Émettre l'événement
         this.eventBus.emit('routeChanged', {
             route: route.path,
             isDemoMode: this.isDemoMode,
-            isDemosPage: route.path === 'demos', // Distinguer la page catalogue
-            isContactPage: route.path === 'contact', // ⭐ NOUVEAU
+            isDemosPage: route.path === 'demos',
+            isContactPage: route.path === 'contact',
             ...route
         });
+    }
+    
+    updatePageSEO(pagePath) {
+        if (!this.seoManager || !window.SEOPagesConfig) return;
+        
+        try {
+            const pageConfig = window.SEOPagesConfig[pagePath];
+            if (pageConfig) {
+                // Construire l'URL canonique
+                const baseUrl = window.CompanyInfo?.urls?.website || 'https://oweo-consulting.fr';
+                const canonical = pagePath === 'home' 
+                    ? baseUrl 
+                    : `${baseUrl}/#${pagePath}`;
+                
+                // Mettre à jour le SEO
+                this.seoManager.updatePageSEO({
+                    ...pageConfig,
+                    canonical: canonical
+                });
+                
+                console.log(`🔍 SEO updated for page: ${pagePath}`);
+            } else {
+                console.warn(`⚠️ No SEO config found for page: ${pagePath}`);
+            }
+        } catch (error) {
+            console.error('❌ Error updating page SEO:', error);
+        }
     }
     
     toggleDemoMode() {
@@ -319,7 +439,30 @@ class OweoApp {
         }
     }
     
-    // Méthodes publiques
+    // ⭐ NOUVELLES MÉTHODES PUBLIQUES POUR LE SEO ET ANALYTICS
+    
+    // Méthode pour tracker des événements personnalisés
+    trackEvent(eventName, parameters = {}) {
+        if (this.googleServices) {
+            this.googleServices.trackEvent(eventName, parameters);
+        }
+    }
+    
+    // Méthode pour tracker des conversions
+    trackConversion(conversionName, value = null) {
+        if (this.googleServices) {
+            this.googleServices.trackConversion(conversionName, value);
+        }
+    }
+    
+    // Méthode pour mettre à jour le SEO dynamiquement
+    updateSEO(seoData) {
+        if (this.seoManager) {
+            this.seoManager.updatePageSEO(seoData);
+        }
+    }
+    
+    // Méthodes publiques existantes
     
     getComponent(name) {
         return this.componentManager?.get(name);
