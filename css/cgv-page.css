@@ -208,9 +208,9 @@ body.demo-mode .nav-sticky,
 
 /* État collé (sticky actif) */
 .nav-sticky.is-stuck {
-    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.25);
-    border-color: rgba(0, 212, 255, 0.5);
-    background: rgba(26, 26, 46, 0.98);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+    background: var(--bg-card);
 }
 
 /* Indicateur de progression sur le côté du menu */

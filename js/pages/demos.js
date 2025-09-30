@@ -88,7 +88,7 @@ class DemosPage extends BasePage {
     
     getTemplate() {
         return `
-            <div class="page-container demos-page">
+            <div class="demos-page">
                 <!-- Page Header -->
                 <section class="page-header">
                     <div class="container">

@@ -44,7 +44,7 @@ class CGVPage extends BasePage {
     
     getTemplate() {
         return `
-            <div class="page-container cgv-page">
+            <div class="cgv-page">
                 <!-- Header -->
                 <section class="cgv-header page-header">
                     <div class="container">

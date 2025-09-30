@@ -31,10 +31,8 @@
 ================================= */
 
 .services-page .page-header {
-    background: linear-gradient(135deg, 
-        rgba(0, 212, 255, 0.05) 0%, 
-        rgba(124, 58, 237, 0.05) 100%);
-    padding: var(--space-12) 0;
+    background: var(--gradient-card);
+    padding: var(--space-8) 0;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -116,7 +114,8 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: var(--space-8);
-    margin-top: var(--space-12);
+    margin-top: 0;
+    padding-top: var(--space-4);
 }
 
 .service-card {
@@ -1130,7 +1129,7 @@
 
 @media (prefers-color-scheme: dark) {
     .step-content {
-        background: rgba(26, 26, 46, 0.8);
+        background: rgba(255, 255, 255, 0.98);
         backdrop-filter: blur(10px);
     }
     
@@ -1139,11 +1138,11 @@
     }
     
     .activity-item:hover {
-        background: rgba(26, 26, 46, 0.9);
+        background: var(--bg-card);
     }
     
     .service-card {
-        background: rgba(26, 26, 46, 0.8);
+        background: rgba(255, 255, 255, 0.98);
         backdrop-filter: blur(10px);
     }
 }

@@ -1,0 +1,172 @@
+/* ========================================
+   css/theme-toggle.css - Bouton de changement de thème
+======================================== */
+
+.theme-toggle {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    border: 2px solid var(--border-color);
+    background: var(--bg-card);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.theme-toggle:hover {
+    border-color: var(--primary-color);
+    background: var(--bg-card-hover);
+    transform: scale(1.05);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+.theme-icon-dark,
+.theme-icon-light {
+    position: absolute;
+    font-size: 1.2rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-icon-dark {
+    color: var(--primary-color);
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+}
+
+.theme-icon-light {
+    color: #F59E0B;
+    transform: translateY(50px) rotate(180deg);
+    opacity: 0;
+}
+
+.theme-toggle.dark .theme-icon-dark {
+    transform: translateY(-50px) rotate(-180deg);
+    opacity: 0;
+}
+
+.theme-toggle.dark .theme-icon-light {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+}
+
+/* Styles spécifiques pour le dark theme */
+.dark-theme .hero-section {
+    background: linear-gradient(135deg,
+        rgba(15, 23, 42, 1) 0%,
+        rgba(30, 41, 59, 1) 50%,
+        rgba(15, 23, 42, 1) 100%
+    ) !important;
+}
+
+.dark-theme .hero-section::before {
+    background: radial-gradient(
+        ellipse at 20% 30%,
+        rgba(59, 130, 246, 0.15) 0%,
+        transparent 50%
+    ),
+    radial-gradient(
+        ellipse at 80% 70%,
+        rgba(139, 92, 246, 0.12) 0%,
+        transparent 50%
+    ) !important;
+}
+
+.dark-theme .navbar {
+    background: rgba(15, 23, 42, 0.95) !important;
+    border-bottom: 2px solid rgba(59, 130, 246, 0.2) !important;
+}
+
+.dark-theme .navbar-mobile {
+    background: rgba(15, 23, 42, 0.98) !important;
+    border-left: 2px solid rgba(59, 130, 246, 0.2) !important;
+}
+
+.dark-theme .footer {
+    background: #0F172A !important;
+}
+
+/* Tous les éléments avec fonds blancs */
+.dark-theme .card,
+.dark-theme .service-card,
+.dark-theme .feature-card,
+.dark-theme .process-card,
+.dark-theme .process-step,
+.dark-theme .benefit-card,
+.dark-theme .product-card,
+.dark-theme .demo-card,
+.dark-theme .step-card,
+.dark-theme .step-content,
+.dark-theme .timeline-item,
+.dark-theme .methodology-step,
+.dark-theme .pricing-card,
+.dark-theme .testimonial-card,
+.dark-theme .stat-card,
+.dark-theme .info-card,
+.dark-theme .expertise-card {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* Hover states */
+.dark-theme .card:hover,
+.dark-theme .service-card:hover,
+.dark-theme .feature-card:hover,
+.dark-theme .process-card:hover,
+.dark-theme .process-step:hover,
+.dark-theme .benefit-card:hover,
+.dark-theme .product-card:hover,
+.dark-theme .demo-card:hover,
+.dark-theme .expertise-card:hover,
+.dark-theme .step-content:hover,
+.dark-theme .methodology-step:hover {
+    background: var(--bg-card-hover) !important;
+    border-color: var(--border-color-hover) !important;
+}
+
+/* Sections avec fonds clairs */
+.dark-theme section,
+.dark-theme .section {
+    background: transparent !important;
+}
+
+.dark-theme .bg-light,
+.dark-theme .bg-gray,
+.dark-theme .methodology-section {
+    background: var(--bg-secondary) !important;
+}
+
+/* Inputs et formulaires */
+.dark-theme input,
+.dark-theme textarea,
+.dark-theme select {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+.dark-theme input:focus,
+.dark-theme textarea:focus,
+.dark-theme select:focus {
+    border-color: var(--primary-color) !important;
+    background: var(--bg-tertiary) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .theme-toggle {
+        width: 40px;
+        height: 40px;
+    }
+
+    .theme-icon-dark,
+    .theme-icon-light {
+        font-size: 1.1rem;
+    }
+}

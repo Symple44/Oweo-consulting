@@ -117,7 +117,7 @@ class ContactPage extends BasePage {
     
     getTemplate() {
         return `
-            <div class="page-container contact-page">
+            <div class="contact-page">
                 <!-- Page Header -->
                 <section class="page-header">
                     <div class="container">

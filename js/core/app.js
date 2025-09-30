@@ -202,7 +202,12 @@ class OweoApp {
         if (typeof ServicesPage !== 'undefined') {
             this.router.register('services', new ServicesPage());
         }
-        
+
+        // Page produits
+        if (typeof ProductsPage !== 'undefined') {
+            this.router.register('products', new ProductsPage());
+        }
+
         // Page catalogue des démos
         if (typeof DemosPage !== 'undefined') {
             this.router.register('demos', new DemosPage());

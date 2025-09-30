@@ -124,7 +124,7 @@ class OweoClientAccess {
                     </div>
                     <h3>Accès Client Requis</h3>
                     <p>Veuillez saisir votre code d'accès pour continuer</p>
-                    <button class="modal-close" onclick="this.closest('.client-auth-modal').remove()">
+                    <button class="modal-close" onclick="this.closest('.client-auth-modal').remove()" aria-label="Fermer">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>

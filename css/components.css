@@ -42,16 +42,35 @@
     align-items: center;
     justify-content: center;
     gap: var(--space-2);
-    padding: var(--space-3) var(--space-6);
+    padding: 0.875rem 1.75rem;  /* Plus d'espace pour un look premium */
     font-size: var(--font-size-base);
-    font-weight: var(--font-weight-medium);
-    line-height: 1;
+    font-weight: var(--font-weight-semibold);  /* Plus de poids */
+    line-height: 1.2;
     text-decoration: none;
-    border: 1px solid transparent;
-    border-radius: var(--radius-lg);
+    border: 2px solid transparent;  /* Bordure plus épaisse */
+    border-radius: var(--radius-xl);  /* Plus arrondi */
     cursor: pointer;
-    transition: all var(--transition-base);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);  /* Courbe d'accélération professionnelle */
     white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.025em;  /* Meilleur espacement des lettres */
+}
+
+/* Effet de brillance au hover */
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+    left: 100%;
 }
 
 .btn:disabled {
@@ -59,18 +78,24 @@
     cursor: not-allowed;
 }
 
+.btn:disabled::before {
+    display: none;
+}
+
 /* Button variants */
 .btn-primary {
     background: var(--primary-color);
     color: var(--text-on-primary);
     border-color: var(--primary-color);
+    font-weight: var(--font-weight-bold);
+    box-shadow: var(--shadow-primary);
 }
 
 .btn-primary:hover:not(:disabled) {
-    background: var(--primary-dark);
-    border-color: var(--primary-dark);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-lg);
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px 0 rgba(59, 130, 246, 0.35);
 }
 
 .btn-secondary {
@@ -88,11 +113,33 @@
     background: transparent;
     color: var(--primary-color);
     border-color: var(--primary-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-outline::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: var(--primary-color);
+    transform: translate(-50%, -50%);
+    transition: width 0.5s ease, height 0.5s ease;
+    z-index: -1;
 }
 
 .btn-outline:hover:not(:disabled) {
-    background: var(--primary-color);
     color: var(--text-on-primary);
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-primary);
+}
+
+.btn-outline:hover:not(:disabled)::after {
+    width: 300%;
+    height: 300%;
 }
 
 .btn-ghost {
@@ -107,13 +154,25 @@
 
 /* Button sizes */
 .btn-sm {
-    padding: var(--space-2) var(--space-4);
+    padding: 0.625rem 1.25rem;
     font-size: var(--font-size-sm);
 }
 
 .btn-lg {
-    padding: var(--space-4) var(--space-8);
+    padding: 1.125rem 2.5rem;
     font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+}
+
+/* Button avec icône uniquement */
+.btn-icon {
+    padding: 0.75rem;
+    aspect-ratio: 1;
+}
+
+/* Button full width */
+.btn-block {
+    width: 100%;
 }
 
 /* =================================
@@ -123,16 +182,26 @@
 .card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    padding: var(--space-6);
-    box-shadow: var(--shadow-sm);
-    transition: all var(--transition-base);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card:hover {
-    background: var(--bg-card-hover);
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-2px);
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-xl);
+    transform: translateY(-4px);
+}
+
+/* Titres et descriptions dans les cartes */
+.card-title {
+    color: var(--text-primary);
+}
+
+.card-description,
+.card-content {
+    color: var(--text-secondary);
 }
 
 .card-header {

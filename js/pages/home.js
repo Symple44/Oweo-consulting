@@ -13,7 +13,7 @@ class HomePage extends BasePage {
     
     getTemplate() {
         return `
-            <div class="page-container home-page">
+            <div class="home-page">
                 <!-- Hero Section -->
                 <section class="hero-section">
                     <div class="container">

@@ -31,6 +31,22 @@ body {
     flex-direction: column;
 }
 
+/* Force le fond blanc partout */
+#app,
+.page-container,
+.app-container {
+    background: var(--bg-primary);
+}
+
+/* Améliorer les contrastes des textes */
+p, li, span {
+    color: var(--text-secondary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+}
+
 /* Sélection de texte */
 ::selection {
     background: rgba(0, 212, 255, 0.3);

@@ -188,7 +188,7 @@ class ServicesPage extends BasePage {
         }
         
         return `
-            <div class="page-container services-page">
+            <div class="services-page">
                 <!-- Page Header -->
                 <section class="page-header">
                     <div class="container">

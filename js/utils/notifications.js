@@ -134,7 +134,7 @@ class NotificationSystem {
                 </div>
                 
                 ${notification.closable ? `
-                    <button class="notification-close" type="button">
+                    <button class="notification-close" type="button" aria-label="Fermer la notification">
                         <i class="fas fa-times"></i>
                     </button>
                 ` : ''}

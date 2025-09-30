@@ -45,31 +45,38 @@ class OweoNavbar extends BaseComponent {
                         </a>
                         <div class="nav-dropdown">
                             <a href="#" class="nav-link dropdown-toggle">
-                                <i class="fas fa-play-circle"></i>
-                                <span>Démos</span>
+                                <i class="fas fa-box-open"></i>
+                                <span>Nos Produits</span>
                                 <i class="fas fa-chevron-down"></i>
                             </a>
                             <div class="dropdown-menu">
-                                <a href="#" class="dropdown-item client-demo-link" data-demo="chiffrage-demo">
-                                    <i class="fas fa-calculator"></i>
+                                <a href="https://topsteel.tech/" target="_blank" rel="noopener noreferrer" class="dropdown-item">
+                                    <i class="fas fa-brain"></i>
                                     <div>
-                                        <div class="item-title">Outil de Chiffrage</div>
-                                        <div class="item-desc">Chiffrage automatisé</div>
+                                        <div class="item-title">TopSteel <i class="fas fa-external-link-alt" style="font-size: 0.75em; opacity: 0.7;"></i></div>
+                                        <div class="item-desc">ERP innovant couplé à l'IA</div>
                                     </div>
                                 </a>
-                                <a href="#" class="dropdown-item client-demo-link" data-demo="dstv-demo">
-                                    <i class="fas fa-cog"></i>
+                                <a href="https://metaliste.info/" target="_blank" rel="noopener noreferrer" class="dropdown-item">
+                                    <i class="fas fa-building"></i>
                                     <div>
-                                        <div class="item-title">Interface DSTV</div>
-                                        <div class="item-desc">Import/Export CNC</div>
+                                        <div class="item-title">MétaListe <i class="fas fa-external-link-alt" style="font-size: 0.75em; opacity: 0.7;"></i></div>
+                                        <div class="item-desc">Annuaire de la métallurgie</div>
+                                    </div>
+                                </a>
+                                <a href="https://vega.pro/" target="_blank" rel="noopener noreferrer" class="dropdown-item">
+                                    <i class="fas fa-industry"></i>
+                                    <div>
+                                        <div class="item-title">V-Steel <i class="fas fa-external-link-alt" style="font-size: 0.75em; opacity: 0.7;"></i></div>
+                                        <div class="item-desc">Gestion production (Partenaire)</div>
                                     </div>
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a href="#" class="dropdown-item" data-page="demos">
+                                <a href="#" class="dropdown-item" data-page="products">
                                     <i class="fas fa-th-large"></i>
                                     <div>
-                                        <div class="item-title">Toutes les démos</div>
-                                        <div class="item-desc">Catalogue complet</div>
+                                        <div class="item-title">Tous nos produits</div>
+                                        <div class="item-desc">Découvrez notre gamme</div>
                                     </div>
                                 </a>
                             </div>
@@ -82,10 +89,6 @@ class OweoNavbar extends BaseComponent {
                     
                     <!-- Actions (Desktop) -->
                     <div class="navbar-actions">
-                        <button class="btn btn-outline btn-sm" id="client-access-btn">
-                            <i class="fas fa-user-lock"></i>
-                            <span>Accès Client</span>
-                        </button>
                         <button class="btn btn-primary btn-sm" data-page="contact">
                             <i class="fas fa-phone"></i>
                             <span>Nous Contacter</span>
@@ -93,10 +96,10 @@ class OweoNavbar extends BaseComponent {
                     </div>
                     
                     <!-- Mobile Menu Toggle -->
-                    <button class="navbar-toggle" id="mobile-menu-toggle">
-                        <span class="toggle-line"></span>
-                        <span class="toggle-line"></span>
-                        <span class="toggle-line"></span>
+                    <button class="navbar-toggle" id="mobile-menu-toggle" aria-label="Menu" aria-expanded="false">
+                        <span class="toggle-line" aria-hidden="true"></span>
+                        <span class="toggle-line" aria-hidden="true"></span>
+                        <span class="toggle-line" aria-hidden="true"></span>
                     </button>
                 </div>
                 
@@ -113,20 +116,24 @@ class OweoNavbar extends BaseComponent {
                                 <span>Services</span>
                             </a>
                             
-                            <!-- Mobile Demos Section -->
+                            <!-- Mobile Products Section -->
                             <div class="mobile-nav-section">
                                 <div class="mobile-nav-title">
-                                    <i class="fas fa-play-circle"></i>
-                                    Démonstrations
+                                    <i class="fas fa-box-open"></i>
+                                    Nos Produits
                                 </div>
                                 <div class="mobile-nav-items">
-                                    <a href="#" class="mobile-nav-link client-demo-link" data-demo="chiffrage-demo">
-                                        <i class="fas fa-calculator"></i>
-                                        <span>Outil de Chiffrage</span>
+                                    <a href="https://topsteel.tech/" target="_blank" rel="noopener noreferrer" class="mobile-nav-link">
+                                        <i class="fas fa-brain"></i>
+                                        <span>TopSteel <i class="fas fa-external-link-alt" style="font-size: 0.75em;"></i></span>
                                     </a>
-                                    <a href="#" class="mobile-nav-link client-demo-link" data-demo="dstv-demo">
-                                        <i class="fas fa-cog"></i>
-                                        <span>Interface DSTV</span>
+                                    <a href="https://metaliste.info/" target="_blank" rel="noopener noreferrer" class="mobile-nav-link">
+                                        <i class="fas fa-building"></i>
+                                        <span>MétaListe <i class="fas fa-external-link-alt" style="font-size: 0.75em;"></i></span>
+                                    </a>
+                                    <a href="https://vega.pro/" target="_blank" rel="noopener noreferrer" class="mobile-nav-link">
+                                        <i class="fas fa-industry"></i>
+                                        <span>V-Steel <i class="fas fa-external-link-alt" style="font-size: 0.75em;"></i></span>
                                     </a>
                                 </div>
                             </div>
@@ -138,10 +145,6 @@ class OweoNavbar extends BaseComponent {
                         </div>
                         
                         <div class="mobile-actions">
-                            <button class="btn btn-outline btn-block" id="mobile-client-access">
-                                <i class="fas fa-user-lock"></i>
-                                Accès Client
-                            </button>
                             <button class="btn btn-primary btn-block" data-page="contact">
                                 <i class="fas fa-phone"></i>
                                 Nous Contacter
@@ -189,11 +192,7 @@ class OweoNavbar extends BaseComponent {
             }
         });
         
-        // Accès client
-        const clientAccessBtns = this.$$('#client-access-btn, #mobile-client-access');
-        clientAccessBtns.forEach(btn => {
-            this.addEventHandler(btn, 'click', () => this.showClientAccess());
-        });
+        // Accès client supprimé
         
         // Gestion du scroll
         if (this.config.hideOnScroll) {

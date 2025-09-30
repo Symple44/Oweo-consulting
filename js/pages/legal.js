@@ -48,7 +48,7 @@ class LegalPage extends BasePage {
         const content = this.getContentByType();
         
         return `
-            <div class="page-container legal-page">
+            <div class="legal-page">
                 <!-- Header -->
                 <section class="legal-header page-header">
                     <div class="container">
