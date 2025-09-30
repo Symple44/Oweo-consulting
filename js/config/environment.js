@@ -108,7 +108,7 @@
     const forcedEnv = urlParams.get('env');
     if (forcedEnv && environments[forcedEnv]) {
         currentEnvironment = environments[forcedEnv];
-        console.warn(`⚠️ Environment forcé à: ${forcedEnv}`);
+        logger.warn(`⚠️ Environment forcé à: ${forcedEnv}`);
     }
     
     // Exposer la configuration
@@ -140,7 +140,7 @@
         // Logger conditionnel
         log(...args) {
             if (currentEnvironment.debug) {
-                console.log('[ENV]', ...args);
+                logger.log('[ENV]', ...args);
             }
         },
         
@@ -154,9 +154,9 @@
                 features: currentEnvironment.features
             };
             
-            console.group('🌍 Environment Configuration');
-            console.table(info);
-            console.groupEnd();
+            logger.group('Environment Configuration');
+            logger.table(info);
+            logger.groupEnd();
         }
     };
     

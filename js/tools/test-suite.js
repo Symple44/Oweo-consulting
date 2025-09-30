@@ -16,8 +16,8 @@ class OweoTestSuite {
     }
     
     async runAll() {
-        console.log('🧪 Démarrage de la suite de tests Oweo...');
-        console.log('==========================================');
+        logger.log('🧪 Démarrage de la suite de tests Oweo...');
+        logger.log('==========================================');
         
         this.startTime = Date.now();
         this.results = [];
@@ -35,7 +35,7 @@ class OweoTestSuite {
                     error: null
                 });
                 
-                console.log(`✅ ${test.name} (${duration}ms)`);
+                logger.log(`✅ ${test.name} (${duration}ms)`);
                 
             } catch (error) {
                 const duration = Date.now() - start;
@@ -47,7 +47,7 @@ class OweoTestSuite {
                     error: error.message
                 });
                 
-                console.log(`❌ ${test.name} - ${error.message} (${duration}ms)`);
+                logger.log(`❌ ${test.name} - ${error.message} (${duration}ms)`);
             }
         }
         
@@ -60,20 +60,20 @@ class OweoTestSuite {
         const passed = this.results.filter(r => r.status === 'PASS').length;
         const failed = this.results.filter(r => r.status === 'FAIL').length;
         
-        console.log('\n==========================================');
-        console.log('📊 RAPPORT DE TESTS');
-        console.log('==========================================');
-        console.log(`⏱️  Durée totale: ${totalDuration}ms`);
-        console.log(`✅ Tests réussis: ${passed}`);
-        console.log(`❌ Tests échoués: ${failed}`);
-        console.log(`📈 Taux de réussite: ${Math.round((passed / this.tests.length) * 100)}%`);
+        logger.log('\n==========================================');
+        logger.log('📊 RAPPORT DE TESTS');
+        logger.log('==========================================');
+        logger.log(`⏱️  Durée totale: ${totalDuration}ms`);
+        logger.log(`✅ Tests réussis: ${passed}`);
+        logger.log(`❌ Tests échoués: ${failed}`);
+        logger.log(`📈 Taux de réussite: ${Math.round((passed / this.tests.length) * 100)}%`);
         
         if (failed > 0) {
-            console.log('\n🔍 Détails des échecs:');
+            logger.log('\n🔍 Détails des échecs:');
             this.results
                 .filter(r => r.status === 'FAIL')
                 .forEach(result => {
-                    console.log(`  ❌ ${result.name}: ${result.error}`);
+                    logger.log(`  ❌ ${result.name}: ${result.error}`);
                 });
         }
         
@@ -226,7 +226,7 @@ class OweoTestSuite {
             // Vérifier le nombre d'éléments DOM (ne doit pas être excessif)
             const domElements = document.querySelectorAll('*').length;
             if (domElements > 1000) {
-                console.warn(`⚠️ Nombre élevé d'éléments DOM: ${domElements}`);
+                logger.warn(`⚠️ Nombre élevé d'éléments DOM: ${domElements}`);
             }
             
             // Vérifier les ressources chargées
@@ -235,7 +235,7 @@ class OweoTestSuite {
                 const slowResources = resources.filter(r => r.duration > 1000);
                 
                 if (slowResources.length > 0) {
-                    console.warn(`⚠️ Ressources lentes détectées:`, slowResources.map(r => r.name));
+                    logger.warn(`⚠️ Ressources lentes détectées:`, slowResources.map(r => r.name));
                 }
             }
         });
@@ -256,7 +256,7 @@ class OweoTestSuite {
             });
             
             if (unlabeledInputs.length > 0) {
-                console.warn(`⚠️ ${unlabeledInputs.length} champs sans label détectés`);
+                logger.warn(`⚠️ ${unlabeledInputs.length} champs sans label détectés`);
             }
         });
     }

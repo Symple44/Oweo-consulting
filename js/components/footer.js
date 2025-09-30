@@ -170,7 +170,7 @@ class OweoFooter extends BaseComponent {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const page = link.dataset.page;
-                console.log(`🔗 Footer navigation to: ${page}`); // ⭐ AJOUT: Debug
+                logger.log(`🔗 Footer navigation to: ${page}`);
                 this.navigateTo(page);
             });
         });
@@ -190,7 +190,7 @@ class OweoFooter extends BaseComponent {
         socialLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 const platform = link.getAttribute('aria-label');
-                console.log(`Social link clicked: ${platform}`);
+                logger.log(`Social link clicked: ${platform}`);
                 
                 // Analytics tracking
                 if (window.AppConfig?.analytics?.enabled && typeof gtag !== 'undefined') {
@@ -231,10 +231,10 @@ class OweoFooter extends BaseComponent {
     
     navigateTo(page) {
         if (window.app && window.app.router) {
-            console.log(`📄 Footer navigating to: ${page}`); // ⭐ AJOUT: Debug
+            logger.log(`📄 Footer navigating to: ${page}`);
             window.app.router.navigate(page);
         } else {
-            console.error('❌ Router not available'); // ⭐ AJOUT: Debug
+            logger.error('Router not available');
         }
     }
     
@@ -258,7 +258,7 @@ class OweoFooter extends BaseComponent {
     // Vérifier la cohérence des informations
     validateInfo() {
         if (!this.companyInfo) {
-            console.warn('⚠️ Footer: CompanyInfo non disponible');
+            logger.warn('⚠️ Footer: CompanyInfo non disponible');
             return false;
         }
         
@@ -271,7 +271,7 @@ class OweoFooter extends BaseComponent {
         
         const failures = checks.filter(check => !check.test);
         if (failures.length > 0) {
-            console.warn('⚠️ Footer: Validation échouée:', failures.map(f => f.msg));
+            logger.warn('⚠️ Footer: Validation échouée:', failures.map(f => f.msg));
             return false;
         }
         

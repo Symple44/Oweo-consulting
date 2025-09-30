@@ -73,8 +73,8 @@ class SEOManager {
         if (meta.hreflang) {
             this.updateHreflang(meta.hreflang);
         }
-        
-        console.log(`🔍 SEO updated for: ${meta.title}`);
+
+        logger.debug(`SEO updated for: ${meta.title}`);
     }
     
     /**
@@ -471,8 +471,8 @@ Host: ${baseUrl.replace('https://', '')}`;
                 subtree: true
             });
         }
-        
-        console.log('🔍 SEO Manager initialized');
+
+        logger.info('SEO Manager initialized');
     }
 }
 

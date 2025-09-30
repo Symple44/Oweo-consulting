@@ -36,17 +36,17 @@ class ValidationTools {
         // Résultats
         const passed = checks.filter(check => check.status === 'pass').length;
         const failed = checks.filter(check => check.status === 'fail').length;
-        
-        console.group('🔍 Validation de l\'intégrité du site');
-        console.log(`✅ Réussis: ${passed}`);
-        console.log(`❌ Échoués: ${failed}`);
-        
+
+        logger.group('Validation de l\'intégrité du site', false);
+        logger.log(`Réussis: ${passed}`);
+        logger.log(`Échoués: ${failed}`);
+
         checks.forEach(check => {
             const icon = check.status === 'pass' ? '✅' : '❌';
-            console.log(`${icon} ${check.name}: ${check.message}`);
+            logger.log(`${icon} ${check.name}: ${check.message}`);
         });
-        
-        console.groupEnd();
+
+        logger.groupEnd();
         
         return {
             total: checks.length,

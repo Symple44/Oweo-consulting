@@ -205,7 +205,7 @@ class DemoSearch extends BaseComponent {
             this.log('Search data loaded:', this.searchData);
             
         } catch (error) {
-            console.error('❌ Error loading search data:', error);
+            logger.error('Error loading search data:', error);
             this.searchData = await this.getDefaultSearchData();
         }
     }
@@ -340,7 +340,7 @@ class DemoSearch extends BaseComponent {
             this.addToHistory(query);
             
         } catch (error) {
-            console.error('❌ Search error:', error);
+            logger.error('Search error:', error);
             this.showError('Erreur lors de la recherche');
         } finally {
             this.setSearching(false);

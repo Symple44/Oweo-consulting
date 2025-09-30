@@ -316,7 +316,7 @@ class ${className} extends BaseDemo {
     }
     
     complete() {
-        console.log('🎉 Démo ${title} terminée');
+        logger.log('🎉 Démo ${title} terminée');
         
         // Notification
         if (window.notifications) {
@@ -340,7 +340,7 @@ class ${className} extends BaseDemo {
     }
     
     exportPDF() {
-        console.log('📄 Export PDF ${title}');
+        logger.log('📄 Export PDF ${title}');
         // Implémentez votre logique d'export PDF
         if (window.notifications) {
             window.notifications.info('Export PDF en cours...');
@@ -348,7 +348,7 @@ class ${className} extends BaseDemo {
     }
     
     exportExcel() {
-        console.log('📊 Export Excel ${title}');
+        logger.log('📊 Export Excel ${title}');
         // Implémentez votre logique d'export Excel
         if (window.notifications) {
             window.notifications.info('Export Excel en cours...');
@@ -364,7 +364,7 @@ if (typeof window !== 'undefined') {
     document.addEventListener('DOMContentLoaded', () => {
         if (window.app && window.app.router) {
             window.app.router.register('${id}', new ${className}());
-            console.log('✅ Démo ${title} enregistrée');
+            logger.log('✅ Démo ${title} enregistrée');
         }
     });
 }`;
@@ -388,7 +388,7 @@ if (typeof window !== 'undefined') {
             this.updateView();
             
         } catch (error) {
-            console.error('Erreur chargement données:', error);
+            logger.error('Erreur chargement données:', error);
             if (window.notifications) {
                 window.notifications.error('Impossible de charger les données');
             }
@@ -427,7 +427,7 @@ if (typeof window !== 'undefined') {
     refreshData() {
         // Mettre à jour les données en temps réel
         const timestamp = new Date().toLocaleTimeString();
-        console.log(\`🔄 Mise à jour données \${timestamp}\`);
+        logger.log(\`🔄 Mise à jour données \${timestamp}\`);
         
         // Mettre à jour l'interface si nécessaire
         const statusEl = document.querySelector('.real-time-status');
@@ -707,7 +707,7 @@ if (typeof window !== 'undefined') {
     // Interface utilisateur pour générer des démos
     static showGenerator() {
         if (!window.modalSystem) {
-            console.error('ModalSystem requis pour le générateur');
+            logger.error('ModalSystem requis pour le générateur');
             return;
         }
         

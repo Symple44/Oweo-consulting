@@ -29,7 +29,7 @@ class EventBus {
         
         // Vérifier la limite de listeners
         if (listeners.length >= this.maxListeners) {
-            console.warn(`⚠️ Maximum listeners (${this.maxListeners}) reached for event: ${event}`);
+            logger.warn(`⚠️ Maximum listeners (${this.maxListeners}) reached for event: ${event}`);
         }
         
         const listener = {
@@ -48,7 +48,7 @@ class EventBus {
         }
         
         if (this.debugMode) {
-            console.log(`📡 EventBus: Listener added for '${event}' (id: ${listener.id})`);
+            logger.log(`📡 EventBus: Listener added for '${event}' (id: ${listener.id})`);
         }
         
         // Retourner une fonction de désabonnement
@@ -82,7 +82,7 @@ class EventBus {
             const removed = listeners.splice(index, 1)[0];
             
             if (this.debugMode) {
-                console.log(`📡 EventBus: Listener removed for '${event}' (id: ${removed.id})`);
+                logger.log(`📡 EventBus: Listener removed for '${event}' (id: ${removed.id})`);
             }
         }
         
@@ -101,7 +101,7 @@ class EventBus {
     emit(event, data) {
         if (!this.events.has(event)) {
             if (this.debugMode) {
-                console.log(`📡 EventBus: No listeners for '${event}'`);
+                logger.log(`📡 EventBus: No listeners for '${event}'`);
             }
             return false;
         }
@@ -110,7 +110,7 @@ class EventBus {
         let executed = 0;
         
         if (this.debugMode) {
-            console.log(`📡 EventBus: Emitting '${event}' to ${listeners.length} listeners`, data);
+            logger.log(`📡 EventBus: Emitting '${event}' to ${listeners.length} listeners`, data);
         }
         
         for (let i = 0; i < listeners.length; i++) {
@@ -125,7 +125,7 @@ class EventBus {
                     this.off(event, listener.id);
                 }
             } catch (error) {
-                console.error(`❌ EventBus: Error in listener for '${event}':`, error);
+                logger.error(`EventBus: Error in listener for '${event}':`, error);
             }
         }
         
@@ -144,7 +144,7 @@ class EventBus {
         }
         
         if (this.debugMode) {
-            console.log(`📡 EventBus: ${event ? `All listeners for '${event}'` : 'All listeners'} removed`);
+            logger.log(`📡 EventBus: ${event ? `All listeners for '${event}'` : 'All listeners'} removed`);
         }
     }
     
@@ -203,7 +203,7 @@ class EventBus {
      */
     setDebugMode(enabled) {
         this.debugMode = enabled;
-        console.log(`📡 EventBus: Debug mode ${enabled ? 'enabled' : 'disabled'}`);
+        logger.log(`📡 EventBus: Debug mode ${enabled ? 'enabled' : 'disabled'}`);
     }
     
     /**

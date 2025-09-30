@@ -191,7 +191,7 @@
     max-width: 500px;
     margin: 1rem;
     background: var(--bg-card);
-    border: 1px solid rgba(0, 212, 255, 0.3);
+    border: 1px solid var(--border-strong);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-2xl);
     overflow: hidden;
@@ -206,9 +206,7 @@
 .client-auth-modal .modal-header {
     text-align: center;
     padding: var(--space-8);
-    background: linear-gradient(135deg, 
-        rgba(0, 212, 255, 0.1) 0%, 
-        rgba(124, 58, 237, 0.1) 100%);
+    background: var(--gradient-card);
     border-bottom: 1px solid var(--border-color);
     position: relative;
 }
@@ -266,7 +264,7 @@
 .client-auth-modal .form-control:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+    box-shadow: var(--shadow-glow-primary);
 }
 
 .client-auth-modal .form-help {
@@ -283,9 +281,10 @@
     font-size: 0.875rem;
     margin-bottom: var(--space-4);
     padding: var(--space-3);
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.2);
+    background: var(--error-light);
+    border: 1px solid var(--error-color);
     border-radius: var(--radius-md);
+    opacity: 0.3;
 }
 
 .form-actions {
@@ -303,16 +302,17 @@
 }
 
 .info-card {
-    background: rgba(59, 130, 246, 0.1);
-    border: 1px solid rgba(59, 130, 246, 0.2);
+    background: var(--info-light);
+    border: 1px solid var(--info-color);
     border-radius: var(--radius-lg);
     padding: var(--space-4);
     margin-bottom: var(--space-6);
+    opacity: 0.3;
 }
 
 .info-card h4 {
     margin: 0 0 var(--space-2);
-    color: #3b82f6;
+    color: var(--info-color);
     font-size: 1rem;
 }
 
@@ -383,25 +383,29 @@
 
 .confirm-icon.warning,
 .alert-icon.warning {
-    background: rgba(245, 158, 11, 0.2);
-    color: #f59e0b;
+    background: var(--warning-light);
+    color: var(--warning-color);
+    opacity: 0.6;
 }
 
 .confirm-icon.danger,
 .alert-icon.error {
-    background: rgba(239, 68, 68, 0.2);
-    color: #ef4444;
+    background: var(--error-light);
+    color: var(--error-color);
+    opacity: 0.6;
 }
 
 .confirm-icon.info,
 .alert-icon.info {
-    background: rgba(59, 130, 246, 0.2);
-    color: #3b82f6;
+    background: var(--info-light);
+    color: var(--info-color);
+    opacity: 0.6;
 }
 
 .alert-icon.success {
-    background: rgba(16, 185, 129, 0.2);
-    color: #10b981;
+    background: var(--success-light);
+    color: var(--success-color);
+    opacity: 0.6;
 }
 
 .confirm-content p,

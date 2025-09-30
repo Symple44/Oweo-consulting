@@ -372,7 +372,7 @@ class CGVPage extends BasePage {
             try {
                 await this.loadPDFLibraries();
             } catch (error) {
-                console.error('Impossible de charger les bibliothèques PDF:', error);
+                logger.error('Impossible de charger les bibliothèques PDF:', error);
                 this.fallbackToPrint();
                 return;
             }
@@ -408,8 +408,8 @@ class CGVPage extends BasePage {
             }
 
         } catch (error) {
-            console.error('Erreur lors de la génération du PDF:', error);
-            
+            logger.error('Erreur lors de la génération du PDF:', error);
+
             if (window.notifications) {
                 window.notifications.error('Erreur lors de la génération du PDF. Utilisation de l\'impression navigateur.');
             }
@@ -987,7 +987,7 @@ class CGVPage extends BasePage {
         // Debug: vérifier que le sticky fonctionne
         if (navSticky) {
             const computedStyle = window.getComputedStyle(navSticky);
-            console.log('🔧 Menu sticky debug:', {
+            logger.log('🔧 Menu sticky debug:', {
                 position: computedStyle.position,
                 top: computedStyle.top,
                 display: computedStyle.display,
@@ -1053,7 +1053,7 @@ class CGVPage extends BasePage {
         const updateActiveLink = (activeId) => {
             if (!activeId || activeId === currentActiveId) return;
             
-            console.log('🎯 Active section:', activeId); // Debug
+            logger.log('🎯 Active section:', activeId); // Debug
             
             currentActiveId = activeId;
             
@@ -1143,7 +1143,7 @@ class CGVPage extends BasePage {
             if (initialActiveId) {
                 updateActiveLink(initialActiveId);
             }
-            console.log('🚀 Scroll spy initialized'); // Debug
+            logger.log('🚀 Scroll spy initialized'); // Debug
         }, 200);
         
         // Re-calculer lors du redimensionnement

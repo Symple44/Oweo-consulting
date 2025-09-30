@@ -30,7 +30,7 @@ class BaseComponent {
      */
     async init() {
         if (this.initialized) {
-            console.warn(`⚠️ Component ${this.constructor.name} already initialized`);
+            logger.warn(`⚠️ Component ${this.constructor.name} already initialized`);
             return;
         }
         
@@ -304,7 +304,7 @@ class BaseComponent {
      */
     log(...args) {
         if (this.debugMode) {
-            console.log(`[${this.constructor.name}#${this.id}]`, ...args);
+            logger.log(`[${this.constructor.name}#${this.id}]`, ...args);
         }
     }
     

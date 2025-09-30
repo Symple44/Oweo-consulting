@@ -660,7 +660,7 @@ class DSTVDemo extends BaseDemo {
     }
     
     handleFileUpload(file) {
-        console.log('📁 Fichier DSTV uploadé:', file.name);
+        logger.log('📁 Fichier DSTV uploadé:', file.name);
         this.dstvData.file = file;
         this.simulateFileProcessing();
     }
@@ -693,7 +693,7 @@ class DSTVDemo extends BaseDemo {
     }
     
     loadSampleData() {
-        console.log('📋 Chargement des données d\'exemple');
+        logger.log('📋 Chargement des données d\'exemple');
         this.dstvData.elements = [...this.sampleElements];
         this.dstvData.parsed = true;
         
@@ -774,7 +774,7 @@ class DSTVDemo extends BaseDemo {
     }
     
     runValidation() {
-        console.log('🔍 Validation des données DSTV');
+        logger.log('🔍 Validation des données DSTV');
         if (window.notifications) {
             window.notifications.info('Validation en cours...');
             setTimeout(() => {
@@ -784,7 +784,7 @@ class DSTVDemo extends BaseDemo {
     }
     
     autoCorrect() {
-        console.log('🔧 Correction automatique');
+        logger.log('🔧 Correction automatique');
         if (window.notifications) {
             window.notifications.success('Corrections appliquées automatiquement');
         }
@@ -799,18 +799,18 @@ class DSTVDemo extends BaseDemo {
         });
         document.querySelector(`[onclick="currentDemo.selectMachineType('${type}')"]`)?.classList.add('active');
         
-        console.log('⚙️ Machine sélectionnée:', type);
+        logger.log('⚙️ Machine sélectionnée:', type);
     }
     
     optimizeSequence() {
-        console.log('🎯 Optimisation de la séquence');
+        logger.log('🎯 Optimisation de la séquence');
         if (window.notifications) {
             window.notifications.success('Séquence optimisée - Gain de 15% sur le temps d\'usinage');
         }
     }
     
     previewCutting() {
-        console.log('👁️ Aperçu 3D de l\'usinage');
+        logger.log('👁️ Aperçu 3D de l\'usinage');
         if (window.notifications) {
             window.notifications.info('Ouverture de l\'aperçu 3D...');
         }
@@ -874,14 +874,14 @@ EN  002`;
     }
     
     downloadFiles() {
-        console.log('💾 Téléchargement des fichiers');
+        logger.log('💾 Téléchargement des fichiers');
         if (window.notifications) {
             window.notifications.success('Téléchargement démarré - 3 fichiers');
         }
     }
     
     sendToMachine() {
-        console.log('📤 Envoi vers la machine');
+        logger.log('📤 Envoi vers la machine');
         if (window.notifications) {
             window.notifications.info('Connexion à la machine en cours...');
             setTimeout(() => {
@@ -891,7 +891,7 @@ EN  002`;
     }
     
     saveProject() {
-        console.log('💾 Sauvegarde du projet');
+        logger.log('💾 Sauvegarde du projet');
         if (window.notifications) {
             window.notifications.success('Projet sauvegardé avec succès');
         }

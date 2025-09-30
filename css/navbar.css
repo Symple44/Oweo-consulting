@@ -10,10 +10,10 @@
     top: 0;
     left: 0;
     right: 0;
-    background: rgba(241, 245, 249, 1);
+    background: var(--bg-secondary);
     -webkit-backdrop-filter: blur(12px) saturate(180%);
     backdrop-filter: blur(12px) saturate(180%);
-    border-bottom: 2px solid rgba(59, 130, 246, 0.15);
+    border-bottom: 2px solid var(--border-color);
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     z-index: 1000;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -28,11 +28,11 @@
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(90deg, 
+    background: linear-gradient(90deg,
         transparent 0%,
-        #00d4ff 20%,
-        #7c3aed 50%,
-        #00d4ff 80%,
+        var(--primary-color) 20%,
+        var(--secondary-color) 50%,
+        var(--primary-color) 80%,
         transparent 100%
     );
     opacity: 0;
@@ -52,7 +52,7 @@
 
 /* États de la navbar */
 .navbar.scrolled {
-    background: rgba(255, 255, 255, 1);
+    background: var(--bg-primary);
     box-shadow: var(--shadow-md);
     border-bottom-color: var(--border-strong);
 }
@@ -278,7 +278,7 @@
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #00d4ff, #7c3aed);
+    background: var(--gradient-primary);
     color: white;
 }
 
@@ -307,8 +307,8 @@
 
 .btn-outline {
     background: transparent;
-    color: #00d4ff;
-    border: 1px solid #00d4ff;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
     position: relative;
 }
 
@@ -319,7 +319,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: #00d4ff;
+    background: var(--primary-color);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -327,7 +327,7 @@
 }
 
 .btn-outline:hover {
-    color: #1a1a2e;
+    color: var(--bg-primary);
 }
 
 .btn-outline:hover::before {
@@ -432,7 +432,7 @@
     left: 0;
     width: 0%;
     height: 3px;
-    background: linear-gradient(90deg, #00d4ff, #7c3aed);
+    background: var(--gradient-primary);
     transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
 }
 
@@ -636,7 +636,7 @@
     left: 0;
     right: 0;
     height: 2px;
-    background: #10b981;
+    background: var(--success-color);
 }
 
 .notification-error {
@@ -650,7 +650,7 @@
     left: 0;
     right: 0;
     height: 2px;
-    background: #ef4444;
+    background: var(--error-color);
 }
 
 .notification-close {

@@ -13,7 +13,7 @@ class ConsistencyChecker {
      * Vérifier la cohérence de toutes les configurations
      */
     checkAll() {
-        console.log('🔍 Démarrage de la vérification de cohérence...');
+        logger.log('🔍 Démarrage de la vérification de cohérence...');
         
         this.issues = [];
         this.warnings = [];
@@ -224,43 +224,43 @@ class ConsistencyChecker {
      * Générer le rapport
      */
     generateReport() {
-        console.log('\n📊 RAPPORT DE COHÉRENCE');
-        console.log('========================');
+        logger.log('\n📊 RAPPORT DE COHÉRENCE');
+        logger.log('========================');
         
         if (this.issues.length === 0) {
-            console.log('✅ Aucun problème détecté');
+            logger.log('✅ Aucun problème détecté');
         } else {
-            console.log(`❌ ${this.issues.length} problème(s) détecté(s):`);
+            logger.log(`❌ ${this.issues.length} problème(s) détecté(s):`);
             this.issues.forEach(issue => {
-                console.log(`  ❌ ${issue.message}`);
+                logger.log(`  ❌ ${issue.message}`);
             });
         }
         
         if (this.warnings.length > 0) {
-            console.log(`\n⚠️ ${this.warnings.length} avertissement(s):`);
+            logger.log(`\n⚠️ ${this.warnings.length} avertissement(s):`);
             this.warnings.forEach(warning => {
-                console.log(`  ⚠️ ${warning.message}`);
+                logger.log(`  ⚠️ ${warning.message}`);
             });
         }
         
         if (this.infos.length > 0) {
-            console.log(`\nℹ️ Informations (${this.infos.length}):`);
+            logger.log(`\nℹ️ Informations (${this.infos.length}):`);
             this.infos.forEach(info => {
-                console.log(`  ℹ️ ${info.message}`);
+                logger.log(`  ℹ️ ${info.message}`);
             });
         }
         
-        console.log('\n========================');
+        logger.log('\n========================');
         
         const score = this.calculateScore();
-        console.log(`📈 Score de cohérence: ${score}%`);
+        logger.log(`📈 Score de cohérence: ${score}%`);
         
         if (score < 80) {
-            console.log('🔴 Score faible - corrections recommandées');
+            logger.log('🔴 Score faible - corrections recommandées');
         } else if (score < 95) {
-            console.log('🟡 Score correct - améliorations possibles');
+            logger.log('🟡 Score correct - améliorations possibles');
         } else {
-            console.log('🟢 Excellente cohérence');
+            logger.log('🟢 Excellente cohérence');
         }
     }
     
@@ -282,12 +282,12 @@ class ConsistencyChecker {
      * Mode d'écoute continue
      */
     startMonitoring(interval = 10000) {
-        console.log(`🔄 Démarrage de la surveillance (${interval/1000}s)`);
+        logger.log(`🔄 Démarrage de la surveillance (${interval/1000}s)`);
         
         setInterval(() => {
             const result = this.checkAll();
             if (!result.success) {
-                console.warn('🚨 Nouvelles incohérences détectées');
+                logger.warn('🚨 Nouvelles incohérences détectées');
             }
         }, interval);
     }
@@ -329,8 +329,8 @@ if (window.location.hostname === 'localhost') {
             window.checkConsistency = () => checker.checkAll();
             window.startMonitoring = () => checker.startMonitoring();
             
-            console.log('💡 Utilisez checkConsistency() pour relancer une vérification');
-            console.log('💡 Utilisez startMonitoring() pour surveiller en continu');
+            logger.log('💡 Utilisez checkConsistency() pour relancer une vérification');
+            logger.log('💡 Utilisez startMonitoring() pour surveiller en continu');
         }, 2000);
     });
 }

@@ -18,7 +18,7 @@ class BasePage {
         await this.onInit();
         
         this.initialized = true;
-        console.log(`✅ Page ${this.id} initialized`);
+        logger.log(`✅ Page ${this.id} initialized`);
     }
     
     async onInit() {

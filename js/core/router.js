@@ -37,7 +37,7 @@ class OweoRouter {
         const initialRoute = this.getRouteFromURL();
         await this.navigate(initialRoute, false);
         
-        console.log('🧭 Router initialized');
+        logger.log('🧭 Router initialized');
     }
     
     /**
@@ -52,7 +52,7 @@ class OweoRouter {
             this.routes.set(path, component);
         }
         
-        console.log(`🛤️ Route registered: ${path}`);
+        logger.log(`🛤️ Route registered: ${path}`);
     }
     
     /**
@@ -60,7 +60,7 @@ class OweoRouter {
      */
     async navigate(path, pushState = true) {
         if (this.isNavigating) {
-            console.warn('Navigation already in progress');
+            logger.warn('Navigation already in progress');
             return;
         }
         
@@ -69,7 +69,7 @@ class OweoRouter {
         
         // Vérifier si la route existe
         if (!this.routes.has(path)) {
-            console.warn(`Route not found: ${path}`);
+            logger.warn(`Route not found: ${path}`);
             if (this.config.notFoundRedirect && path !== this.config.notFoundRedirect) {
                 return this.navigate(this.config.notFoundRedirect, pushState);
             }
@@ -101,7 +101,7 @@ class OweoRouter {
             this.emitRouteChange(route);
             
         } catch (error) {
-            console.error('Navigation error:', error);
+            logger.error('Navigation error:', error);
             this.handleNavigationError(error, path);
         } finally {
             this.isNavigating = false;
@@ -273,7 +273,7 @@ class OweoRouter {
      * Hooks de navigation
      */
     async onBeforeNavigate(route) {
-        console.log(`🧭 Navigating to: ${route.path}`);
+        logger.log(`🧭 Navigating to: ${route.path}`);
         
         if (this.eventBus) {
             this.eventBus.emit('beforeNavigate', route);
@@ -281,7 +281,7 @@ class OweoRouter {
     }
     
     async onAfterNavigate(route) {
-        console.log(`✅ Navigation completed: ${route.path}`);
+        logger.log(`✅ Navigation completed: ${route.path}`);
         
         // Scroll vers le haut
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -311,8 +311,8 @@ class OweoRouter {
      * Gérer les erreurs de navigation
      */
     handleNavigationError(error, path) {
-        console.error(`Navigation error for ${path}:`, error);
-        
+        logger.error(`Navigation error for ${path}:`, error);
+
         // Tentative de navigation vers une page d'erreur ou accueil
         if (path !== 'home' && this.routes.has('home')) {
             setTimeout(() => this.navigate('home'), 100);
@@ -450,7 +450,7 @@ class OweoRouter {
         this.currentRoute = null;
         this.previousRoute = null;
         
-        console.log('🧭 Router destroyed');
+        logger.log('🧭 Router destroyed');
     }
 }
 

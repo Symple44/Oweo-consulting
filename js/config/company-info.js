@@ -222,9 +222,9 @@ window.CompanyInfo = {
 (function() {
     const validation = window.CompanyInfo.validate();
     if (!validation.valid) {
-        console.warn('⚠️ Configuration société invalide:', validation.issues);
+        logger.warn('⚠️ Configuration société invalide:', validation.issues);
     } else {
-        console.log('✅ Configuration société validée');
-        console.log('📍 Statut:', window.CompanyInfo.getBusinessStatus());
+        logger.log('✅ Configuration société validée');
+        logger.log('📍 Statut:', window.CompanyInfo.getBusinessStatus());
     }
 })();

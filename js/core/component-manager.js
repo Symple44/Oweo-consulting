@@ -20,7 +20,7 @@ class ComponentManager {
      */
     async register(name, component, options = {}) {
         if (this.components.has(name)) {
-            console.warn(`⚠️ Component '${name}' already registered, replacing...`);
+            logger.warn(`⚠️ Component '${name}' already registered, replacing...`);
         }
         
         const componentWrapper = {
@@ -38,7 +38,7 @@ class ComponentManager {
         this.components.set(name, componentWrapper);
         
         if (this.debugMode) {
-            console.log(`🧩 ComponentManager: Registered '${name}'`);
+            logger.log(`🧩 ComponentManager: Registered '${name}'`);
         }
         
         // Auto-initialisation si activée
@@ -92,7 +92,7 @@ class ComponentManager {
             await this._initializeDependencies(component);
             
             if (this.debugMode) {
-                console.log(`🧩 ComponentManager: Initializing '${component.name}'...`);
+                logger.log(`🧩 ComponentManager: Initializing '${component.name}'...`);
             }
             
             // Initialiser le composant
@@ -110,19 +110,19 @@ class ComponentManager {
             });
             
             if (this.debugMode) {
-                console.log(`✅ ComponentManager: '${component.name}' initialized successfully`);
+                logger.log(`✅ ComponentManager: '${component.name}' initialized successfully`);
             }
             
             return component;
             
         } catch (error) {
             component.retryCount++;
-            
-            console.error(`❌ ComponentManager: Failed to initialize '${component.name}':`, error);
-            
+
+            logger.error(`ComponentManager: Failed to initialize '${component.name}':`, error);
+
             // Retry si possible
             if (component.retryCount < component.maxRetries) {
-                console.log(`🔄 ComponentManager: Retrying '${component.name}' (${component.retryCount}/${component.maxRetries})`);
+                logger.log(`🔄 ComponentManager: Retrying '${component.name}' (${component.retryCount}/${component.maxRetries})`);
                 await new Promise(resolve => setTimeout(resolve, 1000 * component.retryCount));
                 return this._initializeComponent(component);
             }
@@ -184,7 +184,7 @@ class ComponentManager {
     async destroy(name) {
         const component = this.components.get(name);
         if (!component) {
-            console.warn(`⚠️ Component '${name}' not found for destruction`);
+            logger.warn(`⚠️ Component '${name}' not found for destruction`);
             return;
         }
         
@@ -202,11 +202,11 @@ class ComponentManager {
             });
             
             if (this.debugMode) {
-                console.log(`🗑️ ComponentManager: '${name}' destroyed`);
+                logger.log(`🗑️ ComponentManager: '${name}' destroyed`);
             }
             
         } catch (error) {
-            console.error(`❌ ComponentManager: Error destroying '${name}':`, error);
+            logger.error(`ComponentManager: Error destroying '${name}':`, error);
         }
     }
     
@@ -232,7 +232,7 @@ class ComponentManager {
         this.loadingPromises.clear();
         
         if (this.debugMode) {
-            console.log('🗑️ ComponentManager: All components destroyed');
+            logger.log('🗑️ ComponentManager: All components destroyed');
         }
     }
     
@@ -251,11 +251,11 @@ class ComponentManager {
             await Promise.all(initPromises);
             
             if (this.debugMode) {
-                console.log(`✅ ComponentManager: All auto-init components initialized (${autoInitComponents.length})`);
+                logger.log(`✅ ComponentManager: All auto-init components initialized (${autoInitComponents.length})`);
             }
             
         } catch (error) {
-            console.error('❌ ComponentManager: Error during batch initialization:', error);
+            logger.error('ComponentManager: Error during batch initialization:', error);
             throw error;
         }
     }
@@ -306,7 +306,7 @@ class ComponentManager {
      */
     setDebugMode(enabled) {
         this.debugMode = enabled;
-        console.log(`🧩 ComponentManager: Debug mode ${enabled ? 'enabled' : 'disabled'}`);
+        logger.log(`🧩 ComponentManager: Debug mode ${enabled ? 'enabled' : 'disabled'}`);
     }
     
     /**

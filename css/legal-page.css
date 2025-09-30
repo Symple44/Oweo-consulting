@@ -19,16 +19,16 @@
 .legal-layout,
 .legal-main,
 .legal-document,
-.container,
+.legal-page .container,
 #app,
 .app-container {
-    overflow: visible !important;
+    overflow: visible;
 }
 
 /* Exception pour le body */
-body {
-    overflow-x: hidden !important;
-    overflow-y: visible !important;
+body.page-legal {
+    overflow-x: hidden;
+    overflow-y: visible;
 }
 
 /* Ajustement du body pour le mode démo */
@@ -128,7 +128,7 @@ body.page-legal.demo-mode {
 .legal-content {
     padding: var(--space-8, 32px) 0;
     background: var(--bg-primary);
-    overflow: visible !important;
+    overflow: visible;
 }
 
 .legal-layout {
@@ -147,8 +147,8 @@ body.page-legal.demo-mode {
 .legal-nav {
     position: relative;
     /* CRITIQUE: Retirer toute contrainte de hauteur */
-    height: auto !important;
-    min-height: 100% !important;
+    height: auto;
+    min-height: 100%;
     /* S'étendre avec le contenu principal */
     align-self: stretch;
     /* Permettre au sticky de fonctionner sur toute la hauteur */
@@ -156,10 +156,10 @@ body.page-legal.demo-mode {
     flex-direction: column;
 }
 
-.legal-nav .nav-sticky {
+.legal-page .legal-nav .nav-sticky {
     /* Position sticky avec support complet */
-    position: -webkit-sticky !important;
-    position: sticky !important;
+    position: -webkit-sticky;
+    position: sticky;
     
     /* Position depuis le haut */
     top: calc(var(--navbar-height, 70px) + var(--space-4, 16px));
@@ -330,7 +330,7 @@ body.demo-mode .legal-nav .nav-sticky,
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-xl, 16px);
-    overflow: visible !important;
+    overflow: visible;
     min-height: 100%;
 }
 
@@ -338,7 +338,7 @@ body.demo-mode .legal-nav .nav-sticky,
     padding: var(--space-8, 32px);
     color: var(--text-secondary);
     line-height: 1.8;
-    overflow: visible !important;
+    overflow: visible;
 }
 
 /* =================================
@@ -516,14 +516,14 @@ body.demo-mode .legal-nav .nav-sticky,
 ================================= */
 
 @supports not (position: sticky) {
-    .legal-nav .nav-sticky {
-        position: fixed !important;
-        top: 86px !important;
+    .legal-page .legal-nav .nav-sticky {
+        position: fixed;
+        top: 86px;
         left: auto;
         width: 250px;
     }
-    
-    .legal-layout {
+
+    .legal-page .legal-layout {
         padding-left: 270px;
     }
 }
@@ -707,10 +707,10 @@ body.demo-mode .legal-nav .nav-sticky,
         page-break-inside: avoid;
         margin-bottom: 1cm;
         transform: none;
-        background: none !important;
-        border: none !important;
-        padding-left: 0 !important;
-        margin-left: 0 !important;
+        background: none;
+        border: none;
+        padding-left: 0;
+        margin-left: 0;
     }
     
     .legal-section h2,

@@ -41,7 +41,7 @@
 }
 
 .theme-icon-light {
-    color: #F59E0B;
+    color: var(--warning-color);
     transform: translateY(50px) rotate(180deg);
     opacity: 0;
 }
@@ -57,7 +57,23 @@
 }
 
 /* Styles spécifiques pour le dark theme */
-.dark-theme .hero-section {
+
+/* Body et conteneurs principaux */
+body.dark-theme {
+    background: var(--bg-primary);
+}
+
+body.dark-theme #app,
+body.dark-theme .page-container,
+body.dark-theme .app-container {
+    background: var(--bg-primary);
+}
+
+/* Hero section - Spécificité maximale pour override */
+body.dark-theme .hero-section,
+body.dark-theme.home-page .hero-section,
+body.dark-theme .home-page .hero-section,
+.dark-theme .home-page .hero-section {
     background: linear-gradient(135deg,
         rgba(15, 23, 42, 1) 0%,
         rgba(30, 41, 59, 1) 50%,
@@ -65,97 +81,257 @@
     ) !important;
 }
 
-.dark-theme .hero-section::before {
+body.dark-theme .hero-section::before,
+body.dark-theme.home-page .hero-section::before,
+body.dark-theme .home-page .hero-section::before,
+.dark-theme .home-page .hero-section::before {
     background: radial-gradient(
         ellipse at 20% 30%,
-        rgba(59, 130, 246, 0.15) 0%,
+        rgba(59, 130, 246, 0.12) 0%,
         transparent 50%
     ),
     radial-gradient(
         ellipse at 80% 70%,
-        rgba(139, 92, 246, 0.12) 0%,
+        rgba(139, 92, 246, 0.08) 0%,
+        transparent 50%
+    ) !important;
+    opacity: 0.8;
+}
+
+/* Hero container doit rester transparent */
+body.dark-theme .hero-section .container,
+body.dark-theme .home-page .hero-section .container {
+    background: transparent !important;
+}
+
+body.dark-theme .navbar {
+    background: var(--bg-dark-navbar);
+    border-bottom: 2px solid var(--border-dark-strong);
+}
+
+body.dark-theme .navbar.scrolled {
+    background: var(--bg-dark-navbar);
+    border-bottom-color: var(--border-dark-strong);
+}
+
+body.dark-theme .navbar-mobile {
+    background: var(--bg-dark-navbar);
+    border-left: 2px solid var(--border-dark-strong);
+}
+
+body.dark-theme .footer {
+    background: var(--bg-dark-footer);
+}
+
+/* Tous les éléments avec fonds blancs */
+body.dark-theme .card,
+body.dark-theme .service-card,
+body.dark-theme .feature-card,
+body.dark-theme .process-card,
+body.dark-theme .process-step,
+body.dark-theme .benefit-card,
+body.dark-theme .product-card,
+body.dark-theme .demo-card,
+body.dark-theme .step-card,
+body.dark-theme .step-content,
+body.dark-theme .timeline-item,
+body.dark-theme .methodology-step,
+body.dark-theme .pricing-card,
+body.dark-theme .testimonial-card,
+body.dark-theme .stat-card,
+body.dark-theme .info-card,
+body.dark-theme .expertise-card {
+    background: var(--bg-card);
+    border-color: var(--border-color);
+}
+
+/* Step content - override les backgrounds hardcodés */
+body.dark-theme .step-content {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    backdrop-filter: blur(10px);
+}
+
+/* Process step - override gradient hardcodé */
+body.dark-theme .process-step,
+body.dark-theme .home-page .process-step,
+.dark-theme .home-page .process-step {
+    background: linear-gradient(
+        135deg,
+        rgba(59, 130, 246, 0.08) 0%,
+        rgba(139, 92, 246, 0.06) 100%
+    ) !important;
+    border: 1px solid rgba(59, 130, 246, 0.15) !important;
+}
+
+/* Hover states */
+body.dark-theme .card:hover,
+body.dark-theme .service-card:hover,
+body.dark-theme .feature-card:hover,
+body.dark-theme .process-card:hover,
+body.dark-theme .process-step:hover,
+body.dark-theme .home-page .process-step:hover,
+.dark-theme .home-page .process-step:hover {
+    border-color: rgba(59, 130, 246, 0.4) !important;
+    background: linear-gradient(
+        135deg,
+        rgba(59, 130, 246, 0.12) 0%,
+        rgba(139, 92, 246, 0.10) 100%
+    ) !important;
+}
+
+body.dark-theme .process-card:hover,
+body.dark-theme .benefit-card:hover,
+body.dark-theme .product-card:hover,
+body.dark-theme .demo-card:hover,
+body.dark-theme .expertise-card:hover,
+body.dark-theme .step-content:hover,
+body.dark-theme .methodology-step:hover {
+    background: var(--bg-card-hover) !important;
+    border-color: var(--border-color-hover);
+}
+
+/* Sections avec fonds clairs */
+body.dark-theme section,
+body.dark-theme .section {
+    background: transparent;
+}
+
+/* Sections spécifiques avec fonds alternés */
+body.dark-theme .hero-section,
+body.dark-theme .expertise-section,
+body.dark-theme .approach-section,
+body.dark-theme .process-section,
+body.dark-theme .cta-section,
+body.dark-theme .trust-section,
+body.dark-theme .products-section,
+body.dark-theme .demos-section,
+body.dark-theme .benefits-section,
+body.dark-theme .pricing-section,
+body.dark-theme .testimonials-section,
+body.dark-theme .faq-section,
+body.dark-theme .contact-section,
+body.dark-theme .contact-hero,
+body.dark-theme .contact-form-section {
+    background: var(--bg-primary);
+}
+
+body.dark-theme .bg-light,
+body.dark-theme .bg-gray,
+body.dark-theme .methodology-section,
+body.dark-theme .services-hero,
+body.dark-theme .products-hero,
+body.dark-theme .features-section,
+body.dark-theme .methodology-details,
+body.dark-theme .services-section,
+body.dark-theme .page-header {
+    background: var(--bg-secondary) !important;
+}
+
+/* Override pour les gradients qui forcent des couleurs claires */
+body.dark-theme .page-header::before {
+    background: radial-gradient(
+        ellipse at center,
+        rgba(59, 130, 246, 0.15) 0%,
         transparent 50%
     ) !important;
 }
 
-.dark-theme .navbar {
-    background: rgba(15, 23, 42, 0.95) !important;
-    border-bottom: 2px solid rgba(59, 130, 246, 0.2) !important;
+/* Containers génériques */
+body.dark-theme .container,
+body.dark-theme .wrapper,
+body.dark-theme .content,
+body.dark-theme .section-content,
+body.dark-theme .page-content,
+body.dark-theme .main-content {
+    background: transparent;
 }
 
-.dark-theme .navbar-mobile {
-    background: rgba(15, 23, 42, 0.98) !important;
-    border-left: 2px solid rgba(59, 130, 246, 0.2) !important;
+/* Modals et overlays */
+body.dark-theme .modal,
+body.dark-theme .modal-content {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
 }
 
-.dark-theme .footer {
-    background: #0F172A !important;
-}
-
-/* Tous les éléments avec fonds blancs */
-.dark-theme .card,
-.dark-theme .service-card,
-.dark-theme .feature-card,
-.dark-theme .process-card,
-.dark-theme .process-step,
-.dark-theme .benefit-card,
-.dark-theme .product-card,
-.dark-theme .demo-card,
-.dark-theme .step-card,
-.dark-theme .step-content,
-.dark-theme .timeline-item,
-.dark-theme .methodology-step,
-.dark-theme .pricing-card,
-.dark-theme .testimonial-card,
-.dark-theme .stat-card,
-.dark-theme .info-card,
-.dark-theme .expertise-card {
-    background: var(--bg-card) !important;
-    border-color: var(--border-color) !important;
-}
-
-/* Hover states */
-.dark-theme .card:hover,
-.dark-theme .service-card:hover,
-.dark-theme .feature-card:hover,
-.dark-theme .process-card:hover,
-.dark-theme .process-step:hover,
-.dark-theme .benefit-card:hover,
-.dark-theme .product-card:hover,
-.dark-theme .demo-card:hover,
-.dark-theme .expertise-card:hover,
-.dark-theme .step-content:hover,
-.dark-theme .methodology-step:hover {
-    background: var(--bg-card-hover) !important;
-    border-color: var(--border-color-hover) !important;
-}
-
-/* Sections avec fonds clairs */
-.dark-theme section,
-.dark-theme .section {
-    background: transparent !important;
-}
-
-.dark-theme .bg-light,
-.dark-theme .bg-gray,
-.dark-theme .methodology-section {
-    background: var(--bg-secondary) !important;
+body.dark-theme .modal-overlay,
+body.dark-theme .overlay {
+    background: rgba(0, 0, 0, 0.85);
 }
 
 /* Inputs et formulaires */
-.dark-theme input,
-.dark-theme textarea,
-.dark-theme select {
-    background: var(--bg-secondary) !important;
-    border-color: var(--border-color) !important;
-    color: var(--text-primary) !important;
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme select {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
 }
 
-.dark-theme input:focus,
-.dark-theme textarea:focus,
-.dark-theme select:focus {
-    border-color: var(--primary-color) !important;
-    background: var(--bg-tertiary) !important;
+body.dark-theme input:focus,
+body.dark-theme textarea:focus,
+body.dark-theme select:focus {
+    border-color: var(--primary-color);
+    background: var(--bg-tertiary);
+}
+
+/* Labels et textes de formulaires */
+body.dark-theme label,
+body.dark-theme .form-label,
+body.dark-theme .field-label {
+    color: var(--text-primary);
+}
+
+/* Boutons en dark mode - préserver les couleurs */
+body.dark-theme .btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+body.dark-theme .btn-outline {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+body.dark-theme .btn-outline:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Tables */
+body.dark-theme table {
+    background: transparent;
+}
+
+body.dark-theme th {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+body.dark-theme td {
+    border-color: var(--border-color);
+    color: var(--text-secondary);
+}
+
+/* Code blocks */
+body.dark-theme pre,
+body.dark-theme code {
+    background: var(--bg-tertiary);
+    border-color: var(--border-color);
+}
+
+/* Notifications et alerts */
+body.dark-theme .notification,
+body.dark-theme .alert {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+/* Accordions et dropdowns */
+body.dark-theme .accordion,
+body.dark-theme .dropdown-menu {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
 }
 
 /* Responsive */

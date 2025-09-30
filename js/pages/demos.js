@@ -325,7 +325,7 @@ class DemosPage extends BasePage {
         // Vérifier que le DOM est prêt
         const container = document.querySelector('.demos-page');
         if (!container) {
-            console.error('DemosPage: Container not found in DOM');
+            logger.error('DemosPage: Container not found in DOM');
             return;
         }
         
@@ -338,7 +338,7 @@ class DemosPage extends BasePage {
         // Utiliser document au lieu de this.container qui peut être null
         const container = document.querySelector('.demos-page');
         if (!container) {
-            console.warn('DemosPage container not found');
+            logger.warn('DemosPage container not found');
             return;
         }
         

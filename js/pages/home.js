@@ -281,7 +281,7 @@ class HomePage extends BasePage {
                         this.navigateTo('contact');
                         break;
                     default:
-                        console.warn('Action non reconnue:', action);
+                        logger.warn('Action non reconnue:', action);
                 }
             });
         });
@@ -332,7 +332,7 @@ class HomePage extends BasePage {
             });
         } else {
             // Fallback : ouvrir dans une nouvelle fenêtre
-            console.warn('Widget Calendly non disponible, fallback vers nouvelle fenêtre');
+            logger.warn('Widget Calendly non disponible, fallback vers nouvelle fenêtre');
             window.open(calendlyUrl, '_blank', 'width=800,height=700,scrollbars=yes,resizable=yes');
         }
         

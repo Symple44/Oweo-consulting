@@ -50,7 +50,7 @@ class GoogleServices {
      * Initialiser les services Google
      */
     async init() {
-        console.log(`🔍 Initializing Google Services (${this.config.environment})...`);
+        logger.log(`🔍 Initializing Google Services (${this.config.environment})...`);
         
         // Activer automatiquement en production
         if (this.config.environment === 'production') {
@@ -74,7 +74,7 @@ class GoogleServices {
         }
         
         this.initialized = true;
-        console.log('✅ Google Services initialized');
+        logger.log('✅ Google Services initialized');
     }
     
     /**
@@ -170,7 +170,7 @@ class GoogleServices {
             this.initGA4();
         }
         
-        console.log('✅ Cookies accepted');
+        logger.log('✅ Cookies accepted');
     }
     
     /**
@@ -180,7 +180,7 @@ class GoogleServices {
         localStorage.setItem('oweo_cookie_consent', 'declined');
         this.consentGiven = false;
         this.hideCookieBanner();
-        console.log('❌ Cookies declined');
+        logger.log('❌ Cookies declined');
     }
     
     /**
@@ -199,7 +199,7 @@ class GoogleServices {
      */
     async initGA4() {
         if (!this.config.ga4.measurementId || this.config.ga4.measurementId === 'G-XXXXXXXXXX') {
-            console.warn('⚠️ Google Analytics: Measurement ID not configured');
+            logger.warn('⚠️ Google Analytics: Measurement ID not configured');
             return;
         }
         
@@ -219,13 +219,13 @@ class GoogleServices {
                 send_page_view: false // On va gérer ça manuellement
             });
             
-            console.log('✅ Google Analytics 4 initialized');
+            logger.log('✅ Google Analytics 4 initialized');
             
             // Envoyer la page vue initiale
             this.trackPageView();
             
         } catch (error) {
-            console.error('❌ Failed to initialize Google Analytics:', error);
+            logger.error('Failed to initialize Google Analytics:', error);
         }
     }
     
@@ -244,7 +244,7 @@ class GoogleServices {
             meta.content = this.config.searchConsole.verificationTag.replace('google-site-verification=', '');
             document.head.appendChild(meta);
             
-            console.log('✅ Google Search Console verification tag added');
+            logger.log('✅ Google Search Console verification tag added');
         }
     }
     
@@ -253,7 +253,7 @@ class GoogleServices {
      */
     initGTM() {
         if (!this.config.gtm.containerId || this.config.gtm.containerId === 'GTM-XXXXXXX') {
-            console.warn('⚠️ Google Tag Manager: Container ID not configured');
+            logger.warn('⚠️ Google Tag Manager: Container ID not configured');
             return;
         }
         
@@ -264,7 +264,7 @@ class GoogleServices {
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
         })(window,document,'script','dataLayer',this.config.gtm.containerId);
         
-        console.log('✅ Google Tag Manager initialized');
+        logger.log('✅ Google Tag Manager initialized');
     }
     
     /**
@@ -279,7 +279,7 @@ class GoogleServices {
             page_referrer: document.referrer
         });
         
-        console.log(`📊 Page view tracked: ${page_title}`);
+        logger.log(`📊 Page view tracked: ${page_title}`);
     }
     
     /**
@@ -289,7 +289,7 @@ class GoogleServices {
         if (!this.config.ga4.enabled || !this.consentGiven || !window.gtag) return;
         
         gtag('event', eventName, parameters);
-        console.log(`📊 Event tracked: ${eventName}`, parameters);
+        logger.log(`📊 Event tracked: ${eventName}`, parameters);
     }
     
     /**

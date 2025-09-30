@@ -16,9 +16,8 @@ class LegalPage extends BasePage {
         this.lastUpdate = '1er janvier 2024';
         this.companyInfo = window.CompanyInfo || {};
         this._eventListeners = [];
-        
-        // ⭐ AJOUT: Debug du type de page
-        console.log(`📄 Creating LegalPage with type: ${this.pageType}`);
+
+        logger.log(`📄 Creating LegalPage with type: ${this.pageType}`);
     }
     
     static getPageConfig(pageType) {
@@ -125,8 +124,8 @@ class LegalPage extends BasePage {
     }
     
     getContentByType() {
-        console.log(`📄 Getting content for type: ${this.pageType}`); // ⭐ AJOUT: Debug
-        
+        logger.log(`📄 Getting content for type: ${this.pageType}`);
+
         switch (this.pageType) {
             case 'legal':
                 return this.getLegalContent();
@@ -137,7 +136,7 @@ class LegalPage extends BasePage {
             case 'cookies':
                 return this.getCookiesContent();
             default:
-                console.warn(`⚠️ Unknown page type: ${this.pageType}, falling back to legal`);
+                logger.warn(`⚠️ Unknown page type: ${this.pageType}, falling back to legal`);
                 return this.getLegalContent();
         }
     }
@@ -670,7 +669,7 @@ class LegalPage extends BasePage {
             const page = link.dataset.page;
             
             if (page) {
-                console.log(`📄 Legal page navigation to: ${page}`);
+                logger.log(`📄 Legal page navigation to: ${page}`);
                 this.navigateTo(page);
             }
             
@@ -714,20 +713,19 @@ class LegalPage extends BasePage {
     }
     
     navigateTo(page) {
-        console.log(`📄 LegalPage navigating to: ${page}`);
+        logger.log(`📄 LegalPage navigating to: ${page}`);
         if (window.app && window.app.router) {
             window.app.router.navigate(page);
         } else {
-            console.error('❌ Router not available');
+            logger.error('Router not available');
         }
     }
     
     async onMount() {
         await super.onMount();
-        
-        // ⭐ AJOUT: Debug au montage
-        console.log(`📄 LegalPage mounted with type: ${this.pageType}`);
-        
+
+        logger.log(`📄 LegalPage mounted with type: ${this.pageType}`);
+
         // Ajouter une classe au body pour les styles spécifiques
         document.body.classList.add('page-legal', `page-${this.pageType}`);
         

@@ -141,8 +141,8 @@
 .bg-info { background-color: var(--info-color) !important; }
 .bg-light { background-color: var(--gray-100) !important; }
 .bg-dark { background-color: var(--gray-900) !important; }
-.bg-white { background-color: #ffffff !important; }
-.bg-black { background-color: #000000 !important; }
+.bg-white { background-color: var(--bg-primary) !important; }
+.bg-black { background-color: var(--gray-900) !important; }
 
 /* Gradient backgrounds */
 .bg-gradient-primary {
@@ -172,9 +172,9 @@
 .border-danger { border-color: var(--error-color) !important; }
 .border-warning { border-color: var(--warning-color) !important; }
 .border-info { border-color: var(--info-color) !important; }
-.border-light { border-color: var(--gray-200) !important; }
+.border-light { border-color: var(--border-light) !important; }
 .border-dark { border-color: var(--gray-800) !important; }
-.border-white { border-color: #ffffff !important; }
+.border-white { border-color: var(--bg-primary) !important; }
 
 /* =================================
    RESPONSIVE UTILITIES

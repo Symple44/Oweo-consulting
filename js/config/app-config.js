@@ -231,17 +231,17 @@ window.AppConfig = {
     // Méthode pour valider la cohérence avec CompanyInfo
     validateCompanyInfo() {
         if (!window.CompanyInfo) {
-            console.warn('⚠️ CompanyInfo non chargé, utilisation des valeurs fallback');
+            logger.warn('⚠️ CompanyInfo non chargé, utilisation des valeurs fallback');
             return false;
         }
         
         const validation = window.CompanyInfo.validate();
         if (!validation.valid) {
-            console.error('❌ Configuration société invalide:', validation.issues);
+            logger.error('Configuration société invalide:', validation.issues);
             return false;
         }
         
-        console.log('✅ Configuration société cohérente');
+        logger.log('✅ Configuration société cohérente');
         return true;
     },
 
@@ -381,13 +381,13 @@ window.AppConfig = {
         window.AppConfig.development.logLevel = 'debug';
         window.AppConfig.analytics.enabled = false;
         
-        console.log('🔧 Development mode detected');
+        logger.log('🔧 Development mode detected');
     } else {
         // Configuration production
         window.AppConfig.development.debug = false;
         window.AppConfig.analytics.enabled = true;
         
-        console.log('🚀 Production mode active');
+        logger.log('🚀 Production mode active');
     }
     
     // Valider la cohérence des informations société
@@ -395,5 +395,5 @@ window.AppConfig = {
         window.AppConfig.validateCompanyInfo();
     }, 100);
     
-    console.log('✅ App Config loaded:', window.AppConfig.appName, 'v' + window.AppConfig.version);
+    logger.log('✅ App Config loaded:', window.AppConfig.appName, 'v' + window.AppConfig.version);
 })();

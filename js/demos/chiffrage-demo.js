@@ -708,7 +708,7 @@ class ChiffrageDemo extends BaseDemo {
     }
     
     exportPDF() {
-        console.log('📄 Export PDF du devis');
+        logger.log('📄 Export PDF du devis');
         if (window.notifications) {
             window.notifications.info('Export PDF en cours de préparation...');
         }
@@ -716,7 +716,7 @@ class ChiffrageDemo extends BaseDemo {
     }
     
     exportExcel() {
-        console.log('📊 Export Excel du devis');
+        logger.log('📊 Export Excel du devis');
         if (window.notifications) {
             window.notifications.info('Export Excel en cours de préparation...');
         }
@@ -724,7 +724,7 @@ class ChiffrageDemo extends BaseDemo {
     }
     
     saveQuote() {
-        console.log('💾 Sauvegarde du devis');
+        logger.log('💾 Sauvegarde du devis');
         if (window.notifications) {
             window.notifications.success('Devis sauvegardé avec succès !');
         }

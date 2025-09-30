@@ -4,7 +4,7 @@
 
 class MigrationHelper {
     static async checkOldStructure() {
-        console.group('🔄 Vérification de l\'ancienne structure');
+        logger.group('Vérification de l\'ancienne structure');
         
         const oldFiles = [
             'js/components/navbar.js',
@@ -35,10 +35,10 @@ class MigrationHelper {
         
         results.forEach(result => {
             const icon = result.exists ? '✅' : '❌';
-            console.log(`${icon} ${result.file}`);
+            logger.log(`${icon} ${result.file}`);
         });
         
-        console.groupEnd();
+        logger.groupEnd();
         return results;
     }
     
@@ -155,7 +155,7 @@ window.MigrationHelper = MigrationHelper;
 if (window.location.search.includes('debug=true')) {
     document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
-            console.log('🚀 Mode debug activé - Validation automatique');
+            logger.log('🚀 Mode debug activé - Validation automatique');
             window.OweoDebug.validateSite();
         }, 2000);
     });

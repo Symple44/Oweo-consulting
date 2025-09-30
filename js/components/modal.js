@@ -148,7 +148,7 @@ class ModalSystem {
     show(modalId) {
         const modal = this.modals.get(modalId);
         if (!modal) {
-            console.error('Modal not found:', modalId);
+            logger.error('Modal not found:', modalId);
             return;
         }
         

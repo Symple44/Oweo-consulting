@@ -29,9 +29,20 @@
     
     /* Couleurs de statut */
     --success-color: #10b981;
+    --success-light: rgba(16, 185, 129, 0.1);
+    --success-dark: #059669;
+
     --warning-color: #f59e0b;
+    --warning-light: rgba(245, 158, 11, 0.1);
+    --warning-dark: #d97706;
+
     --error-color: #ef4444;
+    --error-light: rgba(239, 68, 68, 0.1);
+    --error-dark: #dc2626;
+
     --info-color: #3b82f6;
+    --info-light: rgba(59, 130, 246, 0.1);
+    --info-dark: #2563eb;
     
     /* Couleurs neutres */
     --gray-50: #f9fafb;
@@ -102,6 +113,7 @@
     /* Ombres colorées - Plus subtiles */
     --shadow-primary: 0 4px 14px 0 rgba(59, 130, 246, 0.25);
     --shadow-secondary: 0 4px 14px 0 rgba(139, 92, 246, 0.25);
+    --shadow-glow-primary: 0 0 0 3px rgba(59, 130, 246, 0.1);
     
     /* =================================
        TYPOGRAPHIE
@@ -232,6 +244,7 @@
     --gradient-card: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
     --gradient-mesh: radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
                      radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+    --gradient-dark: linear-gradient(135deg, rgba(15, 23, 42, 1) 0%, rgba(30, 41, 59, 1) 50%, rgba(15, 23, 42, 1) 100%);
     
     /* =================================
        ANIMATIONS
@@ -321,6 +334,8 @@
     --bg-primary: #0F172A;  /* Presque noir */
     --bg-secondary: #1E293B;  /* Gris foncé */
     --bg-tertiary: #334155;
+    --bg-dark-navbar: rgba(15, 23, 42, 0.95);
+    --bg-dark-footer: #0F172A;
 
     --bg-card: #1E293B;
     --bg-card-hover: #334155;
@@ -334,7 +349,11 @@
     /* Bordures */
     --border-color: rgba(255, 255, 255, 0.1);
     --border-color-hover: rgba(255, 255, 255, 0.2);
+    --border-dark-strong: rgba(59, 130, 246, 0.2);
 
     /* Overlay */
     --bg-overlay: rgba(0, 0, 0, 0.85);
+
+    /* Couleurs secondaires pour dark mode */
+    --secondary-light: rgba(139, 92, 246, 0.1);
 }

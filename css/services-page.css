@@ -307,13 +307,14 @@
 }
 
 .deliverable-tag {
-    background: rgba(0, 212, 255, 0.1);
+    background: var(--primary-light);
     color: var(--primary-color);
     padding: var(--space-1) var(--space-3);
     border-radius: var(--radius-full);
     font-size: 0.75rem;
     font-weight: 600;
-    border: 1px solid rgba(0, 212, 255, 0.2);
+    border: 1px solid var(--primary-color);
+    opacity: 0.3;
 }
 
 /* Actions du service */
@@ -389,14 +390,14 @@
     top: 120px;
     bottom: 80px;
     width: 4px;
-    background: linear-gradient(to bottom, 
-        var(--primary-color) 0%, 
+    background: linear-gradient(to bottom,
+        var(--primary-color) 0%,
         var(--secondary-color) 25%,
-        #10b981 50%,
-        #f59e0b 75%,
+        var(--success-color) 50%,
+        var(--warning-color) 75%,
         var(--error-color) 100%);
     border-radius: var(--radius-full);
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-glow-primary);
     z-index: 1;
 }
 
@@ -739,10 +740,8 @@
 ================================= */
 
 .contact-cta {
-    background: linear-gradient(135deg, 
-        rgba(0, 212, 255, 0.1) 0%, 
-        rgba(124, 58, 237, 0.1) 100%);
-    border: 1px solid rgba(0, 212, 255, 0.2);
+    background: var(--gradient-card);
+    border: 1px solid var(--border-color);
     border-radius: var(--radius-2xl);
     padding: var(--space-12);
     text-align: center;
@@ -1177,34 +1176,35 @@
         transform: none;
     }
     
+    /* Print styles - Les !important sont légitimes ici */
     .methodology-timeline::before {
         background: #666 !important;
     }
-    
+
     .step-number-inner {
         background: #333 !important;
         color: white !important;
         box-shadow: none;
     }
-    
+
     .step-content {
         background: white !important;
         border: 1px solid #ddd !important;
         box-shadow: none !important;
     }
-    
+
     .activity-item {
         background: #f5f5f5 !important;
         border: 1px solid #ddd !important;
     }
-    
+
     .methodology-step {
         page-break-inside: avoid;
         margin-bottom: 1cm;
         transform: none !important;
         opacity: 1 !important;
     }
-    
+
     .contact-cta {
         background: none !important;
         border: 1px solid #ddd;
@@ -1297,11 +1297,11 @@
 
 /* Variables CSS personnalisées pour la méthodologie */
 :root {
-    --methodology-step-1-color: #3b82f6;
-    --methodology-step-2-color: #10b981;
-    --methodology-step-3-color: #f59e0b;
-    --methodology-step-4-color: #8b5cf6;
-    --methodology-step-5-color: #ef4444;
+    --methodology-step-1-color: var(--info-color);
+    --methodology-step-2-color: var(--success-color);
+    --methodology-step-3-color: var(--warning-color);
+    --methodology-step-4-color: var(--secondary-color);
+    --methodology-step-5-color: var(--error-color);
 }
 
 /* Application des couleurs d'étapes */

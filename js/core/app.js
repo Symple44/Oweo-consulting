@@ -30,31 +30,31 @@ class OweoApp {
     
     async init() {
         try {
-            console.log('🚀 Initializing Oweo App...');
-            
+            logger.info('Initializing Oweo App...');
+
             // 1. Initialiser les utilitaires
             await this.initUtils();
-            
+
             // 2. Initialiser le SEO
             await this.initSEO();
-            
+
             // 3. Initialiser Google Services
             await this.initGoogleServices();
-            
+
             // 4. Initialiser les composants
             await this.initComponents();
-            
+
             // 5. Initialiser le routeur
             await this.initRouter();
-            
+
             // 6. Démarrer l'application
             await this.start();
-            
+
             this.initialized = true;
-            console.log('✅ Oweo App initialized successfully');
-            
+            logger.info('Oweo App initialized successfully');
+
         } catch (error) {
-            console.error('❌ App initialization failed:', error);
+            logger.error('App initialization failed:', error);
             this.showErrorPage(error);
         }
     }
@@ -73,40 +73,40 @@ class OweoApp {
     
     async initSEO() {
         if (!this.config.enableSEO || typeof SEOManager === 'undefined') {
-            console.warn('⚠️ SEO disabled or SEOManager not available');
+            logger.warn('SEO disabled or SEOManager not available');
             return;
         }
-        
+
         try {
             this.seoManager = new SEOManager();
             this.seoManager.init();
-            
+
             // Définir le SEO de la page d'accueil par défaut
             if (window.SEOPagesConfig?.home) {
                 this.seoManager.updatePageSEO(window.SEOPagesConfig.home);
             }
-            
-            console.log('✅ SEO Manager initialized');
+
+            logger.info('SEO Manager initialized');
         } catch (error) {
-            console.error('❌ SEO initialization failed:', error);
+            logger.error('SEO initialization failed:', error);
         }
     }
     
     async initGoogleServices() {
         if (!this.config.enableAnalytics || typeof GoogleServices === 'undefined') {
-            console.warn('⚠️ Analytics disabled or GoogleServices not available');
+            logger.warn('Analytics disabled or GoogleServices not available');
             return;
         }
-        
+
         try {
             this.googleServices = window.googleServices || new GoogleServices();
-            
+
             // Écouter les événements de l'app pour le tracking
             this.setupAnalyticsEvents();
-            
-            console.log('✅ Google Services ready');
+
+            logger.info('Google Services ready');
         } catch (error) {
-            console.error('❌ Google Services initialization failed:', error);
+            logger.error('Google Services initialization failed:', error);
         }
     }
     
@@ -284,28 +284,28 @@ class OweoApp {
     
     updatePageSEO(pagePath) {
         if (!this.seoManager || !window.SEOPagesConfig) return;
-        
+
         try {
             const pageConfig = window.SEOPagesConfig[pagePath];
             if (pageConfig) {
                 // Construire l'URL canonique
                 const baseUrl = window.CompanyInfo?.urls?.website || 'https://oweo-consulting.fr';
-                const canonical = pagePath === 'home' 
-                    ? baseUrl 
+                const canonical = pagePath === 'home'
+                    ? baseUrl
                     : `${baseUrl}/#${pagePath}`;
-                
+
                 // Mettre à jour le SEO
                 this.seoManager.updatePageSEO({
                     ...pageConfig,
                     canonical: canonical
                 });
-                
-                console.log(`🔍 SEO updated for page: ${pagePath}`);
+
+                logger.debug(`SEO updated for page: ${pagePath}`);
             } else {
-                console.warn(`⚠️ No SEO config found for page: ${pagePath}`);
+                logger.warn(`No SEO config found for page: ${pagePath}`);
             }
         } catch (error) {
-            console.error('❌ Error updating page SEO:', error);
+            logger.error('Error updating page SEO:', error);
         }
     }
     
@@ -491,7 +491,7 @@ class OweoApp {
         }
         
         this.initialized = false;
-        console.log('🗑️ App destroyed');
+        logger.info('App destroyed');
     }
 }
 

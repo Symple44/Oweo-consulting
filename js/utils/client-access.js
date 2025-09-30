@@ -42,7 +42,7 @@ class OweoClientAccess {
             // Sauvegarder la session
             this.saveSession();
             
-            console.log('✅ Accès client accordé:', normalizedCode);
+            logger.log('✅ Accès client accordé:', normalizedCode);
             
             // Émettre un événement d'authentification
             this.emitAuthEvent('authenticated', { code: normalizedCode });
@@ -50,7 +50,7 @@ class OweoClientAccess {
             return true;
         }
         
-        console.log('❌ Code client invalide:', normalizedCode);
+        logger.log('❌ Code client invalide:', normalizedCode);
         this.emitAuthEvent('authentication_failed', { code: normalizedCode });
         
         return false;
@@ -66,7 +66,7 @@ class OweoClientAccess {
         
         this.clearSession();
         
-        console.log('🚪 Déconnexion client');
+        logger.log('🚪 Déconnexion client');
         this.emitAuthEvent('logout');
         
         // Rediriger vers l'accueil
@@ -306,14 +306,14 @@ class OweoClientAccess {
         // Restaurer le scroll du body si nécessaire
         document.body.style.overflow = '';
         
-        console.log('🗙 Modal d\'authentification fermée');
+        logger.log('🗙 Modal d\'authentification fermée');
     }
     
     /**
      * Naviguer vers une démo
      */
     navigateToDemo(demoId) {
-        console.log(`🎯 Navigation vers la démo: ${demoId}`);
+        logger.log(`🎯 Navigation vers la démo: ${demoId}`);
         
         if (window.app && window.app.router) {
             window.app.router.navigate(demoId);
@@ -346,7 +346,7 @@ class OweoClientAccess {
             });
         } else {
             // Fallback console
-            console.log('✅ ' + message);
+            logger.log('✅ ' + message);
             
             // Notification native du navigateur en dernier recours
             if ('Notification' in window && Notification.permission === 'granted') {
@@ -400,7 +400,7 @@ class OweoClientAccess {
             window._oweoSession = sessionData;
             
         } catch (error) {
-            console.warn('Impossible de sauvegarder la session:', error);
+            logger.warn('Impossible de sauvegarder la session:', error);
         }
     }
     
@@ -420,12 +420,12 @@ class OweoClientAccess {
                 if (!this.isSessionValid()) {
                     this.clearSession();
                 } else {
-                    console.log('✅ Session client restaurée');
+                    logger.log('✅ Session client restaurée');
                 }
             }
             
         } catch (error) {
-            console.warn('Impossible de charger la session:', error);
+            logger.warn('Impossible de charger la session:', error);
         }
     }
     
@@ -436,7 +436,7 @@ class OweoClientAccess {
         try {
             delete window._oweoSession;
         } catch (error) {
-            console.warn('Impossible de supprimer la session:', error);
+            logger.warn('Impossible de supprimer la session:', error);
         }
     }
     
@@ -487,26 +487,11 @@ class OweoClientAccess {
     
     /**
      * Ajouter un indicateur de statut dans la navbar
+     * DÉSACTIVÉ - Indicateur retiré pour interface épurée
      */
     addStatusIndicator() {
-        const navbar = document.querySelector('.navbar-actions');
-        if (!navbar || document.querySelector('.client-status-indicator')) return;
-        
-        const indicator = document.createElement('div');
-        indicator.className = 'client-status-indicator';
-        indicator.innerHTML = `
-            <div class="status-badge client-status ${this.hasAccess() ? 'authenticated' : 'guest'}">
-                <i class="fas fa-${this.hasAccess() ? 'user-check' : 'user'}"></i>
-                <span>${this.hasAccess() ? this.clientCode : 'Invité'}</span>
-                ${this.hasAccess() ? `
-                    <button class="logout-btn" onclick="window.OweoClientAccess.logout()" title="Se déconnecter">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </button>
-                ` : ''}
-            </div>
-        `;
-        
-        navbar.insertBefore(indicator, navbar.firstChild);
+        // Fonctionnalité désactivée
+        return;
     }
     
     /**

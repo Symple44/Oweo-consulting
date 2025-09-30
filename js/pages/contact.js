@@ -49,10 +49,10 @@ class ContactPage extends BasePage {
             script.onload = () => {
                 emailjs.init(this.emailJS.publicKey);
                 this.emailJS.initialized = true;
-                console.log('✅ EmailJS initialized');
+                logger.log('✅ EmailJS initialized');
             };
             script.onerror = () => {
-                console.error('❌ Erreur chargement EmailJS');
+                logger.error('Erreur chargement EmailJS');
             };
             document.head.appendChild(script);
         } else {
@@ -63,7 +63,7 @@ class ContactPage extends BasePage {
 
     initRecaptcha() {
         if (!this.recaptcha.enabled) {
-            console.log('🔒 reCAPTCHA désactivé');
+            logger.log('🔒 reCAPTCHA désactivé');
             return;
         }
         
@@ -73,10 +73,10 @@ class ContactPage extends BasePage {
             script.src = `https://www.google.com/recaptcha/api.js?render=${this.recaptcha.siteKey}`;
             script.onload = () => {
                 this.recaptcha.loaded = true;
-                console.log('✅ reCAPTCHA v3 chargé');
+                logger.log('✅ reCAPTCHA v3 chargé');
             };
             script.onerror = () => {
-                console.error('❌ Erreur chargement reCAPTCHA');
+                logger.error('Erreur chargement reCAPTCHA');
                 this.recaptcha.enabled = false;
             };
             document.head.appendChild(script);
@@ -433,17 +433,17 @@ class ContactPage extends BasePage {
         // Attendre un peu que les services se chargent
         setTimeout(() => {
             if (!this.emailJS.initialized) {
-                console.warn('⚠️ EmailJS non initialisé, vérifiez votre connection internet');
+                logger.warn('⚠️ EmailJS non initialisé, vérifiez votre connection internet');
             }
             
             if (this.recaptcha.enabled && !this.recaptcha.loaded) {
-                console.warn('⚠️ reCAPTCHA non chargé, vérifiez votre connection internet');
+                logger.warn('⚠️ reCAPTCHA non chargé, vérifiez votre connection internet');
             }
         }, 3000);
     }
     
     bindEvents() {
-        console.log('📋 Contact page: binding events');
+        logger.log('📋 Contact page: binding events');
         
         const form = document.getElementById('contact-form');
         if (form) {
@@ -504,7 +504,7 @@ class ContactPage extends BasePage {
     
     async getRecaptchaToken() {
         if (!this.recaptcha.enabled || !this.recaptcha.loaded || !window.grecaptcha) {
-            console.log('🔒 reCAPTCHA désactivé ou non chargé');
+            logger.log('🔒 reCAPTCHA désactivé ou non chargé');
             return null;
         }
         
@@ -513,11 +513,11 @@ class ContactPage extends BasePage {
                 action: this.recaptcha.action
             });
             
-            console.log('🔒 Token reCAPTCHA obtenu');
+            logger.log('🔒 Token reCAPTCHA obtenu');
             return token;
             
         } catch (error) {
-            console.error('❌ Erreur reCAPTCHA:', error);
+            logger.error('Erreur reCAPTCHA:', error);
             this.showNotification('Erreur de vérification de sécurité. Veuillez réessayer.', 'warning');
             return null;
         }
@@ -579,7 +579,7 @@ class ContactPage extends BasePage {
             templateParams.recaptcha_token = recaptchaToken || 'Non disponible';
             templateParams.recaptcha_score = 'Analysé côté serveur';
             
-            console.log('📧 Envoi email avec les paramètres:', templateParams);
+            logger.log('📧 Envoi email avec les paramètres:', templateParams);
             
             // 3. Envoyer via EmailJS
             const response = await emailjs.send(
@@ -589,7 +589,7 @@ class ContactPage extends BasePage {
                 this.emailJS.publicKey
             );
             
-            console.log('✅ Email envoyé avec succès:', response);
+            logger.log('✅ Email envoyé avec succès:', response);
             
             // 4. Afficher le succès
             form.style.display = 'none';
@@ -602,8 +602,8 @@ class ContactPage extends BasePage {
             this.trackFormSubmission(recaptchaToken ? 'with_recaptcha' : 'without_recaptcha');
             
         } catch (error) {
-            console.error('❌ Erreur envoi email:', error);
-            
+            logger.error('Erreur envoi email:', error);
+
             let errorMessage = 'Erreur lors de l\'envoi du message. ';
             
             if (error.status === 400) {

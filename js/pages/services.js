@@ -498,7 +498,7 @@ class ServicesPage extends BasePage {
         const service = this.services.find(s => s.id === serviceId);
         
         if (!service) {
-            console.error('Service non trouvé:', serviceId);
+            logger.error('Service non trouvé:', serviceId);
             return;
         }
         
@@ -542,7 +542,7 @@ class ServicesPage extends BasePage {
         const service = this.services.find(s => s.id === serviceId);
         
         if (!service) {
-            console.error('Service non trouvé:', serviceId);
+            logger.error('Service non trouvé:', serviceId);
             return;
         }
         
@@ -692,7 +692,7 @@ class ServicesPage extends BasePage {
             window.notifications.success(`Votre demande de devis pour "${service.title}" a été envoyée avec succès !`);
         }
         
-        console.log('📧 Demande de devis envoyée:', {
+        logger.log('📧 Demande de devis envoyée:', {
             service: service.id,
             data: Object.fromEntries(formData)
         });
@@ -800,7 +800,7 @@ class ServicesPage extends BasePage {
             });
         } else {
             // Fallback : ouvrir dans une nouvelle fenêtre
-            console.warn('Widget Calendly non disponible, fallback vers nouvelle fenêtre');
+            logger.warn('Widget Calendly non disponible, fallback vers nouvelle fenêtre');
             window.open(calendlyUrl, '_blank', 'width=800,height=700,scrollbars=yes,resizable=yes');
         }
         

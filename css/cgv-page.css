@@ -20,16 +20,16 @@
 .cgv-layout,
 .cgv-main,
 .cgv-document,
-.container,
+.cgv-page .container,
 #app,
 .app-container {
-    overflow: visible !important;
+    overflow: visible;
 }
 
 /* Exception pour le body */
-body {
-    overflow-x: hidden !important;
-    overflow-y: visible !important;
+body.page-cgv {
+    overflow-x: hidden;
+    overflow-y: visible;
 }
 
 /* Ajustement du body pour le mode démo */
@@ -129,7 +129,7 @@ body.page-cgv.demo-mode {
 .cgv-content {
     padding: var(--space-8, 32px) 0;
     background: var(--bg-primary);
-    overflow: visible !important;
+    overflow: visible;
 }
 
 .cgv-layout {
@@ -148,8 +148,8 @@ body.page-cgv.demo-mode {
 .cgv-nav {
     position: relative;
     /* CRITIQUE: Retirer toute contrainte de hauteur */
-    height: auto !important;
-    min-height: 100% !important;
+    height: auto;
+    min-height: 100%;
     /* S'étendre avec le contenu principal */
     align-self: stretch;
     /* Permettre au sticky de fonctionner sur toute la hauteur */
@@ -157,10 +157,10 @@ body.page-cgv.demo-mode {
     flex-direction: column;
 }
 
-.nav-sticky {
+.cgv-page .nav-sticky {
     /* Position sticky avec support complet */
-    position: -webkit-sticky !important;
-    position: sticky !important;
+    position: -webkit-sticky;
+    position: sticky;
     
     /* Position depuis le haut */
     top: calc(var(--navbar-height, 70px) + var(--space-4, 16px));
@@ -375,7 +375,7 @@ body.demo-mode .nav-sticky,
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-xl, 16px);
-    overflow: visible !important;
+    overflow: visible;
     min-height: 100%;
 }
 
@@ -383,7 +383,7 @@ body.demo-mode .nav-sticky,
     padding: var(--space-8, 32px);
     color: var(--text-secondary);
     line-height: 1.8;
-    overflow: visible !important;
+    overflow: visible;
 }
 
 /* =================================
@@ -718,14 +718,14 @@ body.demo-mode .nav-sticky,
 ================================= */
 
 @supports not (position: sticky) {
-    .nav-sticky {
-        position: fixed !important;
-        top: 86px !important;
+    .cgv-page .nav-sticky {
+        position: fixed;
+        top: 86px;
         left: auto;
         width: 250px;
     }
-    
-    .cgv-layout {
+
+    .cgv-page .cgv-layout {
         padding-left: 270px;
     }
 }
@@ -896,10 +896,10 @@ body.demo-mode .nav-sticky,
         page-break-inside: avoid;
         margin-bottom: 1cm;
         transform: none;
-        background: none !important;
-        border: none !important;
-        padding-left: 0 !important;
-        margin-left: 0 !important;
+        background: none;
+        border: none;
+        padding-left: 0;
+        margin-left: 0;
     }
     
     .cgv-section h2,
@@ -937,7 +937,7 @@ body.demo-mode .nav-sticky,
 ================================= */
 
 .cgv-page .nav-sticky {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+    display: block;
+    visibility: visible;
+    opacity: 1;
 }

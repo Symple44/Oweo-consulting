@@ -192,7 +192,6 @@
     <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/notifications.css">
     <link rel="stylesheet" href="css/demo-search.css">
-    <link rel="stylesheet" href="css/theme-toggle.css">
 
     <!-- Pages -->
     <link rel="stylesheet" href="css/pages.css">
@@ -204,6 +203,9 @@
     <link rel="stylesheet" href="css/legal-page.css">
     <link rel="stylesheet" href="css/cgv-page.css">
     <link rel="stylesheet" href="css/error-pages.css">
+
+    <!-- Theme Toggle - DOIT ÊTRE CHARGÉ EN DERNIER pour override -->
+    <link rel="stylesheet" href="css/theme-toggle.css">
 
     <!-- Démos -->
     <link rel="stylesheet" href="css/demo-components.css">
@@ -338,15 +340,18 @@
     <div id="modals-container" role="dialog" aria-hidden="true"></div>
     
     <!-- Scripts - Architecture Modulaire -->
-    
-    <!-- 0. Configuration société (EN PREMIER) -->
+
+    <!-- 0. Logger (EN TOUT PREMIER pour être disponible partout) -->
+    <script src="js/utils/logger.js"></script>
+
+    <!-- 1. Configuration société -->
     <script src="js/config/company-info.js"></script>
-    
-    <!-- 1. Core Classes de base -->
+
+    <!-- 2. Core Classes de base -->
     <script src="js/core/event-bus.js"></script>
     <script src="js/core/component-manager.js"></script>
-    
-    <!-- 2. Utilities -->
+
+    <!-- 3. Utilities -->
     <script src="js/utils/dom-utils.js"></script>
     <script src="js/utils/animation-utils.js"></script>
     <script src="js/utils/client-access.js"></script>
@@ -354,22 +359,22 @@
     <script src="js/utils/seo-manager.js"></script>
     <script src="js/utils/theme-manager.js"></script>
     
-    <!-- 3. Base Components -->
+    <!-- 4. Base Components -->
     <script src="js/components/base-component.js"></script>
     <script src="js/pages/base-page.js"></script>
     <script src="js/demos/base-demo.js"></script>
-    
-    <!-- 4. Core System -->
+
+    <!-- 5. Core System -->
     <script src="js/core/router.js"></script>
     <script src="js/core/app.js"></script>
-    
-    <!-- 5. Components -->
+
+    <!-- 6. Components -->
     <script src="js/components/navbar.js"></script>
     <script src="js/components/footer.js"></script>
     <script src="js/components/demo-search.js"></script>
     <script src="js/components/modal.js"></script>
-    
-    <!-- 6. Pages -->
+
+    <!-- 7. Pages -->
     <script src="js/pages/home.js"></script>
     <script src="js/pages/services.js"></script>
     <script src="js/pages/products.js"></script>
@@ -377,19 +382,19 @@
     <script src="js/pages/contact.js"></script>
     <script src="js/pages/legal.js"></script>
     <script src="js/pages/cgv.js"></script>
-    
-    <!-- 7. Demo Pages -->
+
+    <!-- 8. Demo Pages -->
     <script src="js/demos/chiffrage-demo.js"></script>
     <script src="js/demos/dstv-demo.js"></script>
-    
-    <!-- 8. Configuration APRÈS CompanyInfo -->
+
+    <!-- 9. Configuration APRÈS CompanyInfo -->
     <script src="js/config/environment.js"></script>
     <script src="js/config/google-services.js"></script>
     <script src="js/config/seo-pages.js"></script>
     <script src="js/config/demo-config.js"></script>
     <script src="js/config/app-config.js"></script>
-    
-    <!-- 9. Tools (développement uniquement) -->
+
+    <!-- 10. Tools (développement uniquement) -->
     <script src="js/tools/consistency-checker.js"></script>
     
     <!-- Bibliothèques pour la génération PDF -->
@@ -404,37 +409,37 @@
         // Initialisation de l'application
         document.addEventListener('DOMContentLoaded', () => {
             try {
-                console.log('🔍 Checking dependencies...');
-                
+                logger.info('Checking dependencies...');
+
                 // Vérifier que les configurations sont cohérentes
                 if (window.CompanyInfo) {
                     const validation = window.CompanyInfo.validate();
                     if (!validation.valid) {
-                        console.error('❌ Configuration société invalide:', validation.issues);
+                        logger.error('Configuration société invalide:', validation.issues);
                     } else {
-                        console.log('✅ Company info validated');
+                        logger.info('Company info validated');
                     }
                 } else {
-                    console.warn('⚠️ CompanyInfo not loaded');
+                    logger.warn('CompanyInfo not loaded');
                 }
-                
+
                 // Initialiser le SEO Manager
                 if (window.SEOManager) {
                     window.seoManager = new window.SEOManager();
                     window.seoManager.init();
-                    console.log('✅ SEO Manager initialized');
+                    logger.info('SEO Manager initialized');
                 } else {
-                    console.warn('⚠️ SEO Manager not available');
+                    logger.warn('SEO Manager not available');
                 }
-                
+
                 // Vérifier AppConfig
                 if (window.AppConfig) {
                     if (typeof window.AppConfig.validateCompanyInfo === 'function') {
                         window.AppConfig.validateCompanyInfo();
                     }
-                    console.log('✅ App config loaded');
+                    logger.info('App config loaded');
                 } else {
-                    console.warn('⚠️ AppConfig not loaded');
+                    logger.warn('AppConfig not loaded');
                 }
                 
                 // Vérifier que toutes les dépendances sont chargées
@@ -450,31 +455,31 @@
                 if (missingClasses.length > 0) {
                     throw new Error(`Classes manquantes: ${missingClasses.join(', ')}`);
                 }
-                
-                console.log('✅ All dependencies loaded');
-                
+
+                logger.info('All dependencies loaded');
+
                 // Vérifier les pages importantes
                 const pageClasses = ['HomePage', 'ServicesPage', 'DemosPage', 'ContactPage'];
                 const missingPages = pageClasses.filter(className => {
                     return typeof window[className] === 'undefined';
                 });
-                
+
                 if (missingPages.length > 0) {
-                    console.warn('⚠️ Pages manquantes:', missingPages.join(', '));
+                    logger.warn('Pages manquantes:', missingPages.join(', '));
                 } else {
-                    console.log('✅ All pages loaded');
+                    logger.info('All pages loaded');
                 }
-                
+
                 // Initialiser l'application
                 if (typeof window.OweoApp !== 'undefined') {
                     window.app = new window.OweoApp();
                     window.app.init();
                 } else {
-                    console.error('OweoApp not found');
+                    logger.error('OweoApp not found');
                 }
-                
+
             } catch (error) {
-                console.error('App initialization failed:', error);
+                logger.error('App initialization failed:', error);
                 document.getElementById('app').innerHTML = `
                     <div class="error-container">
                         <div class="error-icon">
