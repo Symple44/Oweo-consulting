@@ -301,6 +301,24 @@ body:not(.dark-theme) .deliverable-tag {
     border-color: var(--primary-dark) !important;
 }
 
+/* Activity items en thème clair - fond blanc avec texte foncé */
+body.light-theme .activity-item,
+body:not(.dark-theme) .activity-item {
+    background: #FFFFFF !important;
+    border: 1px solid #E5E7EB !important;
+}
+
+body.light-theme .activity-item span,
+body:not(.dark-theme) .activity-item span {
+    color: #1F2937 !important;
+}
+
+body.light-theme .activity-item:hover,
+body:not(.dark-theme) .activity-item:hover {
+    background: #F9FAFB !important;
+    border-color: var(--primary-color) !important;
+}
+
 body.light-theme .btn-outline,
 body:not(.dark-theme) .btn-outline {
     border-color: var(--primary-color);
