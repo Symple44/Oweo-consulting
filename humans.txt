@@ -1,0 +1,26 @@
+# humanstxt.org
+
+/* ÉQUIPE */
+    Développeur & Fondateur: Nicolas Dubain
+    Contact: contact@oweo-consulting.fr
+    LinkedIn: https://linkedin.com/company/oweo-consulting
+    Localisation: Orvault, France
+
+/* SITE */
+    Dernière mise à jour: 2025/09/30
+    Standards: HTML5, CSS3, ES6+
+    Composants: Vanilla JavaScript SPA
+    Outils: Git
+    IDE: Visual Studio Code
+
+/* MERCI */
+    Merci à tous nos clients de l'industrie métallique qui nous font confiance
+    pour leur transformation digitale.
+
+/* SITE */
+    Nom: Oweo
+    Tagline: Expert en transformation digitale pour l'industrie métallique
+    Type: Site vitrine & démonstrations
+    Technologies: HTML5, CSS3, JavaScript (Vanilla)
+    Hébergement: Apache
+    Sécurité: HTTPS, CSP, XSS Protection

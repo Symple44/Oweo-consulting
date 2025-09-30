@@ -47,28 +47,27 @@ window.SEOPagesConfig = {
         }
     },
     
-    // Page démos
-    demos: {
-        title: 'Démonstrations ERP Métallique | Chiffrage & DSTV | Oweo',
-        description: 'Découvrez nos solutions ERP métallique en action : outil de chiffrage automatisé, interface DSTV, gestion production. Demandez votre démonstration personnalisée.',
+    // Page produits
+    products: {
+        title: 'Nos Produits ERP | TopSteel, MétaListe, V-Steel | Oweo',
+        description: 'Découvrez notre gamme de produits : TopSteel (ERP IA), MétaListe (annuaire métallurgie), V-Steel (gestion production). Solutions innovantes pour l\'industrie métallique.',
         keywords: [
-            'démo ERP métallique', 'démonstration logiciel', 'chiffrage automatisé',
-            'interface DSTV démo', 'gestion production métallique',
-            'test logiciel ERP', 'essai gratuit', 'présentation solution',
-            'POC métallurgie', 'prototype ERP', 'validation concept'
+            'TopSteel', 'MétaListe', 'V-Steel', 'ERP métallique',
+            'logiciel métallurgie', 'annuaire métallurgie', 'gestion production',
+            'ERP intelligence artificielle', 'solutions métallique',
+            'produits ERP', 'logiciels industrie métallique'
         ],
-        type: 'software',
-        image: '/assets/images/og-demos.jpg',
-        imageAlt: 'Démonstrations des solutions ERP métallique Oweo',
-        priority: '0.8',
-        changefreq: 'weekly',
+        type: 'product',
+        image: '/assets/images/og-products.jpg',
+        imageAlt: 'Gamme de produits Oweo pour l\'industrie métallique',
+        priority: '0.9',
+        changefreq: 'monthly',
         structuredData: {
-            type: 'software',
-            applicationCategory: 'BusinessApplication',
-            operatingSystem: 'Web Browser'
+            type: 'product',
+            category: 'Software Products'
         }
     },
-    
+
     // Page contact
     contact: {
         title: 'Contact Oweo | Expert ERP Métallique Nantes | Devis Gratuit',
@@ -86,52 +85,6 @@ window.SEOPagesConfig = {
         changefreq: 'monthly',
         structuredData: {
             type: 'contact'
-        }
-    },
-    
-    // Démo chiffrage
-    'chiffrage-demo': {
-        title: 'Démo Chiffrage Automatisé | ERP Métallique | Oweo',
-        description: 'Découvrez notre outil de chiffrage automatisé pour la charpente métallique. Calcul instantané, base matériaux, export PDF. Gain de temps et précision garantis.',
-        keywords: [
-            'chiffrage automatisé', 'outil devis métallique', 'calcul charpente',
-            'base prix matériaux', 'métrage automatique', 'export PDF devis',
-            'logiciel chiffrage', 'estimation automatique', 'pricing tool',
-            'cost calculation', 'automated quotation'
-        ],
-        type: 'software',
-        image: '/assets/images/og-chiffrage-demo.jpg',
-        imageAlt: 'Outil de chiffrage automatisé pour la métallurgie',
-        priority: '0.8',
-        changefreq: 'weekly',
-        robots: 'index, follow',
-        structuredData: {
-            type: 'software',
-            name: 'Outil de Chiffrage Automatisé',
-            applicationCategory: 'BusinessApplication',
-            description: 'Logiciel de chiffrage automatisé pour la charpente métallique'
-        }
-    },
-    
-    // Démo DSTV
-    'dstv-demo': {
-        title: 'Démo Interface DSTV | CNC Métallique | Oweo',
-        description: 'Interface DSTV pour machines CNC métalliques. Import/export fichiers, validation automatique, optimisation production. Compatible toutes machines.',
-        keywords: [
-            'interface DSTV', 'CNC métallique', 'fichier DSTV', 'machines CNC',
-            'import export DSTV', 'validation automatique', 'optimisation CNC',
-            'production automatisée', 'usinage métallique', 'CAM interface'
-        ],
-        type: 'software',
-        image: '/assets/images/og-dstv-demo.jpg',
-        imageAlt: 'Interface DSTV pour machines CNC métalliques',
-        priority: '0.8',
-        changefreq: 'weekly',
-        structuredData: {
-            type: 'software',
-            name: 'Interface DSTV',
-            applicationCategory: 'BusinessApplication',
-            description: 'Interface DSTV pour machines CNC de métallurgie'
         }
     },
     
@@ -262,10 +215,10 @@ window.RichSnippetsConfig = {
         breadcrumb: true,
         faq: false // Ajouter si on a une FAQ
     },
-    demos: {
-        software: true,
+    products: {
+        product: true,
         breadcrumb: true,
-        video: false // Ajouter si on a des vidéos
+        aggregateRating: false // Ajouter si on a des avis
     },
     contact: {
         organization: true,

@@ -256,6 +256,13 @@
     gap: 1rem;
 }
 
+/* Theme toggle container */
+.navbar-theme-toggle-container {
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+}
+
 .btn {
     padding: 0.5rem 1rem;
     border-radius: 6px;
@@ -700,28 +707,34 @@
     .navbar-actions {
         display: none;
     }
-    
+
     .navbar-toggle {
         display: flex;
     }
-    
+
     .navbar-container {
         padding: 0 1rem;
     }
-    
+
     .logo-text {
         font-size: 1.25rem;
     }
-    
+
     .logo-icon {
         font-size: 1.5rem;
     }
-    
+
+    /* Theme toggle visible en mobile */
+    .navbar-theme-toggle-container {
+        margin-left: auto;
+        margin-right: 0.5rem;
+    }
+
     /* Animation du logo sur mobile */
     .navbar-toggle.active ~ .navbar-brand .brand-logo {
         transform: scale(0.95);
     }
-    
+
     /* S'assurer que le menu mobile prend toute la largeur */
     .navbar-mobile {
         width: 100%;

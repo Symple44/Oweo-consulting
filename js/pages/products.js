@@ -15,7 +15,7 @@ class ProductsPage extends BasePage {
                 id: 'topsteel',
                 name: 'TopSteel',
                 tagline: 'Solution innovante couplée à l\'IA',
-                description: 'Solution ERP innovante pour gérer les entreprises de métallurgie avec un couplage natif aux intelligences artificielles. Automatisez et optimisez vos processus grâce à l\'IA.',
+                description: 'Solution innovante pour gérer les entreprises de métallurgie avec un couplage natif aux intelligences artificielles. Automatisez et optimisez vos processus grâce à l\'IA.',
                 icon: 'fas fa-brain',
                 color: '#00d4ff',
                 link: 'https://topsteel.tech/',
@@ -32,8 +32,8 @@ class ProductsPage extends BasePage {
                     },
                     {
                         icon: 'fas fa-industry',
-                        title: 'Gestion de Production',
-                        description: 'Optimisation de la production avec prédictions IA'
+                        title: 'Gestion',
+                        description: 'Optimisation avec prédictions IA'
                     },
                     {
                         icon: 'fas fa-cogs',

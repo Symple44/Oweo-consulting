@@ -178,7 +178,8 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="oweo-consulting" />
     <link rel="manifest" href="/assets/images/site.webmanifest" />
-    
+    <link rel="author" href="/humans.txt" />
+
     <!-- CSS Variables et Base -->
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
@@ -191,14 +192,12 @@
     <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/notifications.css">
-    <link rel="stylesheet" href="css/demo-search.css">
 
     <!-- Pages -->
     <link rel="stylesheet" href="css/pages.css">
     <link rel="stylesheet" href="css/home-pages.css">
     <link rel="stylesheet" href="css/services-page.css">
     <link rel="stylesheet" href="css/products-page.css">
-    <link rel="stylesheet" href="css/demos-page.css">
     <link rel="stylesheet" href="css/contact-page.css">
     <link rel="stylesheet" href="css/legal-page.css">
     <link rel="stylesheet" href="css/cgv-page.css">
@@ -206,11 +205,6 @@
 
     <!-- Theme Toggle - DOIT ÊTRE CHARGÉ EN DERNIER pour override -->
     <link rel="stylesheet" href="css/theme-toggle.css">
-
-    <!-- Démos -->
-    <link rel="stylesheet" href="css/demo-components.css">
-    <link rel="stylesheet" href="css/auth-modal.css">
-    <link rel="stylesheet" href="css/dstv-demo.css">
 
     <!-- Icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -362,7 +356,6 @@
     <!-- 4. Base Components -->
     <script src="js/components/base-component.js"></script>
     <script src="js/pages/base-page.js"></script>
-    <script src="js/demos/base-demo.js"></script>
 
     <!-- 5. Core System -->
     <script src="js/core/router.js"></script>
@@ -371,27 +364,20 @@
     <!-- 6. Components -->
     <script src="js/components/navbar.js"></script>
     <script src="js/components/footer.js"></script>
-    <script src="js/components/demo-search.js"></script>
     <script src="js/components/modal.js"></script>
 
     <!-- 7. Pages -->
     <script src="js/pages/home.js"></script>
     <script src="js/pages/services.js"></script>
     <script src="js/pages/products.js"></script>
-    <script src="js/pages/demos.js"></script>
     <script src="js/pages/contact.js"></script>
     <script src="js/pages/legal.js"></script>
     <script src="js/pages/cgv.js"></script>
 
-    <!-- 8. Demo Pages -->
-    <script src="js/demos/chiffrage-demo.js"></script>
-    <script src="js/demos/dstv-demo.js"></script>
-
-    <!-- 9. Configuration APRÈS CompanyInfo -->
+    <!-- 8. Configuration APRÈS CompanyInfo -->
     <script src="js/config/environment.js"></script>
     <script src="js/config/google-services.js"></script>
     <script src="js/config/seo-pages.js"></script>
-    <script src="js/config/demo-config.js"></script>
     <script src="js/config/app-config.js"></script>
 
     <!-- 10. Tools (développement uniquement) -->
@@ -459,7 +445,7 @@
                 logger.info('All dependencies loaded');
 
                 // Vérifier les pages importantes
-                const pageClasses = ['HomePage', 'ServicesPage', 'DemosPage', 'ContactPage'];
+                const pageClasses = ['HomePage', 'ServicesPage', 'ProductsPage', 'ContactPage'];
                 const missingPages = pageClasses.filter(className => {
                     return typeof window[className] === 'undefined';
                 });

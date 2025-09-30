@@ -45,6 +45,7 @@ class ThemeManager {
     }
 
     createThemeToggle() {
+        // Un seul bouton pour desktop et mobile (logo uniquement)
         const toggle = document.createElement('button');
         toggle.id = 'theme-toggle';
         toggle.className = 'theme-toggle';
@@ -53,14 +54,14 @@ class ThemeManager {
             <i class="fas fa-moon theme-icon-dark"></i>
             <i class="fas fa-sun theme-icon-light"></i>
         `;
-
         toggle.addEventListener('click', () => this.toggleTheme());
 
-        // Ajouter le bouton au navbar - tout à droite
+        // Ajouter le bouton
         setTimeout(() => {
-            const navbar = document.querySelector('.navbar-actions');
-            if (navbar) {
-                navbar.appendChild(toggle);
+            // Container dans le header navbar
+            const container = document.querySelector('.navbar-theme-toggle-container');
+            if (container) {
+                container.appendChild(toggle);
             }
         }, 100);
     }

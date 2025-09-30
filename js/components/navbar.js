@@ -43,44 +43,10 @@ class OweoNavbar extends BaseComponent {
                             <i class="fas fa-cogs"></i>
                             <span>Services</span>
                         </a>
-                        <div class="nav-dropdown">
-                            <a href="#" class="nav-link dropdown-toggle">
-                                <i class="fas fa-box-open"></i>
-                                <span>Nos Produits</span>
-                                <i class="fas fa-chevron-down"></i>
-                            </a>
-                            <div class="dropdown-menu">
-                                <a href="https://topsteel.tech/" target="_blank" rel="noopener noreferrer" class="dropdown-item">
-                                    <i class="fas fa-brain"></i>
-                                    <div>
-                                        <div class="item-title">TopSteel <i class="fas fa-external-link-alt" style="font-size: 0.75em; opacity: 0.7;"></i></div>
-                                        <div class="item-desc">ERP innovant couplé à l'IA</div>
-                                    </div>
-                                </a>
-                                <a href="https://metaliste.info/" target="_blank" rel="noopener noreferrer" class="dropdown-item">
-                                    <i class="fas fa-building"></i>
-                                    <div>
-                                        <div class="item-title">MétaListe <i class="fas fa-external-link-alt" style="font-size: 0.75em; opacity: 0.7;"></i></div>
-                                        <div class="item-desc">Annuaire de la métallurgie</div>
-                                    </div>
-                                </a>
-                                <a href="https://vega.pro/" target="_blank" rel="noopener noreferrer" class="dropdown-item">
-                                    <i class="fas fa-industry"></i>
-                                    <div>
-                                        <div class="item-title">V-Steel <i class="fas fa-external-link-alt" style="font-size: 0.75em; opacity: 0.7;"></i></div>
-                                        <div class="item-desc">Gestion production (Partenaire)</div>
-                                    </div>
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a href="#" class="dropdown-item" data-page="products">
-                                    <i class="fas fa-th-large"></i>
-                                    <div>
-                                        <div class="item-title">Tous nos produits</div>
-                                        <div class="item-desc">Découvrez notre gamme</div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
+                        <a href="#" class="nav-link" data-page="products">
+                            <i class="fas fa-box-open"></i>
+                            <span>Nos Produits</span>
+                        </a>
                         <a href="#" class="nav-link" data-page="contact">
                             <i class="fas fa-envelope"></i>
                             <span>Contact</span>
@@ -94,7 +60,10 @@ class OweoNavbar extends BaseComponent {
                             <span>Nous Contacter</span>
                         </button>
                     </div>
-                    
+
+                    <!-- Theme toggle - desktop et mobile -->
+                    <div class="navbar-theme-toggle-container"></div>
+
                     <!-- Mobile Menu Toggle -->
                     <button class="navbar-toggle" id="mobile-menu-toggle" aria-label="Menu" aria-expanded="false">
                         <span class="toggle-line" aria-hidden="true"></span>
@@ -116,27 +85,10 @@ class OweoNavbar extends BaseComponent {
                                 <span>Services</span>
                             </a>
                             
-                            <!-- Mobile Products Section -->
-                            <div class="mobile-nav-section">
-                                <div class="mobile-nav-title">
-                                    <i class="fas fa-box-open"></i>
-                                    Nos Produits
-                                </div>
-                                <div class="mobile-nav-items">
-                                    <a href="https://topsteel.tech/" target="_blank" rel="noopener noreferrer" class="mobile-nav-link">
-                                        <i class="fas fa-brain"></i>
-                                        <span>TopSteel <i class="fas fa-external-link-alt" style="font-size: 0.75em;"></i></span>
-                                    </a>
-                                    <a href="https://metaliste.info/" target="_blank" rel="noopener noreferrer" class="mobile-nav-link">
-                                        <i class="fas fa-building"></i>
-                                        <span>MétaListe <i class="fas fa-external-link-alt" style="font-size: 0.75em;"></i></span>
-                                    </a>
-                                    <a href="https://vega.pro/" target="_blank" rel="noopener noreferrer" class="mobile-nav-link">
-                                        <i class="fas fa-industry"></i>
-                                        <span>V-Steel <i class="fas fa-external-link-alt" style="font-size: 0.75em;"></i></span>
-                                    </a>
-                                </div>
-                            </div>
+                            <a href="#" class="mobile-nav-link" data-page="products">
+                                <i class="fas fa-box-open"></i>
+                                <span>Nos Produits</span>
+                            </a>
                             
                             <a href="#" class="mobile-nav-link" data-page="contact">
                                 <i class="fas fa-envelope"></i>

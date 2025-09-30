@@ -282,6 +282,38 @@ body.dark-theme .field-label {
     color: var(--text-primary);
 }
 
+/* Boutons en thème clair - s'assurer d'un bon contraste */
+body.light-theme .btn-primary,
+body:not(.dark-theme) .btn-primary {
+    color: #FFFFFF !important;
+}
+
+body.light-theme .btn-primary span,
+body:not(.dark-theme) .btn-primary span {
+    color: #FFFFFF !important;
+}
+
+/* Deliverable tags en thème clair - texte blanc sur fond bleu */
+body.light-theme .deliverable-tag,
+body:not(.dark-theme) .deliverable-tag {
+    background: var(--primary-color) !important;
+    color: #FFFFFF !important;
+    border-color: var(--primary-dark) !important;
+}
+
+body.light-theme .btn-outline,
+body:not(.dark-theme) .btn-outline {
+    border-color: var(--primary-color);
+    color: var(--primary-color) !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+}
+
+body.light-theme .btn-outline:hover,
+body:not(.dark-theme) .btn-outline:hover {
+    background: var(--primary-color) !important;
+    color: white !important;
+}
+
 /* Boutons en dark mode - préserver les couleurs */
 body.dark-theme .btn-primary {
     background: var(--primary-color);

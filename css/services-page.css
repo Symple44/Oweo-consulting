@@ -314,7 +314,7 @@
     font-size: 0.75rem;
     font-weight: 600;
     border: 1px solid var(--primary-color);
-    opacity: 0.3;
+    opacity: 1;
 }
 
 /* Actions du service */
@@ -863,7 +863,8 @@
     }
     
     .methodology-timeline::before {
-        left: 30px;
+        left: 50%;
+        transform: translateX(-50%);
         width: 3px;
         top: 80px;
         bottom: 60px;
@@ -886,6 +887,9 @@
         height: 80px;
         position: relative;
         margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .step-digit {
@@ -906,7 +910,8 @@
     }
     
     .step-timeline-connector {
-        left: 30px;
+        left: 50%;
+        transform: translateX(-50%);
         top: -20px;
         height: 20px;
     }
@@ -981,13 +986,17 @@
     }
     
     .methodology-timeline::before {
-        left: 25px;
+        left: 50%;
+        transform: translateX(-50%);
         width: 2px;
     }
-    
+
     .step-number {
         width: 60px;
         height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .step-digit {
@@ -1008,7 +1017,8 @@
     }
     
     .step-timeline-connector {
-        left: 25px;
+        left: 50%;
+        transform: translateX(-50%);
     }
     
     .step-content {

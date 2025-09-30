@@ -37,13 +37,13 @@ window.CompanyInfo = {
     
     // Adresse
     address: {
-        street: '10 Rue du sous bois',
-        city: 'Nantes',
+        street: '10 Rue du Sous-Bois',
+        city: 'Orvault',
         postalCode: '44700',
         country: 'France',
         region: 'Pays de la Loire',
-        full: 'Nantes, France',
-        complete: '10 Rue du sous bois, 44700 Orvault, France'
+        full: 'Orvault, France',
+        complete: '10 Rue du Sous-Bois, 44700 Orvault, France'
     },
     
     // URLs et liens

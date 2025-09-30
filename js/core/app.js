@@ -22,7 +22,6 @@ class OweoApp {
         this.config = {
             enableAnalytics: true,
             enableClientAccess: true,
-            enableDemoSearch: true,
             enableSEO: true,
             debugMode: false
         };
@@ -170,14 +169,6 @@ class OweoApp {
             await this.componentManager.register('footer', footer);
         }
         
-        // Demo Search (si activé)
-        if (this.config.enableDemoSearch && typeof DemoSearch !== 'undefined') {
-            const demoSearch = new DemoSearch({
-                container: '#demo-search-banner',
-                eventBus: this.eventBus
-            });
-            await this.componentManager.register('demoSearch', demoSearch);
-        }
     }
     
     async initRouter() {
@@ -208,11 +199,6 @@ class OweoApp {
             this.router.register('products', new ProductsPage());
         }
 
-        // Page catalogue des démos
-        if (typeof DemosPage !== 'undefined') {
-            this.router.register('demos', new DemosPage());
-        }
-        
         // Page de contact
         if (typeof ContactPage !== 'undefined') {
             this.router.register('contact', new ContactPage());
@@ -229,15 +215,6 @@ class OweoApp {
             this.router.register('privacy', new LegalPage('privacy'));
             this.router.register('terms', new LegalPage('terms'));
             this.router.register('cookies', new LegalPage('cookies'));
-        }
-        
-        // Pages démo individuelles
-        if (typeof ChiffrageDemo !== 'undefined') {
-            this.router.register('chiffrage-demo', new ChiffrageDemo());
-        }
-        
-        if (typeof DSTVDemo !== 'undefined') {
-            this.router.register('dstv-demo', new DSTVDemo());
         }
     }
     
@@ -275,8 +252,6 @@ class OweoApp {
         // Émettre l'événement
         this.eventBus.emit('routeChanged', {
             route: route.path,
-            isDemoMode: this.isDemoMode,
-            isDemosPage: route.path === 'demos',
             isContactPage: route.path === 'contact',
             ...route
         });
@@ -308,26 +283,7 @@ class OweoApp {
             logger.error('Error updating page SEO:', error);
         }
     }
-    
-    toggleDemoMode() {
-        const demoSearch = document.getElementById('demo-search-banner');
-        if (!demoSearch) return;
-        
-        if (this.isDemoMode) {
-            demoSearch.style.display = 'block';
-            setTimeout(() => demoSearch.classList.add('active'), 50);
-            
-            // Ajuster le padding du body
-            document.body.style.paddingTop = 'calc(var(--navbar-height) + 80px)';
-        } else {
-            demoSearch.classList.remove('active');
-            setTimeout(() => demoSearch.style.display = 'none', 300);
-            
-            // Restaurer le padding
-            document.body.style.paddingTop = 'var(--navbar-height)';
-        }
-    }
-    
+
     showErrorPage(error) {
         const appContainer = document.getElementById('app');
         if (appContainer) {
