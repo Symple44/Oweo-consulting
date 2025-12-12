@@ -27,8 +27,7 @@ class OweoNavbar extends BaseComponent {
                     <div class="navbar-brand">
                         <a href="#" class="brand-link" data-page="home">
                             <div class="brand-logo">
-                                <div class="logo-icon">🏗️</div>
-                                <span class="logo-text">Oweo</span>
+                                <img src="assets/images/oweo.png" alt="Oweo" class="logo-image">
                             </div>
                         </a>
                     </div>

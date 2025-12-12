@@ -62,8 +62,7 @@ class OweoFooter extends BaseComponent {
                         <div class="footer-section">
                             <div class="footer-brand">
                                 <div class="footer-logo">
-                                    <div class="footer-logo-icon">🏗️</div>
-                                    <span class="footer-logo-text">${this.companyInfo.name}</span>
+                                    <img src="assets/images/oweo.png" alt="${this.companyInfo.name}" class="footer-logo-image">
                                 </div>
                                 <p class="footer-tagline">
                                     ${this.companyInfo.tagline}
