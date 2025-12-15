@@ -247,10 +247,6 @@ class ServicesPage extends BasePage {
                                     <i class="fas fa-calendar"></i>
                                     Planifier un échange
                                 </button>
-                                <button class="btn btn-outline btn-lg" id="contact-direct-btn">
-                                    <i class="fas fa-phone"></i>
-                                    Nous contacter
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -608,11 +604,6 @@ class ServicesPage extends BasePage {
                         <div class="form-group">
                             <label for="contact-email">Email *</label>
                             <input type="email" id="contact-email" class="form-control" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="contact-phone">Téléphone</label>
-                            <input type="tel" id="contact-phone" class="form-control">
                         </div>
                         
                         <div class="form-group col-span-2">

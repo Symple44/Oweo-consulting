@@ -138,10 +138,6 @@ class ContactPage extends BasePage {
                                 <i class="fas fa-calendar"></i>
                                 Planifier un appel
                             </button>
-                            <a href="tel:${this.contactInfo.contact.phone}" class="btn btn-outline btn-lg">
-                                <i class="fas fa-phone"></i>
-                                ${this.contactInfo.getFormattedPhone()}
-                            </a>
                         </div>
                     </div>
                 </section>
@@ -185,15 +181,6 @@ class ContactPage extends BasePage {
                                                    placeholder="votre@email.com"
                                                    required>
                                             <div class="field-error" id="email-error"></div>
-                                        </div>
-                                        
-                                        <div class="form-group">
-                                            <label for="contact-phone">Téléphone</label>
-                                            <input type="tel" 
-                                                   id="contact-phone" 
-                                                   name="phone"
-                                                   class="form-control" 
-                                                   placeholder="06 12 34 56 78">
                                         </div>
                                         
                                         <div class="form-group">
@@ -327,18 +314,6 @@ class ContactPage extends BasePage {
                                         
                                         <div class="contact-method">
                                             <div class="method-icon">
-                                                <i class="fas fa-phone"></i>
-                                            </div>
-                                            <div class="method-content">
-                                                <div class="method-label">Téléphone</div>
-                                                <a href="tel:${this.contactInfo.contact.phone}" class="method-value">
-                                                    ${this.contactInfo.getFormattedPhone()}
-                                                </a>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="contact-method">
-                                            <div class="method-icon">
                                                 <i class="fas fa-map-marker-alt"></i>
                                             </div>
                                             <div class="method-content">
@@ -403,7 +378,7 @@ class ContactPage extends BasePage {
             },
             {
                 question: "Comment prendre rendez-vous ?",
-                answer: `Vous pouvez planifier un rendez-vous directement via notre calendrier en ligne ou nous appeler au ${this.contactInfo.contact.phoneFormatted}.`
+                answer: `Vous pouvez planifier un rendez-vous directement via notre calendrier en ligne.`
             },
             {
                 question: "Intervenez-vous dans toute la France ?",

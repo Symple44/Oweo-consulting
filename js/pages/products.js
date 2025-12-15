@@ -268,10 +268,6 @@ class ProductsPage extends BasePage {
                                     <i class="fas fa-calendar"></i>
                                     Demander une démonstration
                                 </button>
-                                <button class="btn btn-outline btn-lg" data-page="contact">
-                                    <i class="fas fa-phone"></i>
-                                    Nous contacter
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -430,10 +426,6 @@ class ProductsPage extends BasePage {
                                         Visiter le site
                                     </a>
                                 ` : ''}
-                                <button class="btn btn-outline btn-lg" data-page="contact">
-                                    <i class="fas fa-phone"></i>
-                                    Nous contacter
-                                </button>
                             </div>
                         </div>
                     </div>

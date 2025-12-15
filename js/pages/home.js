@@ -243,10 +243,6 @@ class HomePage extends BasePage {
                                     <i class="fas fa-calendar"></i>
                                     Planifier un échange
                                 </button>
-                                <button class="btn btn-outline btn-lg" id="contact-direct-btn">
-                                    <i class="fas fa-phone"></i>
-                                    Nous contacter
-                                </button>
                             </div>
                         </div>
                     </div>

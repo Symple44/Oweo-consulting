@@ -110,11 +110,7 @@ class OweoFooter extends BaseComponent {
                         <div class="footer-section">
                             <h4 class="footer-section-title">Solutions</h4>
                             <ul class="footer-links">
-                                <li><a href="#" class="client-demo-link" data-demo="chiffrage-demo">Outil de Chiffrage</a></li>
-                                <li><a href="#" class="client-demo-link" data-demo="dstv-demo">Interface DSTV</a></li>
-                                <li><a href="#" data-page="services">Gestion Production</a></li>
-                                <li><a href="#" data-page="services">Suivi Projets</a></li>
-                                <li><a href="#" data-page="services">Analytics Métier</a></li>
+                                <li><a href="#" data-page="products">Nos Produits</a></li>
                             </ul>
                         </div>
                         
@@ -127,10 +123,6 @@ class OweoFooter extends BaseComponent {
                                     <div>
                                         <div>${this.companyInfo.address.full}</div>
                                     </div>
-                                </div>
-                                <div class="contact-item">
-                                    <i class="fas fa-phone"></i>
-                                    <a href="tel:${this.companyInfo.contact.phone}">${this.companyInfo.contact.phoneFormatted}</a>
                                 </div>
                                 <div class="contact-item">
                                     <i class="fas fa-envelope"></i>
