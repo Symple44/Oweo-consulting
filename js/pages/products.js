@@ -1,5 +1,5 @@
 // ========================================
-// js/pages/products.js - Page produits avec MetaSteel, MétaListe, V-Steel
+// js/pages/products.js - Page produits avec TopSteel, V-Steel
 // ========================================
 
 class ProductsPage extends BasePage {
@@ -18,7 +18,7 @@ class ProductsPage extends BasePage {
                 description: 'Solution innovante pour gérer les entreprises de métallurgie avec un couplage natif aux intelligences artificielles. Automatisez et optimisez vos processus grâce à l\'IA.',
                 icon: 'fas fa-brain',
                 color: '#00d4ff',
-                link: 'https://topsteel.tech/',
+                link: 'https://topsteel.fr',
                 features: [
                     {
                         icon: 'fas fa-robot',
@@ -61,58 +61,6 @@ class ProductsPage extends BasePage {
                 cta: {
                     primary: 'Visiter TopSteel',
                     secondary: 'Demander une démo'
-                }
-            },
-            {
-                id: 'metaliste',
-                name: 'MétaListe',
-                tagline: 'L\'annuaire de la métallurgie française',
-                description: 'Annuaire digital complet dédié à l\'industrie métallurgique française. Découvrez et connectez-vous avec plus de 3 200 entreprises, 55+ solutions logicielles et 120 organisations professionnelles.',
-                icon: 'fas fa-building',
-                color: '#7c3aed',
-                link: 'https://metaliste.info/',
-                features: [
-                    {
-                        icon: 'fas fa-building',
-                        title: '3 200+ Entreprises',
-                        description: 'Base de données complète des acteurs de la métallurgie'
-                    },
-                    {
-                        icon: 'fas fa-laptop-code',
-                        title: '55+ Solutions Logicielles',
-                        description: 'Catalogue des logiciels spécialisés pour la métallurgie'
-                    },
-                    {
-                        icon: 'fas fa-users',
-                        title: '120 Organisations',
-                        description: 'Syndicats, fédérations et associations professionnelles'
-                    },
-                    {
-                        icon: 'fas fa-calendar-alt',
-                        title: '150 Événements',
-                        description: 'Agenda complet des salons et événements du secteur'
-                    },
-                    {
-                        icon: 'fas fa-search',
-                        title: 'Recherche Avancée',
-                        description: 'Filtres intelligents pour trouver les bons contacts'
-                    },
-                    {
-                        icon: 'fas fa-shield-check',
-                        title: 'Données Vérifiées',
-                        description: 'Informations régulièrement mises à jour et validées'
-                    }
-                ],
-                benefits: [
-                    'Accès centralisé à tout l\'écosystème métallurgique',
-                    'Gain de temps dans la recherche de partenaires',
-                    'Mise en réseau facilitée avec les acteurs du secteur',
-                    'Veille sectorielle simplifiée'
-                ],
-                technologies: ['Annuaire Digital', 'Base de Données', 'Moteur de Recherche'],
-                cta: {
-                    primary: 'Accéder à MétaListe',
-                    secondary: 'En savoir plus'
                 }
             },
             {

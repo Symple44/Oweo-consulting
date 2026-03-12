@@ -49,11 +49,11 @@ window.SEOPagesConfig = {
     
     // Page produits
     products: {
-        title: 'Nos Produits ERP | TopSteel, MétaListe, V-Steel | Oweo',
-        description: 'Découvrez notre gamme de produits : TopSteel (ERP IA), MétaListe (annuaire métallurgie), V-Steel (gestion production). Solutions innovantes pour l\'industrie métallique.',
+        title: 'Nos Produits ERP | TopSteel, V-Steel | Oweo',
+        description: 'Découvrez notre gamme de produits : TopSteel (ERP IA), V-Steel (gestion production). Solutions innovantes pour l\'industrie métallique.',
         keywords: [
-            'TopSteel', 'MétaListe', 'V-Steel', 'ERP métallique',
-            'logiciel métallurgie', 'annuaire métallurgie', 'gestion production',
+            'TopSteel', 'V-Steel', 'ERP métallique',
+            'logiciel métallurgie', 'gestion production',
             'ERP intelligence artificielle', 'solutions métallique',
             'produits ERP', 'logiciels industrie métallique'
         ],
