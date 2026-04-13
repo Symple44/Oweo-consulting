@@ -1,25 +1,20 @@
 /* ========================================
-   css/navbar.css - Navigation propre style Topsteel
+   css/navbar.css - Navigation
 ======================================== */
 
-/* =================================
-   NAVBAR BASE
-================================= */
 .navbar {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.95);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
+    background: #ffffff;
     border-bottom: 1px solid var(--border-color);
     z-index: 1000;
     transition: all 0.2s ease;
 }
 
 .navbar.scrolled {
-    background: rgba(255, 255, 255, 0.98);
+    background: #ffffff;
     box-shadow: var(--shadow-sm);
 }
 
@@ -27,7 +22,6 @@
     transform: translateY(-100%);
 }
 
-/* Container principal */
 .navbar-container {
     max-width: var(--container-max-width);
     margin: 0 auto;
@@ -38,35 +32,12 @@
     height: var(--navbar-height);
 }
 
-/* =================================
-   BRAND/LOGO
-================================= */
-.navbar-brand {
-    flex-shrink: 0;
-    z-index: 1001;
-}
+/* Brand */
+.navbar-brand { flex-shrink: 0; z-index: 1001; }
+.brand-link { text-decoration: none; display: block; }
+.logo-image { height: 36px; width: auto; object-fit: contain; }
 
-.brand-link {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-}
-
-.brand-logo {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.logo-image {
-    height: 36px;
-    width: auto;
-    object-fit: contain;
-}
-
-/* =================================
-   NAVIGATION DESKTOP
-================================= */
+/* Desktop nav */
 .navbar-nav {
     display: flex;
     align-items: center;
@@ -86,51 +57,28 @@
     transition: all 0.15s ease;
 }
 
-.nav-link:hover {
-    color: var(--text-primary);
-    background: var(--bg-secondary);
-}
+.nav-link:hover { color: var(--text-primary); background: var(--bg-secondary); }
+.nav-link.active { color: var(--primary-color); font-weight: var(--font-weight-semibold); background: rgba(29, 78, 216, 0.06); }
+.nav-link i { display: none; }
 
-.nav-link.active {
-    color: var(--primary-color);
-    font-weight: var(--font-weight-semibold);
-    background: rgba(29, 78, 216, 0.06);
-}
+/* Actions desktop */
+.navbar-actions { display: flex; align-items: center; gap: var(--space-3); }
+.navbar-theme-toggle-container { display: flex; align-items: center; margin-left: var(--space-2); }
 
-.nav-link i {
-    display: none;
-}
-
-/* =================================
-   ACTIONS
-================================= */
-.navbar-actions {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-}
-
-.navbar-theme-toggle-container {
-    display: flex;
-    align-items: center;
-    margin-left: var(--space-2);
-}
-
-/* =================================
-   MOBILE MENU TOGGLE
-================================= */
+/* Hamburger */
 .navbar-toggle {
     display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     background: transparent;
     border: none;
     cursor: pointer;
     padding: 0;
     z-index: 1001;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .toggle-line {
@@ -142,21 +90,11 @@
     transform-origin: center;
 }
 
-.navbar-toggle.active .toggle-line:nth-child(1) {
-    transform: rotate(45deg) translate(6px, 6px);
-}
+.navbar-toggle.active .toggle-line:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
+.navbar-toggle.active .toggle-line:nth-child(2) { opacity: 0; }
+.navbar-toggle.active .toggle-line:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
 
-.navbar-toggle.active .toggle-line:nth-child(2) {
-    opacity: 0;
-}
-
-.navbar-toggle.active .toggle-line:nth-child(3) {
-    transform: rotate(-45deg) translate(6px, -6px);
-}
-
-/* =================================
-   MOBILE MENU
-================================= */
+/* Mobile menu */
 .navbar-mobile {
     position: fixed;
     top: var(--navbar-height);
@@ -184,22 +122,18 @@
     min-height: 100%;
 }
 
-.mobile-nav {
-    display: flex;
-    flex-direction: column;
-}
+.mobile-nav { display: flex; flex-direction: column; }
 
 .mobile-nav-link {
     display: flex;
     align-items: center;
-    gap: var(--space-3);
-    color: var(--text-secondary);
+    color: var(--text-primary);
     text-decoration: none;
-    padding: var(--space-4) var(--space-4);
+    padding: var(--space-4);
     border-bottom: 1px solid var(--border-color);
     font-weight: var(--font-weight-medium);
-    font-size: var(--font-size-base);
-    transition: all 0.15s ease;
+    font-size: var(--font-size-lg);
+    -webkit-tap-highlight-color: transparent;
 }
 
 .mobile-nav-link:hover,
@@ -208,9 +142,7 @@
     background: rgba(29, 78, 216, 0.04);
 }
 
-.mobile-nav-link i {
-    display: none;
-}
+.mobile-nav-link i { display: none; }
 
 .mobile-actions {
     display: flex;
@@ -221,72 +153,16 @@
 }
 
 /* =================================
-   DROPDOWN (desktop)
+   RESPONSIVE - MOBILE
 ================================= */
-.nav-dropdown {
-    position: relative;
-}
-
-.dropdown-toggle .fa-chevron-down {
-    font-size: 0.625rem;
-    transition: transform 0.2s ease;
-}
-
-.nav-dropdown.show .dropdown-toggle .fa-chevron-down {
-    transform: rotate(180deg);
-}
-
-.dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    min-width: 240px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-lg);
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-4px);
-    transition: all 0.2s ease;
-    margin-top: var(--space-2);
-    padding: var(--space-2);
-}
-
-.nav-dropdown.show .dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.dropdown-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-3);
-    color: var(--text-primary);
-    text-decoration: none;
-    border-radius: var(--radius-md);
-    transition: all 0.15s ease;
-    font-size: var(--font-size-sm);
-}
-
-.dropdown-item:hover {
-    background: var(--bg-secondary);
-    color: var(--primary-color);
-}
-
-/* =================================
-   RESPONSIVE
-================================= */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .navbar-nav,
     .navbar-actions {
-        display: none;
+        display: none !important;
     }
 
     .navbar-toggle {
-        display: flex;
+        display: flex !important;
     }
 
     .navbar-theme-toggle-container {
@@ -295,11 +171,9 @@
     }
 
     .logo-image {
-        height: 30px;
+        height: 28px;
     }
-}
 
-@media (max-width: 480px) {
     .navbar-container {
         height: 56px;
     }
@@ -310,30 +184,53 @@
     }
 }
 
-/* =================================
-   DARK MODE
-================================= */
+/* Dark theme */
 .dark-theme .navbar {
-    background: rgba(15, 23, 42, 0.95);
+    background: #0f172a;
     border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
 .dark-theme .navbar.scrolled {
-    background: rgba(15, 23, 42, 0.98);
+    background: #0f172a;
+}
+
+.dark-theme .navbar .toggle-line {
+    background: #e2e8f0;
 }
 
 .dark-theme .navbar-mobile {
-    background: var(--bg-primary);
+    background: #1e293b;
 }
 
-/* =================================
-   REDUCED MOTION
-================================= */
+.dark-theme .mobile-nav-link {
+    color: #e2e8f0;
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-theme .mobile-nav-link:hover,
+.dark-theme .mobile-nav-link:active {
+    color: #60a5fa;
+    background: rgba(59, 130, 246, 0.1);
+}
+
+.dark-theme .mobile-actions .btn {
+    color: #ffffff;
+}
+
+.dark-theme .nav-link {
+    color: #94a3b8;
+}
+
+.dark-theme .nav-link:hover {
+    color: #e2e8f0;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.dark-theme .nav-link.active {
+    color: #60a5fa;
+    background: rgba(59, 130, 246, 0.1);
+}
+
 @media (prefers-reduced-motion: reduce) {
-    .navbar,
-    .navbar-mobile,
-    .nav-link,
-    .mobile-nav-link {
-        transition: none;
-    }
+    .navbar, .navbar-mobile, .nav-link, .mobile-nav-link { transition: none; }
 }

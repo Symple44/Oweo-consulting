@@ -3,37 +3,30 @@
 # ==================================================
 
 # -------------------- REWRITES --------------------
-RewriteEngine On
-RewriteBase /
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
 
-# Forcer HTTPS
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    # Forcer HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# Forcer www OU non-www (choisir l'un ou l'autre)
-# Option 1: Forcer non-www (recommandé)
-RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
-RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+    # Forcer non-www
+    RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+    RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 
-# Option 2: Forcer www (décommenter si préféré)
-# RewriteCond %{HTTP_HOST} !^www\. [NC]
-# RewriteCond %{HTTP_HOST} !^localhost [NC]
-# RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [R=301,L]
-
-# Redirection trailing slash (optionnel)
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_URI} !(.*)/$
-RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1/ [L,R=301]
-
-# Support des URLs clean pour SPA
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.html [L]
+    # Support des URLs clean pour SPA
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.html [L]
+</IfModule>
 
 # -------------------- SÉCURITÉ --------------------
 
 # Désactiver l'affichage du listing des répertoires
-Options -Indexes
+<IfModule mod_autoindex.c>
+    Options -Indexes
+</IfModule>
 
 # Protéger les fichiers sensibles
 <FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql|conf|bak|git)$">
@@ -42,7 +35,9 @@ Options -Indexes
 </FilesMatch>
 
 # Désactiver la signature du serveur
-ServerSignature Off
+<IfModule mod_env.c>
+    ServerSignature Off
+</IfModule>
 
 # Protection XSS
 <IfModule mod_headers.c>
@@ -154,11 +149,7 @@ ErrorDocument 500 /index.html
 
 # Empêcher l'accès aux fichiers cachés (type .git, .env)
 <IfModule mod_rewrite.c>
+    RewriteCond %{REQUEST_URI} "(^|/)\."
+    RewriteCond %{REQUEST_URI} !\.(well-known)
     RewriteRule "(^|/)\." - [F]
 </IfModule>
-
-# Limiter la taille des requêtes
-LimitRequestBody 10485760
-
-# Désactiver TRACE HTTP
-TraceEnable off

@@ -105,18 +105,16 @@ body.dark-theme .home-page .hero-section .container {
 }
 
 body.dark-theme .navbar {
-    background: var(--bg-dark-navbar);
-    border-bottom: 2px solid var(--border-dark-strong);
+    background: #0f172a;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 body.dark-theme .navbar.scrolled {
-    background: var(--bg-dark-navbar);
-    border-bottom-color: var(--border-dark-strong);
+    background: #0f172a;
 }
 
 body.dark-theme .navbar-mobile {
-    background: var(--bg-dark-navbar);
-    border-left: 2px solid var(--border-dark-strong);
+    background: #1e293b;
 }
 
 body.dark-theme .footer {

@@ -19,17 +19,17 @@ class HomePage extends BasePage {
                     <div class="container">
                         <div class="hero-content">
                             <div class="hero-text">
-                                <p class="hero-eyebrow fade-in-up">Développement & Conseil - Charpente Métallique</p>
-                                <h1 class="hero-title fade-in-up">
+                                <p class="hero-eyebrow">Développement & Conseil - Charpente Métallique</p>
+                                <h1 class="hero-title">
                                     Nous développons les <span class="text-gradient">outils métier</span>
                                     de l'industrie métallique
                                 </h1>
-                                <p class="hero-description fade-in-up">
+                                <p class="hero-description">
                                     Configurateurs 3D, imbrication barres et tôles, import DSTV,
                                     génération IFC, estimation de production, BI...
                                     Nous concevons des logiciels pensés pour votre métier.
                                 </p>
-                                <div class="hero-actions fade-in-up">
+                                <div class="hero-actions">
                                     <button class="btn btn-primary btn-lg" data-action="contact">
                                         Parlons de votre projet
                                     </button>

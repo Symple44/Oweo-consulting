@@ -240,16 +240,49 @@
    RESPONSIVE
 ================================= */
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+    .products-page .page-header {
+        padding: var(--space-8) 0 var(--space-6);
+    }
+
+    .products-page .page-title {
+        font-size: 1.75rem;
+    }
+
+    .product-highlight {
+        padding: var(--space-8) 0;
+    }
+
     .product-highlight-card {
-        padding: var(--space-6);
+        padding: var(--space-5);
+    }
+
+    .ph-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .ph-features {
+        gap: var(--space-2);
+    }
+
+    .ph-feature {
+        font-size: var(--font-size-xs);
+        padding: var(--space-1) var(--space-2);
+    }
+
+    .other-products {
+        padding: var(--space-4) 0 var(--space-8);
     }
 
     .other-products-grid {
         grid-template-columns: 1fr;
     }
 
-    .ph-features {
-        gap: var(--space-2);
+    .product-card-simple {
+        padding: var(--space-5);
+    }
+
+    .clients-logos {
+        gap: var(--space-4);
     }
 }

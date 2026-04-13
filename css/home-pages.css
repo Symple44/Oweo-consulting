@@ -727,17 +727,33 @@
    RESPONSIVE DESIGN
 ================================= */
 
-@media (max-width: 1024px) {
-    .trust-content {
-        grid-template-columns: 1fr;
-        gap: var(--space-10);
-    }
-}
-
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .home-page .hero-section {
         min-height: auto;
-        padding: var(--space-12) 0 var(--space-16);
+        padding: var(--space-10) 0 var(--space-12);
+    }
+
+    .home-page .hero-title {
+        font-size: 1.75rem;
+    }
+
+    .home-page .hero-description {
+        font-size: var(--font-size-base);
+    }
+
+    .home-page .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-3);
+    }
+
+    .home-page .hero-actions .btn {
+        justify-content: center;
+    }
+
+    .capabilities-section {
+        margin-top: 0;
+        padding: var(--space-8) 0;
     }
 
     .capabilities-grid {
@@ -745,13 +761,34 @@
         gap: var(--space-3);
     }
 
-    .capabilities-section {
-        margin-top: 0;
+    .capability-card {
+        padding: var(--space-4);
+    }
+
+    .cap-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .capability-card h3 {
+        font-size: var(--font-size-xs);
+    }
+
+    .capability-card p {
+        display: none;
     }
 
     .what-we-do-section,
     .trust-section {
-        padding: var(--space-12) 0;
+        padding: var(--space-10) 0;
+    }
+
+    .wwd-intro h2,
+    .trust-text h2,
+    .section-title,
+    .contact-title {
+        font-size: 1.5rem;
     }
 
     .wwd-grid {
@@ -759,14 +796,44 @@
         gap: var(--space-4);
     }
 
+    .wwd-card {
+        padding: var(--space-5);
+    }
+
+    .trust-content {
+        grid-template-columns: 1fr;
+        gap: var(--space-8);
+    }
+
+    .clients-logos {
+        gap: var(--space-4);
+    }
+
+    .client-logo-item {
+        min-width: 140px;
+        padding: var(--space-3) var(--space-4);
+        height: 64px;
+    }
+
+    .client-logo-item .client-logo-img {
+        height: 36px;
+    }
+
     .contact-actions {
         flex-direction: column;
-        align-items: center;
+        align-items: stretch;
     }
 
     .contact-actions .btn {
-        width: 100%;
-        max-width: 300px;
+        justify-content: center;
+    }
+
+    .contact-cta {
+        padding: var(--space-10) 0;
+    }
+
+    .contact-content p {
+        font-size: var(--font-size-base);
     }
 
     .contact-info {
@@ -776,11 +843,28 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 380px) {
     .capabilities-grid {
-        grid-template-columns: 1fr;
-        max-width: 300px;
-        margin: 0 auto;
+        gap: var(--space-2);
+    }
+
+    .capability-card {
+        padding: var(--space-3);
+    }
+
+    .cap-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 0.875rem;
+        margin-bottom: var(--space-2);
+    }
+
+    .home-page .hero-title {
+        font-size: 1.5rem;
+    }
+
+    .hero-eyebrow {
+        font-size: var(--font-size-xs);
     }
 }
 

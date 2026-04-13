@@ -256,6 +256,12 @@
     --content-top-offset: var(--navbar-dynamic-height);
 }
 
+@media (max-width: 900px) {
+    :root {
+        --navbar-height: 56px;
+    }
+}
+
 /* =================================
    DARK THEME
 ======================================== */

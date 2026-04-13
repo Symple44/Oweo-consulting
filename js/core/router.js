@@ -124,25 +124,26 @@ class OweoRouter {
             await this.destroyCurrentComponent();
         }
         
-        // Transition de sortie
-        if (this.config.enableTransitions && container.firstElementChild) {
+        // Transition de sortie (pas au premier chargement)
+        const isFirstLoad = !this.currentRoute;
+        if (this.config.enableTransitions && container.firstElementChild && !isFirstLoad) {
             await this.transitionOut(container.firstElementChild);
         }
-        
+
         // Initialiser le nouveau composant
         await this.initializeComponent(component);
-        
+
         // Rendre le composant
         const content = await component.render();
         container.innerHTML = content;
-        
+
         // Monter le composant
         if (component.onMount) {
             await component.onMount();
         }
-        
-        // Transition d'entrée
-        if (this.config.enableTransitions) {
+
+        // Transition d'entrée (pas au premier chargement)
+        if (this.config.enableTransitions && !isFirstLoad) {
             await this.transitionIn(container.firstElementChild);
         }
         

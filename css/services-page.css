@@ -601,14 +601,32 @@
    RESPONSIVE
 ================================= */
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+    .services-page .page-header {
+        padding: var(--space-8) 0 var(--space-6);
+    }
+
+    .services-page .page-title {
+        font-size: 1.75rem;
+    }
+
     .services-grid {
         grid-template-columns: 1fr;
         gap: var(--space-4);
     }
 
     .service-card {
-        padding: var(--space-6);
+        padding: var(--space-5);
+    }
+
+    .service-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 1rem;
+    }
+
+    .service-title {
+        font-size: var(--font-size-lg);
     }
 
     .methodology-timeline {
