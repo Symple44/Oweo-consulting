@@ -25,21 +25,20 @@ class OweoFooter extends BaseComponent {
     }
     
     getFallbackInfo() {
-        // Informations de fallback si CompanyInfo n'est pas disponible
         return {
             name: 'Oweo',
-            tagline: 'Expert en transformation digitale pour l\'industrie métallique',
+            tagline: 'Conseil & Développement de Projets Sur Mesure',
             contact: {
                 email: 'contact@oweo-consulting.fr',
                 phone: '+33 6 86 76 81 31',
                 phoneFormatted: '06 86 76 81 31'
             },
             address: {
-                full: 'Nantes, France'
+                full: 'Orvault, France'
             },
             businessHours: {
                 days: 'Lun-Ven',
-                hours: '8h30-18h30'
+                hours: '14h00-18h00'
             },
             social: {
                 linkedin: 'https://linkedin.com/company/oweo-consulting'
@@ -65,9 +64,8 @@ class OweoFooter extends BaseComponent {
                                     <img src="assets/images/oweo.png" alt="${this.companyInfo.name}" class="footer-logo-image">
                                 </div>
                                 <p class="footer-tagline">
-                                    ${this.companyInfo.tagline}
-                                    Nous accompagnons les entreprises dans leur digitalisation 
-                                    avec des solutions ERP sur mesure.
+                                    Développement d'outils métier et conseil pour l'industrie
+                                    de la charpente métallique.
                                 </p>
                                 <div class="footer-social">
                                     ${this.companyInfo.social.linkedin ? `
@@ -98,19 +96,20 @@ class OweoFooter extends BaseComponent {
                         <div class="footer-section">
                             <h4 class="footer-section-title">Services</h4>
                             <ul class="footer-links">
-                                <li><a href="#" data-page="services">Diagnostic Gratuit</a></li>
+                                <li><a href="#" data-page="services">Premier échange gratuit</a></li>
                                 <li><a href="#" data-page="services">Conseil Stratégique</a></li>
-                                <li><a href="#" data-page="services">Implémentation ERP</a></li>
                                 <li><a href="#" data-page="services">Développement Sur Mesure</a></li>
-                                <li><a href="#" data-page="services">Formation & Support</a></li>
+                                <li><a href="#" data-page="services">Accompagnement & Support</a></li>
                             </ul>
                         </div>
-                        
-                        <!-- Solutions -->
+
+                        <!-- Réalisations -->
                         <div class="footer-section">
-                            <h4 class="footer-section-title">Solutions</h4>
+                            <h4 class="footer-section-title">Réalisations</h4>
                             <ul class="footer-links">
-                                <li><a href="#" data-page="products">Nos Produits</a></li>
+                                <li><a href="#" data-page="products">TopSteel</a></li>
+                                <li><a href="https://metaliste.info" target="_blank" rel="noopener">Metaliste.info</a></li>
+                                <li><a href="#" data-page="products">V-Steel</a></li>
                             </ul>
                         </div>
                         

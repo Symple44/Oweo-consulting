@@ -10,7 +10,7 @@ window.CompanyInfo = {
     // Informations de base
     name: 'Oweo',
     fullName: 'OWEO',
-    tagline: 'Expert en transformation digitale pour l\'industrie métallique',
+    tagline: 'Développement & Conseil pour la Charpente Métallique',
     
     // Contact principal
     contact: {
@@ -134,9 +134,9 @@ window.CompanyInfo = {
     
     // Messages et textes récurrents
     messages: {
-        welcome: 'Bienvenue chez Oweo, votre partenaire pour la transformation digitale de l\'industrie métallique',
-        mission: 'Notre mission est d\'accompagner les entreprises de la métallurgie dans leur transformation numérique avec des solutions sur mesure et innovantes.',
-        values: 'Innovation, Excellence, Proximité'
+        welcome: 'Bienvenue chez Oweo, votre partenaire conseil et développement sur mesure',
+        mission: 'Nous développons des outils métier pour l\'industrie de la charpente métallique : configurateur 3D, imbrication, DSTV, IFC, estimation production, BI.',
+        values: 'Pragmatisme, Expertise, Engagement'
     },
     
     // Méthodes utilitaires

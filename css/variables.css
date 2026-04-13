@@ -1,140 +1,134 @@
 /* ========================================
    css/variables.css - Variables CSS globales
+   Style inspir du design system Topsteel
 ======================================== */
 
 :root {
     /* =================================
        COULEURS PRINCIPALES
     ================================= */
-    
-    /* Couleurs primaires - Palette moderne et professionnelle */
-    --primary-color: #3B82F6;  /* Bleu professionnel */
-    --primary-light: #60A5FA;
-    --primary-dark: #2563EB;
-    --primary-hover: #1D4ED8;
 
-    /* Couleurs secondaires */
-    --secondary-color: #8B5CF6;  /* Violet moderne */
-    --secondary-light: #A78BFA;
-    --secondary-dark: #7C3AED;
+    /* Couleurs primaires - Bleu professionnel Topsteel */
+    --primary-color: #1d4ed8;
+    --primary-light: #3b82f6;
+    --primary-dark: #1e40af;
+    --primary-hover: #1e3a8a;
 
-    /* Couleur d'accent */
-    --accent-color: #10B981;  /* Vert moderne */
-    --accent-light: #34D399;
-    --accent-dark: #059669;
-    
+    /* Couleurs secondaires - Gris acier */
+    --secondary-color: #475569;
+    --secondary-light: #64748b;
+    --secondary-dark: #334155;
+
+    /* Couleur d'accent - Vert professionnel */
+    --accent-color: #059669;
+    --accent-light: #10b981;
+    --accent-dark: #047857;
+
     /* =================================
-       COULEURS SYSTÈME
+       COULEURS SYSTEME
     ================================= */
-    
+
     /* Couleurs de statut */
-    --success-color: #10b981;
-    --success-light: rgba(16, 185, 129, 0.1);
-    --success-dark: #059669;
+    --success-color: #16a34a;
+    --success-light: rgba(22, 163, 74, 0.1);
+    --success-dark: #15803d;
 
-    --warning-color: #f59e0b;
-    --warning-light: rgba(245, 158, 11, 0.1);
-    --warning-dark: #d97706;
+    --warning-color: #d97706;
+    --warning-light: rgba(217, 119, 6, 0.1);
+    --warning-dark: #b45309;
 
-    --error-color: #ef4444;
-    --error-light: rgba(239, 68, 68, 0.1);
-    --error-dark: #dc2626;
+    --error-color: #dc2626;
+    --error-light: rgba(220, 38, 38, 0.1);
+    --error-dark: #b91c1c;
 
-    --info-color: #3b82f6;
-    --info-light: rgba(59, 130, 246, 0.1);
-    --info-dark: #2563eb;
-    
-    /* Couleurs neutres */
-    --gray-50: #f9fafb;
-    --gray-100: #f3f4f6;
-    --gray-200: #e5e7eb;
-    --gray-300: #d1d5db;
-    --gray-400: #9ca3af;
-    --gray-500: #6b7280;
-    --gray-600: #4b5563;
-    --gray-700: #374151;
-    --gray-800: #1f2937;
-    --gray-900: #111827;
-    
+    --info-color: #2563eb;
+    --info-light: rgba(37, 99, 235, 0.1);
+    --info-dark: #1d4ed8;
+
+    /* Palette acier (steel) - inspir de Topsteel */
+    --steel-50: #f8fafc;
+    --steel-100: #f1f5f9;
+    --steel-200: #e2e8f0;
+    --steel-300: #cbd5e1;
+    --steel-400: #94a3b8;
+    --steel-500: #64748b;
+    --steel-600: #475569;
+    --steel-700: #334155;
+    --steel-800: #1e293b;
+    --steel-900: #0f172a;
+
     /* =================================
        COULEURS DE FOND
     ================================= */
-    
-    /* Arrière-plans principaux - Équilibrés */
-    --bg-primary: #FFFFFF;  /* Blanc pur */
-    --bg-secondary: #F8FAFC;  /* Gris très clair */
-    --bg-tertiary: #F1F5F9;
 
-    /* Arrière-plans de cartes */
-    --bg-card: #FFFFFF;
-    --bg-card-hover: #F8FAFC;
-    
-    /* Arrière-plans d'éléments */
-    --bg-input: rgba(255, 255, 255, 0.1);
+    --bg-primary: #ffffff;
+    --bg-secondary: #f1f5f9;
+    --bg-tertiary: #e2e8f0;
+
+    --bg-card: #ffffff;
+    --bg-card-hover: #f8fafc;
+
+    --bg-input: #ffffff;
     --bg-button: var(--primary-color);
-    --bg-overlay: rgba(0, 0, 0, 0.7);
-    
+    --bg-overlay: rgba(15, 23, 42, 0.6);
+
     /* =================================
        COULEURS DE TEXTE
     ================================= */
-    
-    /* Texte - Contrastes renforcés */
-    --text-primary: #0F172A;  /* Presque noir pour meilleure lisibilité */
-    --text-secondary: #475569;  /* Gris plus foncé */
-    --text-muted: #64748B;
-    --text-disabled: #CBD5E1;
 
-    /* Texte sur fonds colorés */
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --text-disabled: #cbd5e1;
+
     --text-on-primary: #ffffff;
     --text-on-secondary: #ffffff;
     --text-on-accent: #ffffff;
-    
+
     /* =================================
        BORDURES
     ================================= */
-    
-    /* Bordures - Thème clair */
-    --border-color: #E5E7EB;
-    --border-light: #F3F4F6;
-    --border-strong: #D1D5DB;
-    --border-primary: var(--primary-color);
-    
-    /* =================================
-       OMBRES
-    ================================= */
-    
-    /* Ombres - Plus subtiles et modernes */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 
-    /* Ombres colorées - Plus subtiles */
-    --shadow-primary: 0 4px 14px 0 rgba(59, 130, 246, 0.25);
-    --shadow-secondary: 0 4px 14px 0 rgba(139, 92, 246, 0.25);
-    --shadow-glow-primary: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    
+    --border-color: #e2e8f0;
+    --border-light: #f1f5f9;
+    --border-strong: #cbd5e1;
+    --border-primary: var(--primary-color);
+
     /* =================================
-       TYPOGRAPHIE
+       OMBRES - Style Topsteel subtil
     ================================= */
-    
+
+    --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.08);
+    --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.1), 0 1px 2px rgba(15, 23, 42, 0.08);
+    --shadow-md: 0 4px 8px -1px rgba(15, 23, 42, 0.12), 0 2px 4px -2px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 10px 20px -3px rgba(15, 23, 42, 0.12), 0 4px 8px -4px rgba(15, 23, 42, 0.08);
+    --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.06);
+    --shadow-2xl: 0 25px 50px -12px rgba(15, 23, 42, 0.15);
+
+    --shadow-primary: 0 4px 14px 0 rgba(29, 78, 216, 0.2);
+    --shadow-focus: 0 0 0 3px rgba(29, 78, 216, 0.15);
+
+    /* =================================
+       TYPOGRAPHIE - Inter + Poppins (Topsteel)
+    ================================= */
+
     /* Familles de polices */
-    --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    --font-family-mono: 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', 'Source Code Pro', monospace;
-    
-    /* Tailles de police - Échelle optimisée pour lisibilité */
-    --font-size-xs: 0.75rem;    /* 12px */
-    --font-size-sm: 0.875rem;   /* 14px */
-    --font-size-base: 1.0625rem; /* 17px - Optimisé pour la lecture */
-    --font-size-lg: 1.125rem;   /* 18px */
-    --font-size-xl: 1.3125rem;  /* 21px */
-    --font-size-2xl: 1.625rem;  /* 26px */
-    --font-size-3xl: 2rem;      /* 32px */
-    --font-size-4xl: 2.5rem;    /* 40px */
-    --font-size-5xl: 3.25rem;   /* 52px */
-    --font-size-6xl: 4rem;      /* 64px */
-    
+    --font-family-base: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-family-display: 'Poppins', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-family-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+
+    /* Tailles de police */
+    --font-size-xs: 0.75rem;     /* 12px */
+    --font-size-sm: 0.875rem;    /* 14px */
+    --font-size-base: 1rem;      /* 16px */
+    --font-size-lg: 1.125rem;    /* 18px */
+    --font-size-xl: 1.25rem;     /* 20px */
+    --font-size-2xl: 1.5rem;     /* 24px */
+    --font-size-3xl: 1.875rem;   /* 30px */
+    --font-size-4xl: 2.25rem;    /* 36px */
+    --font-size-5xl: 3rem;       /* 48px */
+    --font-size-6xl: 3.75rem;    /* 60px */
+
     /* Poids de police */
     --font-weight-light: 300;
     --font-weight-normal: 400;
@@ -143,18 +137,18 @@
     --font-weight-bold: 700;
     --font-weight-extrabold: 800;
     --font-weight-black: 900;
-    
-    /* Hauteurs de ligne - Optimisées pour la lisibilité */
-    --line-height-tight: 1.2;
+
+    /* Hauteurs de ligne */
+    --line-height-tight: 1.25;
     --line-height-snug: 1.375;
     --line-height-normal: 1.5;
-    --line-height-relaxed: 1.65;
-    --line-height-loose: 1.8;
-    
+    --line-height-relaxed: 1.625;
+    --line-height-loose: 1.75;
+
     /* =================================
        ESPACEMENTS
     ================================= */
-    
+
     --space-1: 0.25rem;   /* 4px */
     --space-2: 0.5rem;    /* 8px */
     --space-3: 0.75rem;   /* 12px */
@@ -169,191 +163,126 @@
     --space-24: 6rem;     /* 96px */
     --space-32: 8rem;     /* 128px */
 
-    /* Espacements sémantiques pour sections - Rendu professionnel */
-    --section-spacing-sm: clamp(3rem, 8vw, 5rem);    /* 48-80px */
-    --section-spacing-md: clamp(4rem, 10vw, 7rem);   /* 64-112px */
-    --section-spacing-lg: clamp(5rem, 12vw, 9rem);   /* 80-144px */
+    /* Espacements semantiques pour sections */
+    --section-spacing-sm: clamp(3rem, 6vw, 4rem);
+    --section-spacing-md: clamp(4rem, 8vw, 6rem);
+    --section-spacing-lg: clamp(5rem, 10vw, 8rem);
 
-    /* Espacements pour conteneurs */
-    --container-padding-x: clamp(1rem, 4vw, 2rem);   /* 16-32px */
-    --container-padding-y: clamp(2rem, 6vw, 4rem);   /* 32-64px */
-    
+    --container-padding-x: clamp(1rem, 4vw, 2rem);
+    --container-padding-y: clamp(2rem, 6vw, 4rem);
+
     /* =================================
-       BORDURES ARRONDIES
+       BORDURES ARRONDIES - Topsteel (8px base)
     ================================= */
-    
+
     --radius-none: 0;
-    --radius-sm: 0.125rem;  /* 2px */
-    --radius-base: 0.25rem; /* 4px */
-    --radius-md: 0.375rem;  /* 6px */
-    --radius-lg: 0.5rem;    /* 8px */
-    --radius-xl: 0.75rem;   /* 12px */
-    --radius-2xl: 1rem;     /* 16px */
-    --radius-3xl: 1.5rem;   /* 24px */
+    --radius-sm: 0.25rem;  /* 4px */
+    --radius-base: 0.375rem; /* 6px */
+    --radius-md: 0.5rem;   /* 8px */
+    --radius-lg: 0.5rem;   /* 8px */
+    --radius-xl: 0.75rem;  /* 12px */
+    --radius-2xl: 1rem;    /* 16px */
+    --radius-3xl: 1.5rem;  /* 24px */
     --radius-full: 9999px;
-    
+
     /* =================================
        TRANSITIONS
     ================================= */
-    
+
     --transition-fast: 0.15s ease;
-    --transition-base: 0.3s ease;
-    --transition-slow: 0.5s ease;
-    
-    /* Propriétés spécifiques */
-    --transition-colors: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
-    --transition-transform: transform 0.3s ease;
-    --transition-opacity: opacity 0.3s ease;
-    --transition-all: all 0.3s ease;
-    
+    --transition-base: 0.2s ease;
+    --transition-slow: 0.3s ease;
+
+    --transition-colors: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+    --transition-transform: transform 0.2s ease;
+    --transition-opacity: opacity 0.2s ease;
+    --transition-all: all 0.2s ease;
+
     /* =================================
        LAYOUT
     ================================= */
-    
-    /* Largeurs de conteneur */
+
     --container-sm: 640px;
     --container-md: 768px;
     --container-lg: 1024px;
-    --container-xl: 1280px;
-    --container-2xl: 1536px;
+    --container-xl: 1200px;
+    --container-2xl: 1400px;
     --container-max-width: 1200px;
-    
-    /* Hauteurs d'éléments */
-    --navbar-height: 70px;
+
+    --navbar-height: 64px;
     --footer-height: auto;
-    --demo-banner-height: 80px;
-    
+
     /* Z-index */
-    --z-dropdown: 1000;
-    --z-sticky: 1020;
-    --z-fixed: 1030;
-    --z-modal-backdrop: 1040;
-    --z-modal: 1050;
-    --z-popover: 1060;
-    --z-tooltip: 1070;
-    --z-toast: 1080;
-    
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-fixed: 300;
+    --z-modal-backdrop: 400;
+    --z-modal: 500;
+    --z-popover: 600;
+    --z-tooltip: 700;
+    --z-toast: 800;
+
     /* =================================
-       GRADIENTS
+       GRADIENTS - Plus subtils
     ================================= */
-    
-    /* Gradients modernes et subtils */
-    --gradient-primary: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
-    --gradient-secondary: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
-    --gradient-hero: linear-gradient(180deg, #F9FAFB 0%, #FFFFFF 100%);
-    --gradient-card: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
-    --gradient-mesh: radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-                     radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
-    --gradient-dark: linear-gradient(135deg, rgba(15, 23, 42, 1) 0%, rgba(30, 41, 59, 1) 50%, rgba(15, 23, 42, 1) 100%);
-    
+
+    --gradient-primary: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+    --gradient-hero: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    --gradient-card: linear-gradient(135deg, rgba(29, 78, 216, 0.03) 0%, rgba(59, 130, 246, 0.03) 100%);
+    --gradient-mesh: radial-gradient(at 20% 30%, rgba(29, 78, 216, 0.06) 0%, transparent 50%),
+                     radial-gradient(at 80% 70%, rgba(59, 130, 246, 0.04) 0%, transparent 50%);
+    --gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+
     /* =================================
        ANIMATIONS
     ================================= */
-    
+
     --animation-duration-fast: 0.15s;
-    --animation-duration-base: 0.3s;
-    --animation-duration-slow: 0.5s;
-    
+    --animation-duration-base: 0.2s;
+    --animation-duration-slow: 0.3s;
+
     --animation-easing-ease: ease;
-    --animation-easing-ease-in: ease-in;
     --animation-easing-ease-out: ease-out;
     --animation-easing-ease-in-out: ease-in-out;
-    
+
     /* =================================
-       BREAKPOINTS (pour référence)
+       PROPRIETES CALCULEES
     ================================= */
-    
-    /* xs: 480px */
-    /* sm: 640px */
-    /* md: 768px */
-    /* lg: 1024px */
-    /* xl: 1280px */
-    /* 2xl: 1536px */
-}
 
-/* =================================
-   VARIABLES POUR MODE CLAIR (optionnel)
-================================= */
-
-@media (prefers-color-scheme: light) {
-    :root {
-        /* Override pour le mode clair si nécessaire */
-        --bg-primary: #ffffff;
-        --bg-secondary: #f8fafc;
-        --bg-tertiary: #f1f5f9;
-        
-        --text-primary: #1f2937;
-        --text-secondary: #4b5563;
-        --text-muted: #6b7280;
-        
-        --border-color: rgba(0, 0, 0, 0.1);
-        --border-light: rgba(0, 0, 0, 0.05);
-        --border-strong: rgba(0, 0, 0, 0.2);
-        
-        --bg-card: rgba(255, 255, 255, 0.8);
-        --bg-card-hover: rgba(255, 255, 255, 0.9);
-    }
-}
-
-/* =================================
-   VARIABLES SPÉCIFIQUES DÉMOS
-================================= */
-
-:root {
-    --demo-primary: var(--primary-color);
-    --demo-secondary: var(--secondary-color);
-    --demo-background: var(--bg-card);
-    --demo-border: var(--border-color);
-    --demo-text: var(--text-primary);
-    --demo-shadow: var(--shadow-lg);
-}
-
-/* =================================
-   VARIABLES CUSTOM PROPERTIES
-================================= */
-
-:root {
-    /* Propriétés calculées */
     --content-width: calc(100vw - 2rem);
     --content-max-width: min(var(--content-width), var(--container-max-width));
-    
-    /* Responsive spacing */
     --responsive-space: clamp(1rem, 4vw, 3rem);
-    --responsive-text: clamp(1rem, 2.5vw, 1.5rem);
-    
-    /* Dynamic navbar */
     --navbar-dynamic-height: var(--navbar-height);
     --content-top-offset: var(--navbar-dynamic-height);
 }
 
-/* ========================================
+/* =================================
    DARK THEME
 ======================================== */
 .dark-theme {
-    /* Couleurs de fond inversées */
-    --bg-primary: #0F172A;  /* Presque noir */
-    --bg-secondary: #1E293B;  /* Gris foncé */
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
     --bg-tertiary: #334155;
-    --bg-dark-navbar: rgba(15, 23, 42, 0.95);
-    --bg-dark-footer: #0F172A;
 
-    --bg-card: #1E293B;
+    --bg-card: #1e293b;
     --bg-card-hover: #334155;
 
-    /* Texte inversé */
-    --text-primary: #F1F5F9;  /* Presque blanc */
-    --text-secondary: #CBD5E1;  /* Gris clair */
-    --text-muted: #94A3B8;
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
     --text-disabled: #475569;
 
-    /* Bordures */
     --border-color: rgba(255, 255, 255, 0.1);
-    --border-color-hover: rgba(255, 255, 255, 0.2);
-    --border-dark-strong: rgba(59, 130, 246, 0.2);
+    --border-light: rgba(255, 255, 255, 0.05);
+    --border-strong: rgba(255, 255, 255, 0.15);
 
-    /* Overlay */
-    --bg-overlay: rgba(0, 0, 0, 0.85);
+    --bg-overlay: rgba(0, 0, 0, 0.8);
 
-    /* Couleurs secondaires pour dark mode */
-    --secondary-light: rgba(139, 92, 246, 0.1);
+    --primary-light: #60a5fa;
+
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.25), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.2);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.35), 0 8px 10px -6px rgba(0, 0, 0, 0.25);
 }

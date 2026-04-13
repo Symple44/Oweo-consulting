@@ -1,133 +1,17 @@
 // ========================================
-// js/pages/products.js - Page produits avec TopSteel, V-Steel
+// js/pages/products.js - Nos réalisations
 // ========================================
 
 class ProductsPage extends BasePage {
     constructor() {
         super({
             id: 'products',
-            title: 'Nos Produits',
-            description: 'Des solutions ERP sur mesure pour l\'industrie métallique'
+            title: 'Nos Réalisations',
+            description: 'Les produits et outils que nous avons développés'
         });
-
-        this.products = [
-            {
-                id: 'topsteel',
-                name: 'TopSteel',
-                tagline: 'Solution innovante couplée à l\'IA',
-                description: 'Solution innovante pour gérer les entreprises de métallurgie avec un couplage natif aux intelligences artificielles. Automatisez et optimisez vos processus grâce à l\'IA.',
-                icon: 'fas fa-brain',
-                color: '#00d4ff',
-                link: 'https://topsteel.fr',
-                features: [
-                    {
-                        icon: 'fas fa-robot',
-                        title: 'Couplage IA Natif',
-                        description: 'Intelligence artificielle intégrée pour automatiser vos processus'
-                    },
-                    {
-                        icon: 'fas fa-calculator',
-                        title: 'Chiffrage Intelligent',
-                        description: 'Génération automatique de devis assistée par IA'
-                    },
-                    {
-                        icon: 'fas fa-industry',
-                        title: 'Gestion',
-                        description: 'Optimisation avec prédictions IA'
-                    },
-                    {
-                        icon: 'fas fa-cogs',
-                        title: 'Interface DSTV',
-                        description: 'Connexion native avec vos machines CNC'
-                    },
-                    {
-                        icon: 'fas fa-chart-network',
-                        title: 'Analytics Avancés',
-                        description: 'Analyses prédictives et recommandations IA'
-                    },
-                    {
-                        icon: 'fas fa-comments',
-                        title: 'Assistant Virtuel',
-                        description: 'Chat IA pour répondre à vos questions métier'
-                    }
-                ],
-                benefits: [
-                    'Automatisation intelligente des tâches répétitives',
-                    'Prédictions précises pour optimiser la planification',
-                    'Réduction des erreurs grâce à l\'IA',
-                    'Solution innovante à la pointe de la technologie'
-                ],
-                technologies: ['IA', 'Machine Learning', 'Python', 'Cloud', 'DSTV'],
-                cta: {
-                    primary: 'Visiter TopSteel',
-                    secondary: 'Demander une démo'
-                }
-            },
-            {
-                id: 'vsteel',
-                name: 'V-Steel',
-                tagline: 'Gestion de production métallurgique',
-                description: 'Partenariat avec Vega PM pour le déploiement en France de V-Steel, logiciel de gestion de production pour l\'industrie métallurgique. Optimisez vos flux et votre productivité.',
-                icon: 'fas fa-industry',
-                color: '#f59e0b',
-                link: 'https://vega.pro/',
-                isPartnership: true,
-                features: [
-                    {
-                        icon: 'fas fa-industry',
-                        title: 'Optimisation Production',
-                        description: 'Optimisation des processus de production métallurgique'
-                    },
-                    {
-                        icon: 'fas fa-clock',
-                        title: 'Suivi Temps Réel',
-                        description: 'Suivi en temps réel des flux de production'
-                    },
-                    {
-                        icon: 'fas fa-cogs',
-                        title: 'Compatible CNC',
-                        description: 'Compatible avec les machines à commande numérique'
-                    },
-                    {
-                        icon: 'fas fa-users-cog',
-                        title: 'Optimisation Charge',
-                        description: 'Optimisation de la charge de travail du personnel'
-                    },
-                    {
-                        icon: 'fas fa-tools',
-                        title: 'Installation & Config',
-                        description: 'Installation et configuration complète assurée'
-                    },
-                    {
-                        icon: 'fas fa-headset',
-                        title: 'Support Dédié',
-                        description: 'Formation, support technique et maintenance continue'
-                    }
-                ],
-                benefits: [
-                    'Amélioration significative de l\'efficacité production',
-                    'Déploiement et support assurés en France',
-                    'Solution éprouvée pour PME et grandes entreprises',
-                    'Interfaces personnalisées selon vos besoins'
-                ],
-                technologies: ['Logiciel Production', 'Gestion Flux', 'Intégration CNC'],
-                cta: {
-                    primary: 'Découvrir V-Steel',
-                    secondary: 'Demander un déploiement'
-                },
-                partner: 'Vega PM'
-            }
-        ];
     }
 
     getTemplate() {
-        const urlParams = new URLSearchParams(window.location.hash.split('?')[1]);
-        const selectedProduct = urlParams.get('product');
-
-        if (selectedProduct) {
-            return this.getProductDetailTemplate(selectedProduct);
-        }
-
         return `
             <div class="products-page">
                 <!-- Page Header -->
@@ -136,244 +20,128 @@ class ProductsPage extends BasePage {
                         <div class="page-breadcrumb">
                             <button type="button" class="breadcrumb-link" data-page="home">Accueil</button>
                             <i class="fas fa-chevron-right"></i>
-                            <span>Nos Produits</span>
+                            <span>Nos Réalisations</span>
                         </div>
 
-                        <h1 class="page-title fade-in-up">Nos Produits</h1>
+                        <h1 class="page-title fade-in-up">Nos réalisations</h1>
                         <p class="page-description fade-in-up">
-                            Des solutions ERP sur mesure pour transformer votre industrie métallique
+                            Des outils conçus et développés pour l'industrie métallique.
                         </p>
                     </div>
                 </section>
 
-                <!-- Products Grid -->
-                <section class="section products-grid-section">
+                <!-- TopSteel -->
+                <section class="section product-highlight">
                     <div class="container">
-                        <div class="products-grid">
-                            ${this.products.map(product => this.renderProductCard(product)).join('')}
+                        <div class="product-highlight-card fade-in-up">
+                            <div class="ph-header">
+                                <div class="ph-badge">Développé par Oweo</div>
+                                <h2>TopSteel</h2>
+                                <p class="ph-tagline">ERP métallurgie couplé à l'IA</p>
+                            </div>
+                            <p class="ph-description">
+                                Solution complète de gestion pour les entreprises de charpente métallique.
+                                Chiffrage, production, configurateur 3D, pré-dimensionnement structurel,
+                                interface DSTV, génération IFC, imbrication barres et tôles.
+                                Couplage natif à l'intelligence artificielle.
+                            </p>
+                            <div class="ph-features">
+                                <div class="ph-feature"><i class="fas fa-cube"></i> Configurateur 3D</div>
+                                <div class="ph-feature"><i class="fas fa-ruler-combined"></i> Pré-dimensionnement</div>
+                                <div class="ph-feature"><i class="fas fa-cut"></i> Imbrication</div>
+                                <div class="ph-feature"><i class="fas fa-file-import"></i> Import DSTV</div>
+                                <div class="ph-feature"><i class="fas fa-building"></i> Export IFC</div>
+                                <div class="ph-feature"><i class="fas fa-robot"></i> Couplage IA</div>
+                                <div class="ph-feature"><i class="fas fa-calculator"></i> Chiffrage auto</div>
+                                <div class="ph-feature"><i class="fas fa-clock"></i> Estimation production</div>
+                            </div>
+                            <div class="ph-actions">
+                                <a href="https://topsteel.fr" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                                    Visiter topsteel.fr
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- Why Choose Section -->
-                <section class="section why-choose-section">
+                <!-- Metaliste + V-Steel -->
+                <section class="section other-products">
+                    <div class="container">
+                        <div class="other-products-grid">
+                            <!-- Metaliste -->
+                            <div class="product-card-simple fade-in-up">
+                                <div class="pcs-badge">Développé par Oweo</div>
+                                <h3>Metaliste.info</h3>
+                                <p class="pcs-tagline">Annuaire géolocalisé de la métallurgie</p>
+                                <p>Plateforme de géolocalisation des entreprises de métallurgie en France.
+                                Trouvez des sous-traitants, fournisseurs et partenaires près de chez vous.</p>
+                                <div class="pcs-features">
+                                    <span><i class="fas fa-map-marker-alt"></i> Géolocalisation</span>
+                                    <span><i class="fas fa-search"></i> Recherche avancée</span>
+                                    <span><i class="fas fa-building"></i> Fiches entreprises</span>
+                                </div>
+                                <a href="https://metaliste.info" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+                                    Visiter metaliste.info
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+
+                            <!-- V-Steel -->
+                            <div class="product-card-simple fade-in-up">
+                                <div class="pcs-badge pcs-badge-partner">Distribution partenaire</div>
+                                <h3>V-Steel</h3>
+                                <p class="pcs-tagline">Gestion de production métallurgique</p>
+                                <p>Partenariat avec Vega PM pour le déploiement en France de V-Steel,
+                                logiciel de gestion de production. Suivi temps réel, optimisation des flux,
+                                compatibilité CNC.</p>
+                                <div class="pcs-features">
+                                    <span><i class="fas fa-industry"></i> Production</span>
+                                    <span><i class="fas fa-clock"></i> Temps réel</span>
+                                    <span><i class="fas fa-cogs"></i> CNC</span>
+                                </div>
+                                <a href="https://vega.pro/" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+                                    Découvrir V-Steel
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Clients -->
+                <section class="section clients-section">
                     <div class="container">
                         <div class="section-header text-center">
-                            <h2 class="section-title fade-in-up">Pourquoi Choisir Nos Produits ?</h2>
-                            <p class="section-description fade-in-up">
-                                Des solutions pensées par et pour les professionnels de la métallurgie
-                            </p>
+                            <h2 class="section-title fade-in-up">Ils nous font confiance</h2>
                         </div>
-
-                        <div class="why-choose-grid">
-                            <div class="why-item fade-in-up">
-                                <div class="why-icon">
-                                    <i class="fas fa-industry"></i>
-                                </div>
-                                <h3>Expertise Métier</h3>
-                                <p>Développé avec des professionnels de la métallurgie pour répondre aux vrais besoins du terrain</p>
+                        <div class="clients-logos fade-in-up" style="justify-content:center;">
+                            <div class="client-logo-item">
+                                <img src="assets/images/logo-poujoulat.png" alt="Groupe Poujoulat" class="client-logo-img">
                             </div>
-
-                            <div class="why-item fade-in-up">
-                                <div class="why-icon">
-                                    <i class="fas fa-puzzle-piece"></i>
-                                </div>
-                                <h3>Modulaire</h3>
-                                <p>Choisissez les modules dont vous avez besoin et évoluez à votre rythme</p>
+                            <div class="client-logo-item">
+                                <img src="assets/images/logo-euro-energies.png" alt="Euro Energies" class="client-logo-img">
                             </div>
-
-                            <div class="why-item fade-in-up">
-                                <div class="why-icon">
-                                    <i class="fas fa-headset"></i>
-                                </div>
-                                <h3>Support Dédié</h3>
-                                <p>Accompagnement personnalisé et support technique réactif</p>
+                            <div class="client-logo-item">
+                                <span class="client-text-logo">Press-Steel</span>
                             </div>
-
-                            <div class="why-item fade-in-up">
-                                <div class="why-icon">
-                                    <i class="fas fa-shield-alt"></i>
-                                </div>
-                                <h3>Sécurité & Fiabilité</h3>
-                                <p>Hébergement sécurisé et sauvegardes automatiques de vos données</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- CTA Section -->
-                <section class="cta-section">
-                    <div class="container">
-                        <div class="cta-content">
-                            <h2 class="cta-title fade-in-up">
-                                Prêt à transformer votre activité ?
-                            </h2>
-                            <p class="fade-in-up">
-                                Discutons de vos besoins et trouvons ensemble la solution adaptée
-                            </p>
-                            <div class="cta-actions fade-in-up">
-                                <button class="btn btn-primary btn-lg" data-page="contact">
-                                    <i class="fas fa-calendar"></i>
-                                    Demander une démonstration
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        `;
-    }
-
-    renderProductCard(product) {
-        return `
-            <div class="product-card fade-in-up" data-product="${product.id}" style="--product-color: ${product.color}">
-                <div class="product-card-header">
-                    <div class="product-icon">
-                        <i class="${product.icon}"></i>
-                    </div>
-                    <div class="product-badge">
-                        <span>${product.isPartnership ? 'Partenaire' : 'Solution'}</span>
-                    </div>
-                </div>
-
-                <div class="product-card-body">
-                    <h3 class="product-name">${product.name}</h3>
-                    <p class="product-tagline">${product.tagline}</p>
-                    <p class="product-description">${product.description}</p>
-
-                    <div class="product-features-preview">
-                        ${product.features.slice(0, 3).map(feature => `
-                            <div class="feature-preview-item">
-                                <i class="${feature.icon}"></i>
-                                <span>${feature.title}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-
-                <div class="product-card-footer">
-                    ${product.link ? `
-                        <a href="${product.link}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-block">
-                            <span>Visiter ${product.name}</span>
-                            <i class="fas fa-external-link-alt"></i>
-                        </a>
-                    ` : `
-                        <button class="btn btn-primary btn-block product-detail-btn" data-product="${product.id}">
-                            <span>Découvrir ${product.name}</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </button>
-                    `}
-                </div>
-            </div>
-        `;
-    }
-
-    getProductDetailTemplate(productId) {
-        const product = this.products.find(p => p.id === productId);
-        if (!product) {
-            return this.getTemplate();
-        }
-
-        return `
-            <div class="product-detail-page">
-                <!-- Product Hero -->
-                <section class="product-hero" style="--product-color: ${product.color}">
-                    <div class="container">
-                        <button class="back-btn" data-action="back">
-                            <i class="fas fa-arrow-left"></i>
-                            Retour aux produits
-                        </button>
-
-                        <div class="product-hero-content">
-                            <div class="product-hero-text">
-                                <div class="product-hero-icon">
-                                    <i class="${product.icon}"></i>
-                                </div>
-                                ${product.isPartnership ? '<span class="partnership-badge"><i class="fas fa-handshake"></i> Partenariat avec ' + product.partner + '</span>' : ''}
-                                <h1 class="product-hero-title">${product.name}</h1>
-                                <p class="product-hero-tagline">${product.tagline}</p>
-                                <p class="product-hero-description">${product.description}</p>
-
-                                <div class="product-hero-actions">
-                                    ${product.link ? `
-                                        <a href="${product.link}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
-                                            <i class="fas fa-external-link-alt"></i>
-                                            ${product.cta.primary}
-                                        </a>
-                                    ` : `
-                                        <button class="btn btn-primary btn-lg" data-page="contact">
-                                            <i class="fas fa-rocket"></i>
-                                            ${product.cta.primary}
-                                        </button>
-                                    `}
-                                    <button class="btn btn-outline btn-lg" data-page="contact">
-                                        <i class="fas fa-phone"></i>
-                                        ${product.cta.secondary}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Features -->
-                <section class="section product-features-section">
-                    <div class="container">
-                        <h2 class="section-title">Fonctionnalités Principales</h2>
-                        <div class="features-grid">
-                            ${product.features.map(feature => `
-                                <div class="feature-card fade-in-up">
-                                    <div class="feature-icon">
-                                        <i class="${feature.icon}"></i>
-                                    </div>
-                                    <h3>${feature.title}</h3>
-                                    <p>${feature.description}</p>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Benefits -->
-                <section class="section product-benefits-section">
-                    <div class="container">
-                        <h2 class="section-title">Bénéfices Concrets</h2>
-                        <div class="benefits-list">
-                            ${product.benefits.map(benefit => `
-                                <div class="benefit-item fade-in-up">
-                                    <i class="fas fa-check-circle"></i>
-                                    <span>${benefit}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Technologies -->
-                <section class="section product-tech-section">
-                    <div class="container">
-                        <h2 class="section-title">Technologies Utilisées</h2>
-                        <div class="tech-badges">
-                            ${product.technologies.map(tech => `
-                                <span class="tech-badge">${tech}</span>
-                            `).join('')}
                         </div>
                     </div>
                 </section>
 
                 <!-- CTA -->
-                <section class="cta-section">
+                <section class="contact-cta">
                     <div class="container">
-                        <div class="cta-content">
-                            <h2 class="cta-title">Intéressé par ${product.name} ?</h2>
-                            <p>${product.link ? 'Visitez le site officiel ou contactez-nous pour en savoir plus' : 'Contactez-nous pour une démonstration personnalisée'}</p>
-                            <div class="cta-actions">
-                                ${product.link ? `
-                                    <a href="${product.link}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
-                                        <i class="fas fa-external-link-alt"></i>
-                                        Visiter le site
-                                    </a>
-                                ` : ''}
+                        <div class="contact-content">
+                            <h2 class="contact-title fade-in-up">Un besoin spécifique ?</h2>
+                            <p class="fade-in-up">
+                                Parlons de votre projet. On peut sûrement vous aider.
+                            </p>
+                            <div class="contact-actions fade-in-up">
+                                <button class="btn btn-primary btn-lg" data-page="contact">
+                                    <i class="fas fa-calendar"></i>
+                                    Planifier un échange
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -385,37 +153,14 @@ class ProductsPage extends BasePage {
     bindEvents() {
         super.bindEvents();
 
-        // Navigation breadcrumb
         const breadcrumbLinks = document.querySelectorAll('.breadcrumb-link[data-page]');
         breadcrumbLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                const page = link.dataset.page;
-                this.navigateTo(page);
+                this.navigateTo(link.dataset.page);
             });
         });
 
-        // Product detail buttons
-        const detailButtons = document.querySelectorAll('.product-detail-btn');
-        detailButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const productId = btn.dataset.product;
-                window.location.hash = `#products?product=${productId}`;
-                window.location.reload();
-            });
-        });
-
-        // Back button
-        const backBtn = document.querySelector('[data-action="back"]');
-        if (backBtn) {
-            backBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.navigateTo('products');
-            });
-        }
-
-        // CTA buttons
         const ctaButtons = document.querySelectorAll('[data-page="contact"]');
         ctaButtons.forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -432,5 +177,4 @@ class ProductsPage extends BasePage {
     }
 }
 
-// Exposer la classe
 window.ProductsPage = ProductsPage;

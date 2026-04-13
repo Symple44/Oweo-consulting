@@ -5,81 +5,92 @@
 window.SEOPagesConfig = {
     // Page d'accueil
     home: {
-        title: 'Oweo - Expert ERP Charpente Métallique | Solutions Digitales Nantes',
-        description: 'Expert ERP pour l\'industrie métallique. Solutions de chiffrage automatisé, interface DSTV, gestion production. Accompagnement digital complet à Nantes. Devis gratuit.',
+        title: 'Oweo - Développement & Conseil pour la Charpente Métallique | Nantes',
+        description: 'Oweo développe des outils métier pour l\'industrie de la charpente métallique : configurateur 3D, imbrication, DSTV, IFC, estimation production, BI. Conseil et accompagnement.',
         keywords: [
-            'ERP métallique', 'charpente métallique', 'logiciel métallurgie',
-            'chiffrage automatisé', 'DSTV', 'Tekla integration', 'industrie 4.0',
-            'transformation digitale', 'consultant ERP', 'Nantes', 'Loire-Atlantique',
-            'OWEO', 'gestion production métallique', 'devis automatisé',
-            'logiciel sur mesure', 'développement ERP', 'système information'
+            'développement sur mesure', 'conseil digital', 'transformation numérique',
+            'projet informatique', 'logiciel métier', 'ERP sur mesure',
+            'accompagnement digital', 'consultant IT', 'Nantes', 'Loire-Atlantique',
+            'OWEO', 'application métier', 'solution logicielle',
+            'conseil stratégique', 'développement logiciel', 'système information'
         ],
         type: 'website',
-        image: '/assets/images/og-home.jpg',
-        imageAlt: 'Oweo - Solutions ERP pour l\'industrie métallique',
+        image: '/assets/images/og-image.png',
+        imageAlt: 'Oweo - Conseil et Développement Sur Mesure',
         priority: '1.0',
         changefreq: 'weekly',
         structuredData: {
             type: 'organization'
         }
     },
-    
+
     // Page services
     services: {
-        title: 'Services ERP Métallique | Conseil & Développement Sur Mesure | Oweo',
-        description: 'Services complets ERP métallique : diagnostic gratuit, conseil stratégique, développement sur mesure, formation. Solutions Tekla, DSTV, chiffrage automatisé.',
+        breadcrumb: [
+            { name: 'Accueil', url: 'https://oweo-consulting.fr/' },
+            { name: 'Services', url: 'https://oweo-consulting.fr/#services' }
+        ],
+        title: 'Nos Services | Développement Outils Métier & Conseil | Oweo',
+        description: 'Développement d\'outils métier pour la charpente métallique : configurateur 3D, imbrication, DSTV, IFC. Conseil stratégique et accompagnement.',
         keywords: [
-            'services ERP métallique', 'conseil ERP', 'développement sur mesure',
-            'diagnostic digital gratuit', 'formation ERP', 'support technique',
-            'intégration Tekla', 'interface DSTV', 'automatisation chiffrage',
-            'consultant métallurgie', 'transformation digitale industrie',
-            'accompagnement changement', 'optimisation processus'
+            'conseil transformation digitale', 'développement sur mesure',
+            'audit digital', 'accompagnement projet', 'logiciel métier',
+            'intégration système', 'formation digitale', 'support technique',
+            'consultant IT Nantes', 'optimisation processus',
+            'conduite du changement', 'architecture logicielle'
         ],
         type: 'service',
-        image: '/assets/images/og-services.jpg',
-        imageAlt: 'Services ERP pour l\'industrie métallique par Oweo',
+        image: '/assets/images/og-image.png',
+        imageAlt: 'Services de conseil et développement par Oweo',
         priority: '0.9',
         changefreq: 'monthly',
         structuredData: {
             type: 'service',
-            serviceType: 'ERP Consulting',
+            serviceType: 'IT Consulting & Custom Development',
             category: 'Software Development & Consulting'
         }
     },
-    
-    // Page produits
+
+    // Page réalisations
     products: {
-        title: 'Nos Produits ERP | TopSteel, V-Steel | Oweo',
-        description: 'Découvrez notre gamme de produits : TopSteel (ERP IA), V-Steel (gestion production). Solutions innovantes pour l\'industrie métallique.',
+        breadcrumb: [
+            { name: 'Accueil', url: 'https://oweo-consulting.fr/' },
+            { name: 'Réalisations', url: 'https://oweo-consulting.fr/#products' }
+        ],
+        title: 'Nos Réalisations | TopSteel, Metaliste.info | Oweo',
+        description: 'TopSteel (ERP métallurgie + IA), Metaliste.info (annuaire géolocalisé), V-Steel (gestion production). Des outils développés pour l\'industrie métallique.',
         keywords: [
-            'TopSteel', 'V-Steel', 'ERP métallique',
-            'logiciel métallurgie', 'gestion production',
-            'ERP intelligence artificielle', 'solutions métallique',
-            'produits ERP', 'logiciels industrie métallique'
+            'réalisations', 'projets sur mesure', 'portfolio',
+            'études de cas', 'solutions métier', 'références clients',
+            'développement logiciel', 'transformation digitale'
         ],
         type: 'product',
-        image: '/assets/images/og-products.jpg',
-        imageAlt: 'Gamme de produits Oweo pour l\'industrie métallique',
+        image: '/assets/images/og-image.png',
+        imageAlt: 'Réalisations et projets Oweo',
         priority: '0.9',
         changefreq: 'monthly',
         structuredData: {
             type: 'product',
-            category: 'Software Products'
+            category: 'Software Projects'
         }
     },
 
     // Page contact
     contact: {
-        title: 'Contact Oweo | Expert ERP Métallique Nantes | Devis Gratuit',
-        description: 'Contactez Oweo pour votre projet ERP métallique. Diagnostic gratuit, devis personnalisé, accompagnement complet. Nantes, Loire-Atlantique. Réponse rapide.',
+        breadcrumb: [
+            { name: 'Accueil', url: 'https://oweo-consulting.fr/' },
+            { name: 'Contact', url: 'https://oweo-consulting.fr/#contact' }
+        ],
+        title: 'Contact Oweo | Parlons de Votre Projet | Nantes',
+        description: 'Contactez Oweo pour discuter de votre projet de développement sur mesure ou de transformation digitale. Premier échange gratuit. Nantes.',
         keywords: [
-            'contact ERP métallique', 'devis gratuit', 'diagnostic digital',
-            'consultant Nantes', 'expert métallurgie', 'projet ERP',
+            'contact développement sur mesure', 'devis gratuit', 'diagnostic digital',
+            'consultant Nantes', 'projet informatique', 'premier échange',
             'rdv conseil', 'étude personnalisée', 'accompagnement projet',
-            'support client', 'service après-vente'
+            'support client', 'partenaire digital'
         ],
         type: 'contact',
-        image: '/assets/images/og-contact.jpg',
+        image: '/assets/images/og-image.png',
         imageAlt: 'Contactez Oweo pour vos projets ERP métallique',
         priority: '0.7',
         changefreq: 'monthly',

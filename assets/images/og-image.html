@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1200">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    background: #0f172a;
+    font-family: 'DM Sans', sans-serif;
+    color: #e2e8f0;
+    position: relative;
+  }
+
+  /* ── Atmospheric grid lines ── */
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(29,78,216,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(29,78,216,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 70% 60% at 75% 50%, black 20%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 75% 50%, black 20%, transparent 70%);
+  }
+
+  /* ── Accent glow ── */
+  .glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.35;
+  }
+  .glow-1 { background: #1d4ed8; top: -120px; right: -80px; }
+  .glow-2 { background: #3b82f6; bottom: -200px; left: 200px; opacity: 0.15; }
+
+  /* ── Geometric accent ── */
+  .geo {
+    position: absolute;
+    border: 1px solid rgba(59,130,246,0.15);
+    border-radius: 4px;
+  }
+  .geo-1 {
+    width: 320px; height: 320px;
+    right: 80px; top: 50%;
+    transform: translateY(-50%) rotate(12deg);
+  }
+  .geo-2 {
+    width: 240px; height: 240px;
+    right: 120px; top: 50%;
+    transform: translateY(-50%) rotate(-6deg);
+    border-color: rgba(59,130,246,0.08);
+  }
+  .geo-3 {
+    width: 6px; height: 120px;
+    background: linear-gradient(to bottom, #1d4ed8, transparent);
+    border: none;
+    left: 80px; top: 80px;
+    border-radius: 3px;
+  }
+
+  /* ── Steel beam motif (top-right) ── */
+  .beam {
+    position: absolute;
+    background: rgba(29,78,216,0.08);
+  }
+  .beam-1 {
+    width: 3px; height: 630px;
+    right: 300px; top: 0;
+  }
+  .beam-2 {
+    width: 3px; height: 630px;
+    right: 304px; top: 0;
+    opacity: 0.5;
+  }
+
+  /* ── Content ── */
+  .content {
+    position: relative;
+    z-index: 10;
+    padding: 72px 80px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 720px;
+  }
+
+  .logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #ffffff;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo-dot {
+    width: 12px;
+    height: 12px;
+    background: #3b82f6;
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(59,130,246,0.6);
+    display: inline-block;
+  }
+
+  .divider {
+    width: 48px;
+    height: 3px;
+    background: linear-gradient(90deg, #1d4ed8, #3b82f6);
+    border-radius: 2px;
+    margin: 20px 0 24px;
+  }
+
+  .tagline {
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: #f1f5f9;
+    margin-bottom: 24px;
+    letter-spacing: -0.01em;
+  }
+
+  .tagline strong {
+    color: #60a5fa;
+    font-weight: 700;
+  }
+
+  .capabilities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .cap {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: #94a3b8;
+    background: rgba(29,78,216,0.1);
+    border: 1px solid rgba(59,130,246,0.15);
+    padding: 6px 14px;
+    border-radius: 4px;
+  }
+
+  /* ── Domain pill (bottom) ── */
+  .domain {
+    position: absolute;
+    bottom: 48px;
+    left: 80px;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: #64748b;
+    letter-spacing: 0.02em;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .domain::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #059669;
+    border-radius: 50%;
+  }
+</style>
+</head>
+<body>
+
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div class="grid-overlay"></div>
+
+  <div class="geo geo-1"></div>
+  <div class="geo geo-2"></div>
+  <div class="geo geo-3"></div>
+  <div class="beam beam-1"></div>
+  <div class="beam beam-2"></div>
+
+  <div class="content">
+    <div class="logo">
+      <span class="logo-dot"></span>
+      OWEO
+    </div>
+
+    <div class="divider"></div>
+
+    <p class="tagline">
+      Développement &amp; Conseil<br>
+      pour la <strong>Charpente Métallique</strong>
+    </p>
+
+    <div class="capabilities">
+      <span class="cap">Configurateur 3D</span>
+      <span class="cap">Imbrication</span>
+      <span class="cap">DSTV</span>
+      <span class="cap">IFC</span>
+      <span class="cap">Estimation production</span>
+      <span class="cap">BI</span>
+    </div>
+  </div>
+
+  <div class="domain">oweo-consulting.fr</div>
+
+</body>
+</html>

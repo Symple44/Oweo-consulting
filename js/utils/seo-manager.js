@@ -12,13 +12,13 @@ class SEOManager {
     
     getDefaultMeta() {
         return {
-            title: `${this.companyInfo.name || 'Oweo'} - Expert ERP Charpente Métallique`,
-            description: `${this.companyInfo.tagline || 'Expert en transformation digitale pour l\'industrie métallique'}. Solutions ERP sur mesure, chiffrage automatisé, interface DSTV. Accompagnement complet.`,
+            title: `${this.companyInfo.name || 'Oweo'} - Développement & Conseil Charpente Métallique`,
+            description: `${this.companyInfo.tagline || 'Développement d\'outils métier pour l\'industrie de la charpente métallique'}. Configurateur 3D, imbrication, DSTV, IFC, estimation production, BI.`,
             keywords: [
-                'ERP métallique', 'charpente métallique', 'logiciel métallurgie',
-                'chiffrage automatisé', 'DSTV', 'Tekla', 'industrie 4.0',
-                'transformation digitale', 'gestion production', 'Nantes',
-                'OWEO', 'consultant ERP', 'développement sur mesure'
+                'développement logiciel métallurgie', 'configurateur 3D', 'charpente métallique',
+                'imbrication barres tôles', 'DSTV', 'IFC', 'ERP métallique',
+                'estimation production', 'BI métier', 'Nantes',
+                'OWEO', 'conseil industrie', 'outils métier'
             ],
             author: this.companyInfo.fullName || 'OWEO',
             robots: 'index, follow',
@@ -212,7 +212,9 @@ class SEOManager {
                     "url": this.companyInfo.urls?.website || 'https://oweo-consulting.fr',
                     "logo": {
                         "@type": "ImageObject",
-                        "url": `${this.companyInfo.urls?.website || 'https://oweo-consulting.fr'}/assets/images/logo.png`
+                        "url": `${this.companyInfo.urls?.website || 'https://oweo-consulting.fr'}/assets/images/oweo.png`,
+                        "width": 250,
+                        "height": 60
                     },
                     "contactPoint": {
                         "@type": "ContactPoint",
@@ -272,7 +274,20 @@ class SEOManager {
         } else if (meta.type === 'article') {
             baseData["@graph"].push(this.generateArticleSchema(meta));
         }
-        
+
+        // BreadcrumbList pour les pages internes
+        if (meta.breadcrumb) {
+            baseData["@graph"].push({
+                "@type": "BreadcrumbList",
+                "itemListElement": meta.breadcrumb.map((item, index) => ({
+                    "@type": "ListItem",
+                    "position": index + 1,
+                    "name": item.name,
+                    "item": item.url
+                }))
+            });
+        }
+
         return baseData;
     }
     
@@ -351,7 +366,7 @@ class SEOManager {
      * Obtenir l'image par défaut
      */
     getDefaultImage() {
-        return `${this.companyInfo.urls?.website || 'https://oweo-consulting.fr'}/assets/images/og-image.jpg`;
+        return `${this.companyInfo.urls?.website || 'https://oweo-consulting.fr'}/assets/images/og-image.png`;
     }
     
     /**

@@ -191,17 +191,11 @@ body.dark-theme .methodology-step:hover {
     border-color: var(--border-color-hover);
 }
 
-/* Sections avec fonds clairs */
-body.dark-theme section,
-body.dark-theme .section {
-    background: transparent;
-}
+/* Sections dark theme */
 
 /* Sections spécifiques avec fonds alternés */
-body.dark-theme .hero-section,
 body.dark-theme .expertise-section,
 body.dark-theme .approach-section,
-body.dark-theme .process-section,
 body.dark-theme .cta-section,
 body.dark-theme .trust-section,
 body.dark-theme .products-section,
@@ -282,55 +276,7 @@ body.dark-theme .field-label {
     color: var(--text-primary);
 }
 
-/* Boutons en thème clair - s'assurer d'un bon contraste */
-body.light-theme .btn-primary,
-body:not(.dark-theme) .btn-primary {
-    color: #FFFFFF !important;
-}
-
-body.light-theme .btn-primary span,
-body:not(.dark-theme) .btn-primary span {
-    color: #FFFFFF !important;
-}
-
-/* Deliverable tags en thème clair - texte blanc sur fond bleu */
-body.light-theme .deliverable-tag,
-body:not(.dark-theme) .deliverable-tag {
-    background: var(--primary-color) !important;
-    color: #FFFFFF !important;
-    border-color: var(--primary-dark) !important;
-}
-
-/* Activity items en thème clair - fond blanc avec texte foncé */
-body.light-theme .activity-item,
-body:not(.dark-theme) .activity-item {
-    background: #FFFFFF !important;
-    border: 1px solid #E5E7EB !important;
-}
-
-body.light-theme .activity-item span,
-body:not(.dark-theme) .activity-item span {
-    color: #1F2937 !important;
-}
-
-body.light-theme .activity-item:hover,
-body:not(.dark-theme) .activity-item:hover {
-    background: #F9FAFB !important;
-    border-color: var(--primary-color) !important;
-}
-
-body.light-theme .btn-outline,
-body:not(.dark-theme) .btn-outline {
-    border-color: var(--primary-color);
-    color: var(--primary-color) !important;
-    background: rgba(255, 255, 255, 0.9) !important;
-}
-
-body.light-theme .btn-outline:hover,
-body:not(.dark-theme) .btn-outline:hover {
-    background: var(--primary-color) !important;
-    color: white !important;
-}
+/* Light theme - minimal overrides only where needed */
 
 /* Boutons en dark mode - préserver les couleurs */
 body.dark-theme .btn-primary {
