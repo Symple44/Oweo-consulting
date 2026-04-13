@@ -7,7 +7,7 @@ class ContactPage extends BasePage {
         super({
             id: 'contact',
             title: 'Nous Contacter',
-            description: 'Prenez contact avec nos experts pour transformer votre industrie métallique'
+            description: 'Parlons de votre projet - Premier échange gratuit'
         });
         
         // Configuration EmailJS - VOS IDENTIFIANTS
@@ -102,7 +102,7 @@ class ContactPage extends BasePage {
             },
             businessHours: {
                 days: 'Lundi - Vendredi',
-                hours: '8h30 - 18h30'
+                hours: '14h00 - 18h00'
             },
             urls: {
                 calendly: 'https://calendly.com/nicolas-dubain/30min',
@@ -129,8 +129,8 @@ class ContactPage extends BasePage {
                         
                         <h1 class="page-title fade-in-up">Parlons de votre projet</h1>
                         <p class="page-description fade-in-up">
-                            Nos experts sont là pour vous accompagner dans votre transformation digitale. 
-                            Contactez-nous pour un échange personnalisé sur vos besoins.
+                            Premier échange gratuit et sans engagement.
+                            Décrivez-nous votre besoin, on vous répond rapidement.
                         </p>
                         
                         <div class="contact-quick-actions fade-in-up">
@@ -222,13 +222,12 @@ class ContactPage extends BasePage {
                                             <label for="contact-subject">Sujet</label>
                                             <select id="contact-subject" name="subject" class="form-control">
                                                 <option value="">Choisissez un sujet</option>
+                                                <option value="Développement outil métier">Développement d'un outil métier</option>
+                                                <option value="Conseil et accompagnement">Conseil et accompagnement</option>
                                                 <option value="Demande de démonstration">Demande de démonstration</option>
-                                                <option value="Diagnostic gratuit">Diagnostic gratuit</option>
-                                                <option value="Conseil stratégique">Conseil stratégique</option>
-                                                <option value="Implémentation ERP">Implémentation ERP</option>
                                                 <option value="Support technique">Support technique</option>
                                                 <option value="Partenariat">Partenariat</option>
-                                                <option value="Autre demande">Autre demande</option>
+                                                <option value="Autre">Autre</option>
                                             </select>
                                         </div>
                                         

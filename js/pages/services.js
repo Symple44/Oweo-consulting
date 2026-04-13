@@ -201,8 +201,8 @@ class ServicesPage extends BasePage {
                 </div>
 
                 <div class="service-actions">
-                    <button type="button" class="btn btn-primary quote-btn" data-service-id="${service.id}">
-                        En savoir plus
+                    <button type="button" class="btn btn-primary contact-btn" data-page="contact">
+                        Nous contacter
                     </button>
                 </div>
             </div>
@@ -225,13 +225,12 @@ class ServicesPage extends BasePage {
                 });
             });
 
-            const quoteButtons = container.querySelectorAll('.quote-btn');
-            quoteButtons.forEach(btn => {
+            const contactButtons = container.querySelectorAll('.contact-btn');
+            contactButtons.forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    const serviceId = btn.dataset.serviceId;
-                    this.learnMore(serviceId);
+                    this.navigateTo('contact');
                 });
             });
 
