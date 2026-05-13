@@ -1,305 +1,1084 @@
 <!DOCTYPE html>
 <html lang="fr" prefix="og: https://ogp.me/ns#">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="theme-color" content="#1d4ed8">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="theme-color" content="#8e2c1c" />
 
-    <title>Oweo - Développement & Conseil pour la Charpente Métallique | Nantes</title>
-    <meta name="description" content="Oweo développe des outils métier pour l'industrie de la charpente métallique : configurateur 3D, imbrication, DSTV, IFC, estimation production, BI. Conseil et accompagnement. Nantes.">
-    <meta name="keywords" content="développement logiciel métallurgie, configurateur 3D charpente métallique, imbrication barres tôles, DSTV, IFC, ERP métallique, conseil digital industrie, Nantes, OWEO">
-    <meta name="author" content="OWEO">
-    <meta name="robots" content="index, follow">
-    <meta name="language" content="fr">
+<title>Oweo — Conseil ERP &amp; développement pour la métallurgie | Nantes</title>
+<meta name="description" content="Cabinet de conseil ERP & développement pour la métallurgie : audit SI, migration ERP, facture électronique 2026, outils métier, BI, IA. Charpente, chaudronnerie, métallerie — Nantes." />
+<meta name="keywords" content="conseil ERP charpente métallique, migration ERP métallurgie, facture électronique 2026, configurateur 3D charpente, imbrication tôles profils, DSTV IFC BIM, BI métier industriel, IA self-hosted RAG, Nantes, OWEO" />
+<meta name="author" content="OWEO" />
+<meta name="robots" content="index, follow" />
+<meta name="language" content="fr" />
 
-    <link rel="canonical" href="https://oweo-consulting.fr/">
-    <link rel="alternate" hreflang="fr" href="https://oweo-consulting.fr/">
-    <link rel="alternate" hreflang="x-default" href="https://oweo-consulting.fr/">
+<link rel="canonical" href="https://oweo-consulting.fr/" />
+<link rel="alternate" hreflang="fr" href="https://oweo-consulting.fr/" />
+<link rel="alternate" hreflang="x-default" href="https://oweo-consulting.fr/" />
 
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Oweo - Développement & Conseil pour la Charpente Métallique">
-    <meta property="og:description" content="Outils métier pour l'industrie métallique : configurateur 3D, imbrication, DSTV, IFC, estimation production, BI.">
-    <meta property="og:url" content="https://oweo-consulting.fr/">
-    <meta property="og:site_name" content="Oweo">
-    <meta property="og:locale" content="fr_FR">
-    <meta property="og:image" content="https://oweo-consulting.fr/assets/images/og-image.png">
-    <meta property="og:image:alt" content="Oweo - Développement et Conseil pour la Charpente Métallique">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Oweo — Conseil ERP &amp; développement pour la métallurgie" />
+<meta property="og:description" content="Audit, migration ERP, facture électronique 2026, outils métier, BI, IA pour la métallurgie : charpente, chaudronnerie, métallerie." />
+<meta property="og:url" content="https://oweo-consulting.fr/" />
+<meta property="og:site_name" content="Oweo" />
+<meta property="og:locale" content="fr_FR" />
+<meta property="og:image" content="https://oweo-consulting.fr/assets/images/og-image.png" />
+<meta property="og:image:alt" content="Oweo — Cabinet de conseil et développement pour la métallurgie" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
 
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Oweo - Développement & Conseil Charpente Métallique">
-    <meta name="twitter:description" content="Outils métier pour l'industrie métallique : configurateur 3D, imbrication, DSTV, IFC, BI.">
-    <meta name="twitter:image" content="https://oweo-consulting.fr/assets/images/og-image.png">
-    <meta name="twitter:image:alt" content="Oweo - Développement et Conseil pour la Charpente Métallique">
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Oweo — Conseil ERP &amp; développement métallurgie" />
+<meta name="twitter:description" content="Audit, ERP, facture électronique, outils métier, BI, IA pour la métallurgie." />
+<meta name="twitter:image" content="https://oweo-consulting.fr/assets/images/og-image.png" />
 
-    <meta name="google-site-verification" content="fcxWmBzNn-x4YOr2neZ9o-BuegjK4GG-bwGkrTH2vj8">
-    <meta name="google-site-verification" content="PUdCG0255qRtpK5s9G47pqVp-WT-T9Ja2z4ToQ9D8ww">
+<meta name="google-site-verification" content="fcxWmBzNn-x4YOr2neZ9o-BuegjK4GG-bwGkrTH2vj8" />
+<meta name="google-site-verification" content="PUdCG0255qRtpK5s9G47pqVp-WT-T9Ja2z4ToQ9D8ww" />
 
-    <script type="application/ld+json">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
     {
-        "@context": "https://schema.org",
-        "@graph": [
-            {
-                "@type": "Organization",
-                "@id": "https://oweo-consulting.fr/#organization",
-                "name": "OWEO",
-                "alternateName": "Oweo",
-                "description": "Développement d'outils métier et conseil pour l'industrie de la charpente métallique",
-                "url": "https://oweo-consulting.fr",
-                "logo": {
-                    "@type": "ImageObject",
-                    "url": "https://oweo-consulting.fr/assets/images/oweo.png",
-                    "width": 250,
-                    "height": 60
-                },
-                "contactPoint": {
-                    "@type": "ContactPoint",
-                    "telephone": "+33-6-86-76-81-31",
-                    "contactType": "customer service",
-                    "availableLanguage": ["French"],
-                    "areaServed": "FR"
-                },
-                "address": {
-                    "@type": "PostalAddress",
-                    "streetAddress": "10 rue du Sous-Bois",
-                    "addressLocality": "Orvault",
-                    "addressRegion": "Pays de la Loire",
-                    "postalCode": "44700",
-                    "addressCountry": "FR"
-                },
-                "geo": {
-                    "@type": "GeoCoordinates",
-                    "latitude": 47.2569,
-                    "longitude": -1.6233
-                },
-                "sameAs": ["https://linkedin.com/company/oweo-consulting"],
-                "foundingDate": "2023",
-                "founder": { "@type": "Person", "name": "Nicolas Dubain" },
-                "hasOfferCatalog": {
-                    "@type": "OfferCatalog",
-                    "name": "Services Développement & Conseil",
-                    "itemListElement": [
-                        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Développement d'outils métier", "description": "Configurateur 3D, imbrication, DSTV, IFC, estimation production, BI" } },
-                        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Conseil en transformation digitale", "description": "Accompagnement stratégique pour l'industrie métallique" } }
-                    ]
-                }
-            },
-            {
-                "@type": "WebSite",
-                "@id": "https://oweo-consulting.fr/#website",
-                "url": "https://oweo-consulting.fr",
-                "name": "Oweo",
-                "description": "Développement d'outils métier et conseil pour la charpente métallique",
-                "publisher": { "@id": "https://oweo-consulting.fr/#organization" },
-                "inLanguage": "fr-FR"
-            },
-            {
-                "@type": "WebPage",
-                "@id": "https://oweo-consulting.fr/#webpage",
-                "url": "https://oweo-consulting.fr/",
-                "name": "Oweo - Développement & Conseil Charpente Métallique",
-                "description": "Outils métier pour l'industrie de la charpente métallique.",
-                "isPartOf": { "@id": "https://oweo-consulting.fr/#website" },
-                "about": { "@id": "https://oweo-consulting.fr/#organization" },
-                "inLanguage": "fr-FR"
-            }
+      "@type": "Organization",
+      "@id": "https://oweo-consulting.fr/#organization",
+      "name": "OWEO",
+      "alternateName": "Oweo",
+      "description": "Cabinet de conseil et développement pour la métallurgie : audit, migration ERP, conformité facture électronique, développement métier, BI, IA.",
+      "url": "https://oweo-consulting.fr",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://oweo-consulting.fr/assets/images/oweo.png",
+        "width": 649,
+        "height": 215
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+33-6-13-94-21-72",
+        "email": "nicolas.dubain@oweo-consulting.fr",
+        "contactType": "customer service",
+        "availableLanguage": ["French", "English"],
+        "areaServed": "FR"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Orvault",
+        "addressRegion": "Pays de la Loire",
+        "postalCode": "44700",
+        "addressCountry": "FR"
+      },
+      "sameAs": ["https://linkedin.com/company/oweo-consulting"],
+      "foundingDate": "2025",
+      "founder": { "@type": "Person", "name": "Nicolas Dubain" },
+      "memberOf": {
+        "@type": "Organization",
+        "name": "French Tech Nantes — La Cantine"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Services Conseil & Développement",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Audit & cadrage SI" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Migration ERP" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Conformité facture électronique 2026" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Développement métier sur-mesure" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "BI & pilotage industriel" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "IA self-hosted" } }
         ]
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://oweo-consulting.fr/#website",
+      "url": "https://oweo-consulting.fr",
+      "name": "Oweo",
+      "publisher": { "@id": "https://oweo-consulting.fr/#organization" },
+      "inLanguage": "fr-FR"
     }
-    </script>
+  ]
+}
+</script>
 
-    <link rel="icon" type="image/png" href="/assets/images/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
-    <link rel="shortcut icon" href="/assets/images/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="Oweo" />
-    <link rel="manifest" href="/assets/images/site.webmanifest" />
+<link rel="icon" type="image/png" href="/assets/images/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
+<link rel="shortcut icon" href="/assets/images/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="Oweo" />
+<link rel="manifest" href="/assets/images/site.webmanifest" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-        h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-    </style>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Manrope:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+/>
 
-    <link rel="stylesheet" href="css/variables.css">
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/utilities.css">
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/navbar.css">
-    <link rel="stylesheet" href="css/footer.css">
-    <link rel="stylesheet" href="css/modal.css">
-    <link rel="stylesheet" href="css/notifications.css">
-    <link rel="stylesheet" href="css/pages.css">
-    <link rel="stylesheet" href="css/home-pages.css">
-    <link rel="stylesheet" href="css/services-page.css">
-    <link rel="stylesheet" href="css/products-page.css">
-    <link rel="stylesheet" href="css/contact-page.css">
-    <link rel="stylesheet" href="css/legal-page.css">
-    <link rel="stylesheet" href="css/cgv-page.css">
-    <link rel="stylesheet" href="css/error-pages.css">
-    <link rel="stylesheet" href="css/theme-toggle.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+<link rel="dns-prefetch" href="//www.googletagmanager.com" />
+<link rel="dns-prefetch" href="//assets.calendly.com" />
+<link rel="dns-prefetch" href="//unpkg.com" />
 
-    <link rel="dns-prefetch" href="//www.googletagmanager.com">
-    <link rel="dns-prefetch" href="//assets.calendly.com">
-    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
-
-    <meta name="application-name" content="Oweo">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Oweo">
-
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LHCDKD6DDL"></script>
-    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-LHCDKD6DDL');</script>
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-W6VQCLNC');</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LHCDKD6DDL"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-LHCDKD6DDL');</script>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-W6VQCLNC');</script>
+<link rel="stylesheet" href="css/oweo.css" />
 </head>
 <body>
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W6VQCLNC"
-    height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe></noscript>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W6VQCLNC"
+height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe></noscript>
 
-    <nav id="navbar" class="navbar" role="navigation" aria-label="Navigation principale">
-        <div class="navbar-container">
-            <div class="navbar-brand">
-                <a href="#" class="brand-link">
-                    <div class="brand-logo">
-                        <img src="assets/images/oweo.png" alt="Oweo" class="logo-image">
-                    </div>
-                </a>
-            </div>
-            <div class="navbar-nav">
-                <a href="#home" class="nav-link"><span>Accueil</span></a>
-                <a href="#services" class="nav-link"><span>Services</span></a>
-                <a href="#products" class="nav-link"><span>Réalisations</span></a>
-                <a href="#contact" class="nav-link"><span>Contact</span></a>
-            </div>
-            <div class="navbar-actions">
-                <a href="#contact" class="btn btn-primary btn-sm">Parlons de votre projet</a>
-            </div>
-            <button class="navbar-toggle" id="mobile-menu-toggle-static" aria-label="Menu">
-                <span class="toggle-line"></span>
-                <span class="toggle-line"></span>
-                <span class="toggle-line"></span>
-            </button>
-        </div>
-    </nav>
+<!-- TOPLINE -->
+<header class="topline">
+  <div class="topline-row">
+    <div>
+      <span>Cabinet de conseil &amp; développement</span>
+      <span class="sep">·</span>
+      <span>Métallurgie — charpente, chaudronnerie, métallerie</span>
+    </div>
+    <div>
+      <span>Orvault — Nantes</span>
+      <span class="sep">·</span>
+      <span>Depuis 2025</span>
+    </div>
+  </div>
+</header>
 
-    <div id="demo-search-banner" class="demo-search-banner" style="display: none;" role="search" aria-label="Recherche de démonstrations">
-        <div class="demo-search-container">
-            <div class="demo-search-content">
-                <div class="demo-search-brand">
-                    <i class="fas fa-search" aria-hidden="true"></i>
-                    <span>Navigation Démos</span>
-                </div>
-                <div class="demo-search-input-container">
-                    <div class="search-input-wrapper">
-                        <input type="text" id="demo-search-input" class="demo-search-input" placeholder="Rechercher une démo..." autocomplete="off" spellcheck="false" aria-label="Rechercher parmi les démonstrations">
-                        <div class="search-input-actions">
-                            <button class="search-clear-btn" id="search-clear" style="display: none;" aria-label="Effacer la recherche"><i class="fas fa-times" aria-hidden="true"></i></button>
-                            <div class="search-loading" id="search-loading" style="display: none;" aria-hidden="true"><i class="fas fa-spinner fa-spin" aria-hidden="true"></i></div>
-                        </div>
-                    </div>
-                    <div id="demo-search-results" class="demo-search-results" role="listbox" aria-label="Résultats de recherche">
-                        <div class="search-empty-state">
-                            <i class="fas fa-search" aria-hidden="true"></i>
-                            <p>Tapez pour rechercher</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="demo-search-actions">
-                    <button id="demo-search-help" class="demo-search-help-btn" title="Aide" aria-label="Aide"><i class="fas fa-question-circle" aria-hidden="true"></i></button>
-                    <button id="demo-search-close" class="demo-search-close-btn" title="Fermer" aria-label="Fermer"><i class="fas fa-times" aria-hidden="true"></i></button>
-                </div>
-            </div>
-            <div class="demo-search-status" id="demo-search-status" style="display: none;">
-                <div class="status-content">
-                    <span class="status-text"></span>
-                    <div class="status-shortcuts"><kbd>↑↓</kbd> naviguer <kbd>↵</kbd> sélectionner <kbd>Échap</kbd> fermer</div>
-                </div>
-            </div>
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-row">
+    <a class="brand" href="#top" aria-label="Oweo — accueil">
+      <img src="assets/images/oweo.png" alt="Oweo" class="brand-logo" />
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" href="#manifesto">Approche</a>
+      <a class="nav-link" href="#expertise">Périmètre</a>
+      <a class="nav-link" href="#method">Méthode</a>
+      <a class="nav-link" href="#modules">Cas concrets</a>
+      <a class="nav-link" href="#ia">IA</a>
+      <a class="nav-link" href="#contact">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <a class="btn primary nav-cta-desktop" href="#contact">Prendre contact</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false" type="button">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile menu overlay -->
+<div class="nav-overlay" id="nav-overlay" aria-hidden="true" hidden>
+  <div class="nav-overlay-inner">
+    <a class="nav-overlay-link" href="#manifesto">Approche</a>
+    <a class="nav-overlay-link" href="#expertise">Périmètre</a>
+    <a class="nav-overlay-link" href="#method">Méthode</a>
+    <a class="nav-overlay-link" href="#modules">Cas concrets</a>
+    <a class="nav-overlay-link" href="#ia">IA</a>
+    <a class="nav-overlay-link" href="#contact">Contact</a>
+    <div class="nav-overlay-cta">
+      <a class="btn primary" href="#contact">Prendre contact</a>
+    </div>
+  </div>
+</div>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <p class="hero-eyebrow">
+          <b>I.</b> Charpente · Chaudronnerie · Métallerie · Serrurerie
+        </p>
+        <h1 class="hero-headline">
+          Conseil &amp; développement<br/>pour la <em>métallurgie.</em>
+        </h1>
+        <p class="hero-tag">
+          Cabinet indépendant, <b>basé à Nantes</b> — intervention nationale.
+        </p>
+        <p class="hero-lede">
+          On accompagne les PME et ETI industrielles à toutes les étapes&nbsp;: <strong>audit, choix d'éditeur, migration ERP, conformité facture électronique, développement métier, BI</strong>.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#contact">Premier échange</a>
+          <a class="btn ghost" href="#cases">Voir nos missions</a>
         </div>
+      </div>
+
+      <figure class="photo hero-photo" role="img" aria-label="Configurateur 3D — dôme métallique avec estimation de prix">
+        <img src="assets/images/hero-configurateur-dome.png" alt="Configurateur 3D d'un dôme métallique avec estimation de prix automatique" />
+        <div class="grain"></div>
+        <figcaption class="caption">
+          <span class="ix">01</span>
+          <span class="name">Conception — chiffrage 3D instantané</span>
+          <span class="note">configurateur</span>
+        </figcaption>
+      </figure>
     </div>
 
-    <main id="app" class="app-container" role="main" aria-label="Contenu principal">
-        <div class="home-page">
-            <section class="hero-section">
-                <div class="container">
-                    <div class="hero-content">
-                        <div class="hero-text">
-                            <p class="hero-eyebrow">Développement & Conseil - Charpente Métallique</p>
-                            <h1 class="hero-title">Nous développons les <span class="text-gradient">outils métier</span> de l'industrie métallique</h1>
-                            <p class="hero-description">Configurateurs 3D, imbrication barres et tôles, import DSTV, génération IFC, estimation de production, BI... Nous concevons des logiciels pensés pour votre métier.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
+    <!-- Cabinet strip -->
+    <div class="founder">
+      <div class="founder-text">
+        <div class="name">Le cabinet</div>
+        <div class="role">Expertise métallurgique — conseil &amp; développement</div>
+        <p class="quote">
+          Une expertise issue du terrain industriel — atelier, bureau d'études, ERP, MES. Oweo accompagne les PME et ETI de la métallurgie sur l'ensemble de leurs sujets digitaux, de l'audit jusqu'à la mise en service.
+        </p>
+      </div>
+      <div class="founder-stats">
+        <div class="row"><div class="lbl">Industries</div><div class="val">Charpente · <em>chaudronnerie</em> · métallerie</div></div>
+        <div class="row"><div class="lbl">Cibles</div><div class="val">PME · <em>ETI</em></div></div>
+        <div class="row"><div class="lbl">Périmètre</div><div class="val">Audit → <em>mise en service</em></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTO STRIP — three scenes from across the chain -->
+<section class="strip-photos">
+  <div class="container">
+    <div class="strip-grid">
+      <figure class="photo" role="img" aria-label="Conception — bureau d'études avec modélisation 3D du dôme">
+        <img src="assets/images/photo-conception.png" alt="Bureau d'études : dessin technique manuel et modélisation 3D du dôme à l'écran" />
+        <div class="grain"></div>
+        <figcaption class="caption">
+          <span class="ix">02</span>
+          <span class="name">Conception — du dessin au modèle 3D</span>
+          <span class="note">bureau d'études</span>
+        </figcaption>
+      </figure>
+
+      <figure class="photo" role="img" aria-label="Atelier — fabrication d'un arbalétrier courbe avec tablette de plan">
+        <img src="assets/images/photo-atelier.png" alt="Atelier : arbalétrier courbe du dôme en cours de fabrication, plan technique consulté sur tablette" />
+        <div class="grain"></div>
+        <figcaption class="caption">
+          <span class="ix">03</span>
+          <span class="name">Atelier — fabrication des arbalétriers</span>
+          <span class="note">production</span>
+        </figcaption>
+      </figure>
+
+      <figure class="photo" role="img" aria-label="Pilotage chantier — tableau de bord KPI face au dôme en construction">
+        <img src="assets/images/photo-pilotage.png" alt="Bureau de chantier : tableau de bord KPI en face du dôme métallique en cours de construction" />
+        <div class="grain"></div>
+        <figcaption class="caption">
+          <span class="ix">04</span>
+          <span class="name">Chantier — pilotage en temps réel</span>
+          <span class="note">KPI · production</span>
+        </figcaption>
+      </figure>
+    </div>
+    <div class="strip-cap">
+      <span><b>↗</b> De la conception au chantier — on vous accompagne à chaque étape</span>
+      <span>Conseil, outils, pilotage</span>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto" id="manifesto">
+  <div class="container">
+    <div class="manifesto-grid">
+      <div class="label"><b>II.</b> Notre approche</div>
+      <p class="manifesto-text">
+        Une mission commence toujours sur le terrain. <em>Une journée chez vous</em> — bureau d'études, méthodes, atelier, direction. On écoute, on observe, on cadre.
+        <span class="pause">Le conseil, l'ERP, les outils, le BI&nbsp;: tout <strong>vient de cette écoute.</strong></span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERTISE -->
+<section id="expertise">
+  <div class="container">
+    <div class="mark">
+      <div class="num"><b>III.</b> Périmètre</div>
+      <h2>De l'<em>audit</em> à la <em>mise en service.</em></h2>
+    </div>
+
+    <div class="outcomes">
+      <article class="outcome">
+        <div class="glyph" aria-hidden="true">
+          <svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.6">
+            <circle cx="22" cy="22" r="14"/>
+            <line x1="22" y1="8"  x2="22" y2="14"/>
+            <line x1="22" y1="30" x2="22" y2="36"/>
+            <line x1="8"  y1="22" x2="14" y2="22"/>
+            <line x1="30" y1="22" x2="36" y2="22"/>
+            <circle cx="22" cy="22" r="3" fill="currentColor"/>
+          </svg>
         </div>
-    </main>
+        <div class="outcome-content">
+          <div class="ix">01 — Cadrer</div>
+          <h3>Audit &amp; <em>cadrage SI.</em></h3>
+          <p>Diagnostic de l'existant, choix techno, schéma directeur, cahier des charges fonctionnel, sélection d'éditeur. Une étape de réflexion préalable, à mener sereinement avant la mise en œuvre.</p>
+          <div class="keys"><span>Audit SI</span><span>Schéma directeur</span><span>Choix techno</span></div>
+        </div>
+      </article>
 
-    <footer id="footer" class="footer" role="contentinfo" aria-label="Pied de page"></footer>
-    <div id="modals-container" role="dialog" aria-hidden="true"></div>
+      <article class="outcome">
+        <div class="glyph" aria-hidden="true">
+          <svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.6">
+            <rect x="6"  y="10" width="14" height="24"/>
+            <rect x="24" y="10" width="14" height="24"/>
+            <line x1="20" y1="22" x2="24" y2="22" stroke-width="2"/>
+            <polyline points="22,18 26,22 22,26" stroke-width="2"/>
+            <line x1="9"  y1="16" x2="17" y2="16"/>
+            <line x1="9"  y1="22" x2="17" y2="22"/>
+            <line x1="9"  y1="28" x2="17" y2="28"/>
+            <line x1="27" y1="16" x2="35" y2="16"/>
+            <line x1="27" y1="22" x2="35" y2="22"/>
+            <line x1="27" y1="28" x2="35" y2="28"/>
+          </svg>
+        </div>
+        <div class="outcome-content">
+          <div class="ix">02 — Migrer</div>
+          <h3>Migration ERP &amp; <em>facture électronique.</em></h3>
+          <p>Migration vers ERP modernes (Sage X3, Cegid, Odoo, Divalto, Sylob, Pennylane, etc.), reprise des données existantes, intégrations sur-mesure, accompagnement des utilisateurs. Mise en conformité du mandat <strong>facture électronique 2026</strong>.</p>
+          <div class="keys"><span>Migration ERP</span><span>Reprise de données</span><span>Facture électronique</span></div>
+        </div>
+      </article>
 
-    <script src="js/utils/logger.js"></script>
-    <script src="js/config/company-info.js"></script>
-    <script src="js/core/event-bus.js"></script>
-    <script src="js/core/component-manager.js"></script>
-    <script src="js/utils/dom-utils.js"></script>
-    <script src="js/utils/animation-utils.js"></script>
-    <script src="js/utils/client-access.js"></script>
-    <script src="js/utils/notifications.js"></script>
-    <script src="js/utils/seo-manager.js"></script>
-    <script src="js/utils/theme-manager.js"></script>
-    <script src="js/components/base-component.js"></script>
-    <script src="js/pages/base-page.js"></script>
-    <script src="js/core/router.js"></script>
-    <script src="js/core/app.js"></script>
-    <script src="js/components/navbar.js"></script>
-    <script src="js/components/footer.js"></script>
-    <script src="js/components/modal.js"></script>
-    <script src="js/pages/home.js"></script>
-    <script src="js/pages/services.js"></script>
-    <script src="js/pages/products.js"></script>
-    <script src="js/pages/contact.js"></script>
-    <script src="js/pages/legal.js"></script>
-    <script src="js/pages/cgv.js"></script>
-    <script src="js/config/environment.js"></script>
-    <script src="js/config/google-services.js"></script>
-    <script src="js/config/seo-pages.js"></script>
-    <script src="js/config/app-config.js"></script>
-    <script src="js/tools/consistency-checker.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
-    <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+      <article class="outcome">
+        <div class="glyph" aria-hidden="true">
+          <svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.6">
+            <polyline points="14,12 6,22 14,32"/>
+            <polyline points="30,12 38,22 30,32"/>
+            <line x1="26" y1="8" x2="18" y2="36"/>
+          </svg>
+        </div>
+        <div class="outcome-content">
+          <div class="ix">03 — Développer</div>
+          <h3>Développement métier <em>sur-mesure.</em></h3>
+          <p>Configurateurs 3D, imbrication barres et tôles, traitement DSTV/NC, génération IFC, applications métier intégrées à votre SI. Conçues à partir de votre process, de vos profils, de vos machines et de votre environnement existant.</p>
+          <div class="keys"><span>Configurateur 3D</span><span>Imbrication</span><span>DSTV / IFC</span></div>
+        </div>
+      </article>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            try {
-                const requiredClasses = ['EventBus', 'ComponentManager', 'DOMUtils', 'AnimationUtils', 'BaseComponent', 'OweoRouter', 'OweoApp'];
-                const missing = requiredClasses.filter(c => typeof window[c] === 'undefined');
-                if (missing.length > 0) throw new Error('Classes manquantes: ' + missing.join(', '));
+      <article class="outcome">
+        <div class="glyph" aria-hidden="true">
+          <svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.6">
+            <line x1="6" y1="38" x2="38" y2="38"/>
+            <rect x="9"  y="26" width="5" height="12" fill="currentColor"/>
+            <rect x="17" y="18" width="5" height="20" fill="currentColor"/>
+            <rect x="25" y="22" width="5" height="16" fill="currentColor"/>
+            <rect x="33" y="10" width="5" height="28" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="outcome-content">
+          <div class="ix">04 — Piloter</div>
+          <h3>BI &amp; <em>pilotage industriel.</em></h3>
+          <p>Tableaux de bord en temps réel : charge de production, marge par projet, écarts, KPI commerciaux. Conçus pour être lus aussi bien par la direction que par les responsables de site.</p>
+          <div class="keys"><span>BI métier</span><span>Dashboards</span><span>Pilotage industriel</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
 
-                if (window.CompanyInfo) window.CompanyInfo.validate();
-                if (window.SEOManager) { window.seoManager = new window.SEOManager(); window.seoManager.init(); }
-                if (window.AppConfig && typeof window.AppConfig.validateCompanyInfo === 'function') window.AppConfig.validateCompanyInfo();
+<!-- CASES -->
+<section id="cases">
+  <div class="container">
+    <div class="mark">
+      <div class="num"><b>IV.</b> Domaines d'intervention</div>
+      <h2>Industries, tailles, zones, <em>méthodes &amp; normes.</em></h2>
+    </div>
 
-                window.app = new window.OweoApp();
-                window.app.init();
-            } catch (error) {
-                document.getElementById('app').innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:2rem;"><h1>Erreur de chargement</h1><p>' + error.message + '</p><button onclick="location.reload()" style="padding:0.75rem 1.5rem;border-radius:8px;background:#1d4ed8;color:white;border:none;cursor:pointer;">Recharger</button></div>';
-            }
+    <div class="domains">
+      <div class="domain-row">
+        <div class="domain-label">Industries</div>
+        <div class="domain-tags">
+          <span>Métallurgie</span>
+          <span>Charpente métallique</span>
+          <span>Chaudronnerie</span>
+          <span>Métallerie</span>
+          <span>Serrurerie</span>
+          <span>Enseignes lumineuses</span>
+          <span>Serres &amp; ouvrages d'art</span>
+          <span>Photovoltaïque</span>
+        </div>
+      </div>
+      <div class="domain-row">
+        <div class="domain-label">Tailles d'entreprise</div>
+        <div class="domain-tags">
+          <span>Start-ups</span>
+          <span>PME</span>
+          <span>ETI</span>
+          <span>Groupes internationaux</span>
+        </div>
+      </div>
+      <div class="domain-row">
+        <div class="domain-label">Zones géographiques</div>
+        <div class="domain-tags">
+          <span>Pays de la Loire</span>
+          <span>Bretagne</span>
+          <span>Nouvelle-Aquitaine</span>
+          <span>National</span>
+          <span>International (FR · IT · CA · US · DE)</span>
+        </div>
+      </div>
+      <div class="domain-row">
+        <div class="domain-label">Norme</div>
+        <div class="domain-tags">
+          <span>EN 1090</span>
+        </div>
+      </div>
+      <div class="domain-row">
+        <div class="domain-label">Logiciels</div>
+        <div class="domain-tags">
+          <span>Sage X3</span>
+          <span>Cegid</span>
+          <span>Pennylane</span>
+          <span>Sylob</span>
+          <span>Eurêka</span>
+          <span>2CM Manager</span>
+          <span>Odoo</span>
+          <span>Divalto</span>
+          <span>Tekla</span>
+          <span>AutoCAD</span>
+          <span>Robot Structural</span>
+          <span>Microsoft 365</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METHOD -->
+<section class="method" id="method">
+  <div class="container">
+    <div class="mark">
+      <div class="num"><b>V.</b> Méthode</div>
+      <h2>Une mission, <em>quatre étapes.</em></h2>
+    </div>
+
+    <div class="method-list">
+      <div class="method-step">
+        <div class="num"></div>
+        <h3>Écoute &amp; <em>diagnostic</em></h3>
+        <p>Une journée chez vous, à passer dans les différents services : bureau d'études, méthodes, atelier, direction. On cherche à comprendre comment vous travaillez aujourd'hui, où ça coince, ce qu'il faut vraiment changer.</p>
+        <div class="dur"><b>1 jour</b>Sur site</div>
+      </div>
+      <div class="method-step">
+        <div class="num"></div>
+        <h3>Cadrage &amp; <em>roadmap</em></h3>
+        <p>Cahier des charges fonctionnel, chiffrage, planning, choix techniques. Un document écrit, partageable, validé ensemble — qui sert de référence pour les mois suivants.</p>
+        <div class="dur"><b>2 sem.</b>Document écrit</div>
+      </div>
+      <div class="method-step">
+        <div class="num"></div>
+        <h3>Conception &amp; <em>réalisation</em></h3>
+        <p>Itérations courtes. Démos régulières avec les utilisateurs concernés sur le terrain. Les ajustements se font en cours de route, pendant la mission.</p>
+        <div class="dur"><b>2–6 mois</b>Démos régulières</div>
+      </div>
+      <div class="method-step">
+        <div class="num"></div>
+        <h3>Mise en service &amp; <em>support</em></h3>
+        <p>Reprise des données, formation des équipes, accompagnement des premiers mois d'utilisation. On reste joignable ensuite, par mail ou téléphone.</p>
+        <div class="dur"><b>en continu</b>Suivi</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULES — Cas concrets / Showcase TopSteel -->
+<section id="modules">
+  <div class="container">
+    <div class="mark">
+      <div class="num"><b>VI.</b> Cas concrets</div>
+      <h2>Sept exemples développés sur <em>TopSteel.</em></h2>
+    </div>
+
+    <div class="modules-intro">
+      <div class="badge"><b>↗</b> TopSteel</div>
+      <p><a href="https://topsteel.fr" target="_blank" rel="noopener">topsteel.fr</a> est l'ERP gratuit que nous développons pour la filière charpente métallique. Voici six modules déjà en production — concrets, mesurables, déployables chez vous selon le même principe.</p>
+    </div>
+
+    <div class="modules">
+      <article class="module">
+        <div class="num">01</div>
+        <div class="ix">Configurateur 3D</div>
+        <h3>Configurateur de <em>structures métalliques.</em></h3>
+        <div class="module-demo">
+          <span class="demo-tag"><b>↗</b> Démo · ombrière PV</span>
+          <canvas class="demo-canvas-3d" id="demo-3d-building" aria-label="Ombrière photovoltaïque 3D — démonstration"></canvas>
+          <span class="demo-rotate">Auto-rotation</span>
+        </div>
+        <p><strong>Bâtiments métalliques, ombrières photovoltaïques, serres.</strong> Création guidée en 4 étapes — dimensions, ouvertures, finitions, export. Génération automatique de l'ossature 3D et export IFC pour le BIM.</p>
+        <div class="stack"><span>Visualisation 3D</span><span>Chiffrage instantané</span><span>Export IFC</span></div>
+      </article>
+
+      <article class="module">
+        <div class="num">02</div>
+        <div class="ix">Achats &amp; appro</div>
+        <h3>Estimation matière <em>tôles &amp; profils.</em></h3>
+        <div class="module-demo">
+          <span class="demo-tag"><b>↗</b> Capture TopSteel</span>
+          <img class="demo-image" src="assets/images/topsteel-imbrication.png" alt="Imbrication tôles : comparaison stock et génération automatique de commande fournisseur — TopSteel" />
+        </div>
+        <p><strong>Pour les achats et l'appro</strong> : estimation des quantités de tôles et profils à commander à partir de la nomenclature du devis. Anticipation fiable des consommations matière, avant la découpe.</p>
+        <div class="stack"><span>Estimation matière</span><span>Tôles &amp; barres</span></div>
+      </article>
+
+      <article class="module">
+        <div class="num">03</div>
+        <div class="ix">Lecture de plans</div>
+        <h3>Lecture <em>automatique</em> de plans.</h3>
+        <div class="module-demo">
+          <span class="demo-tag"><b>↗</b> Capture TopSteel</span>
+          <img class="demo-image" src="assets/images/topsteel-lecture-plans.png" alt="Lecture de DPGF avec mapping automatique des colonnes — TopSteel" />
+        </div>
+        <p>Extraction des dimensions et nomenclatures depuis vos plans techniques. Intégration directe au flux de chiffrage et de fabrication.</p>
+        <div class="stack"><span>PDF · DWG</span><span>Auto-extraction</span></div>
+      </article>
+
+      <article class="module">
+        <div class="num">04</div>
+        <div class="ix">DSTV</div>
+        <h3>Lecture &amp; extraction <em>DSTV.</em></h3>
+        <div class="dstv-preview" aria-label="Exemple de fichier DSTV / NC1">
+          <span class="l"><span class="k">ST</span></span>
+          <span class="l">  <span class="c">** Order **</span></span>
+          <span class="l">  <span class="n">NC1-2026-0118</span></span>
+          <span class="l">  <span class="c">** Profile **</span></span>
+          <span class="l">  <span class="n">IPE 200</span>  <span class="c">// S275JR</span></span>
+          <span class="l">  <span class="c">** Length / Quantity **</span></span>
+          <span class="l">  <span class="n">12000.00</span>  <span class="n">6</span></span>
+          <span class="l"><span class="k">BO</span></span>
+          <span class="l">  <span class="c">// trous Ø22</span></span>
+          <span class="l">  v   <span class="n">125.00</span>  <span class="n">50.00</span>  <span class="n">22.00</span></span>
+          <span class="l">  v  <span class="n">1875.00</span>  <span class="n">50.00</span>  <span class="n">22.00</span></span>
+          <span class="l"><span class="k">EN</span></span>
+        </div>
+        <p>Parsing des fichiers DSTV pour extraire les <strong>données structurées</strong> — profils, longueurs, perçages, débits — et alimenter les calculs en amont&nbsp;: <strong>estimation des temps, imbrication, nomenclatures</strong>.</p>
+        <div class="stack"><span>DSTV / NC1</span><span>Donnée prête à exploiter</span></div>
+      </article>
+
+      <article class="module">
+        <div class="num">05</div>
+        <div class="ix">Commerce</div>
+        <h3>Signature <em>électronique</em> des devis.</h3>
+        <div class="module-demo">
+          <span class="demo-tag"><b>↗</b> Capture TopSteel</span>
+          <img class="demo-image" src="assets/images/topsteel-signature-devis.png" alt="Signature électronique du devis — total TTC visible et signature manuscrite du client — TopSteel" />
+        </div>
+        <p>Envoi des devis avec signature électronique intégrée. Suivi des états (envoyé, lu, signé), traçabilité, archivage.</p>
+        <div class="stack"><span>Signature électronique</span><span>Suivi temps réel</span></div>
+      </article>
+
+      <article class="module">
+        <div class="num">06</div>
+        <div class="ix">Achats</div>
+        <h3>Demandes de prix &amp; <em>gestion fournisseurs.</em></h3>
+        <p>Génération de demandes de prix multi-fournisseurs, comparatif automatique des offres reçues, suivi des commandes, base fournisseurs centralisée. <strong>Du besoin atelier à la commande validée</strong>, sans ressaisie.</p>
+        <div class="metrics">
+          <span class="metric">Multi-fournisseurs</span>
+          <span class="metric">Comparatif auto</span>
+        </div>
+        <div class="stack"><span>Demandes de prix</span><span>Commandes</span><span>Base fournisseurs</span></div>
+      </article>
+
+      <article class="module">
+        <div class="num">07</div>
+        <div class="ix">Conformité</div>
+        <h3>Facture électronique <em>2026.</em></h3>
+        <div class="module-demo">
+          <span class="demo-tag"><b>↗</b> Capture TopSteel</span>
+          <img class="demo-image" src="assets/images/topsteel-facture-electronique.png" alt="Import et lecture automatique des factures fournisseurs (photo / PDF) — TopSteel" />
+        </div>
+        <p>Mise en conformité du mandat 2026 : choix de PDP, connexion aux plateformes publiques, génération Factur-X, intégration au flux comptable.</p>
+        <div class="stack"><span>PDP</span><span>Factur-X</span><span>FEC</span></div>
+      </article>
+    </div>
+
+    <!-- Trust strip — entreprises de la métallurgie où Oweo a œuvré -->
+    <div class="trust-strip">
+      <div class="trust-strip-lbl">Ils nous font <em>confiance</em></div>
+      <div class="trust-strip-logos">
+        <img src="assets/images/logo-poujoulat.png"     alt="Groupe Poujoulat" />
+        <img src="assets/images/logo-euro-energies.png" alt="Euro Energies" />
+        <img src="assets/images/logo-press-steel.png"   alt="Press-Steel — Prestation Service Acier" />
+        <img src="assets/images/logo-cmf-groupe.jpg"    alt="CMF Groupe — Bâtisseur de climats" />
+        <img src="assets/images/logo-visotec.jpg"       alt="Visotec" />
+        <img src="assets/images/logo-graitec.png"       alt="Graitec" />
+        <img src="assets/images/logo-eureka.png"        alt="Eurêka Solutions" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IA — Spotlight -->
+<section class="ia" id="ia">
+  <div class="container">
+    <div class="ia-grid">
+      <div class="ia-text">
+        <div class="num"><b>VII.</b> Intelligence artificielle</div>
+        <h2>Trois <em>cas d'usage</em> industriels.</h2>
+        <p>Conçus à partir de votre documentation et de vos process. Tous déployables en interne, sur vos propres serveurs — vos documents, vos requêtes, vos données restent dans votre environnement.</p>
+        <div class="stack">
+          <span class="lbl">— Stack</span>
+          <span>Mistral</span>
+          <span>vLLM</span>
+          <span>OpenWebUI</span>
+          <span>ElasticSearch</span>
+          <span>RAG</span>
+          <span>OCR</span>
+          <span>Hugging Face</span>
+        </div>
+      </div>
+
+      <div class="ia-cases">
+        <figure class="ia-preview">
+          <img src="assets/images/photo-ia-assistant.png" alt="OweoAssistant — chatbot IA métier consulté sur tablette dans un atelier de charpente métallique" />
+          <figcaption><span class="tag">IA</span> OweoAssistant — consulté en atelier, devant les pièces en cours de fabrication</figcaption>
+        </figure>
+
+        <article class="ia-case">
+          <div class="num">01</div>
+          <div>
+            <h3>Chatbot métier (RAG)</h3>
+            <p>Un assistant interne entraîné sur votre documentation : ERP, CAO, normes, procédures qualité. Vos équipes posent des questions en langage naturel — l'agent répond et cite ses sources.</p>
+            <div class="tags"><span>RAG</span><span>Mistral</span><span>ElasticSearch</span></div>
+          </div>
+        </article>
+
+        <article class="ia-case">
+          <div class="num">02</div>
+          <div>
+            <h3>OCR documentaire</h3>
+            <p>Lecture et structuration automatique de plans techniques, fiches matière, bons de commande et bons de livraison. Intégration directe au flux ERP, sans ressaisie manuelle.</p>
+            <div class="tags"><span>OCR</span><span>NLP</span><span>API ERP</span></div>
+          </div>
+        </article>
+
+        <article class="ia-case">
+          <div class="num">03</div>
+          <div>
+            <h3>Infrastructure self-hosted</h3>
+            <p>Modèles déployés sur vos serveurs ou un cloud privé (vLLM, OpenWebUI). Aucune donnée ne sort de votre environnement — utile quand la confidentialité ou la propriété intellectuelle est sensible.</p>
+            <div class="tags"><span>vLLM</span><span>OpenWebUI</span><span>On-premise</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="mark">
+      <div class="num"><b>VIII.</b> Contact</div>
+      <h2>On <em>parle</em> de votre projet ?</h2>
+    </div>
+
+    <div class="contact-grid">
+      <div>
+        <h3>Trente minutes,<br/><em>premier échange,</em><br/>sans engagement.</h3>
+        <p class="contact-lede">
+          Que vous ayez un cahier des charges précis ou simplement l'intuition qu'il y a quelque chose à faire — on en discute, vous repartez avec un avis honnête.
+        </p>
+        <div class="contact-actions">
+          <a class="btn primary" href="https://calendly.com/nicolas-dubain/30min">Planifier l'échange</a>
+          <a class="btn ghost" href="mailto:nicolas.dubain@oweo-consulting.fr">Écrire un mot</a>
+        </div>
+      </div>
+
+      <aside class="contact-detail">
+        <div class="contact-row contact-person">
+          <img src="assets/images/nicolas-dubain.jpg" alt="Nicolas Dubain — fondateur" />
+          <div>
+            <div class="lbl">Votre interlocuteur</div>
+            <div class="val">Nicolas Dubain</div>
+            <div class="role">Fondateur</div>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="lbl">Bureaux</div>
+          <div class="val">Orvault — Nantes</div>
+          <div class="affiliation">
+            <img src="https://www.lacantine.co/app/uploads/2025/01/ftn-x-cantine-logo-bleu-.svg" alt="French Tech Nantes — La Cantine" />
+            <span>Membre de la French Tech Nantes</span>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="lbl">Email</div>
+          <div class="val"><a href="mailto:nicolas.dubain@oweo-consulting.fr">nicolas.dubain@oweo&#8209;consulting.fr</a></div>
+        </div>
+        <div class="contact-row">
+          <div class="lbl">Réseau</div>
+          <div class="val"><a href="https://linkedin.com/company/oweo-consulting">Oweo sur LinkedIn</a></div>
+        </div>
+        <div class="contact-row">
+          <div class="lbl">Délai de réponse</div>
+          <div class="val">Sous 24 h, jours ouvrés</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="foot">
+  <div class="foot-row">
+    <div class="foot-sig">
+      <img src="assets/images/oweo.png" alt="Oweo" class="foot-logo" />
+      <p>Cabinet de conseil et développement pour la métallurgie — charpente, chaudronnerie, métallerie, serrurerie. Nantes, France, depuis 2025.</p>
+      <p class="foot-eco">
+        <span class="lbl">Écosystème —</span>
+        <strong>Oweo</strong> · <a href="https://topsteel.fr">TopSteel</a> · Métaliste
+      </p>
+    </div>
+    <div class="foot-col">
+      <h5>Société</h5>
+      <ul>
+        <li><a href="#manifesto">Approche</a></li>
+        <li><a href="#expertise">Expertise</a></li>
+        <li><a href="#cases">Réalisations</a></li>
+        <li><a href="#method">Méthode</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h5>Périmètre</h5>
+      <ul>
+        <li>Audit &amp; conseil SI</li>
+        <li>Migration ERP &amp; reprise</li>
+        <li>Facture électronique</li>
+        <li>Développement métier</li>
+        <li>Configurateur, imbrication</li>
+        <li>DSTV / IFC / BIM</li>
+        <li>BI &amp; reporting</li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h5>Contact</h5>
+      <ul>
+        <li>Orvault — Nantes</li>
+        <li><a href="mailto:nicolas.dubain@oweo-consulting.fr">@oweo-consulting.fr</a></li>
+        <li><a href="https://linkedin.com/company/oweo-consulting">LinkedIn ↗</a></li>
+      </ul>
+      <a class="foot-ftn" href="https://lacantine.co" target="_blank" rel="noopener" aria-label="Membre de la French Tech Nantes">
+        <span class="lbl">Membre de</span>
+        <img src="https://www.lacantine.co/app/uploads/2025/01/ftn-x-cantine-logo-bleu-.svg" alt="French Tech Nantes — La Cantine" />
+      </a>
+    </div>
+  </div>
+  <div class="foot-bot">
+    <div>© 2025 — 2026 Oweo · <b>Tous droits réservés</b></div>
+    <div><a href="mentions-legales.html"><b>Mentions légales</b></a> · <a href="cgv.html"><b>CGV</b></a> · <a href="confidentialite.html"><b>Confidentialité</b></a></div>
+  </div>
+</footer>
+
+<script>
+  // Mobile menu — hamburger toggle + close on link click
+  (function () {
+    const toggle = document.getElementById("nav-toggle");
+    const overlay = document.getElementById("nav-overlay");
+    if (!toggle || !overlay) return;
+    const close = () => {
+      overlay.classList.remove("is-open");
+      overlay.setAttribute("aria-hidden", "true");
+      toggle.setAttribute("aria-expanded", "false");
+      document.body.classList.remove("nav-open");
+    };
+    toggle.addEventListener("click", () => {
+      const open = overlay.classList.toggle("is-open");
+      overlay.setAttribute("aria-hidden", String(!open));
+      toggle.setAttribute("aria-expanded", String(open));
+      document.body.classList.toggle("nav-open", open);
+    });
+    overlay.querySelectorAll("a[href^='#']").forEach((a) => a.addEventListener("click", close));
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+  })();
+
+  // Smooth in-page nav
+  document.querySelectorAll('a[href^="#"]').forEach((a) => {
+    a.addEventListener("click", (e) => {
+      const id = a.getAttribute("href");
+      if (id.length < 2) return;
+      const t = document.querySelector(id);
+      if (!t) return;
+      e.preventDefault();
+      t.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+
+  // Subtle reveal on scroll
+  if ("IntersectionObserver" in window) {
+    const items = document.querySelectorAll(".outcome, .case, .method-step, .cap, .strip-grid .photo");
+    items.forEach((el) => {
+      el.style.opacity = "0";
+      el.style.transform = "translateY(14px)";
+      el.style.transition = "opacity 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1)";
+    });
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
+            io.unobserve(entry.target);
+          }
         });
+      },
+      { threshold: 0.18 }
+    );
+    items.forEach((el) => io.observe(el));
+  }
+</script>
 
-        window.addEventListener('error', (event) => {
-            if (event.filename && event.filename.includes('calendly')) { event.preventDefault(); return; }
-        });
-    </script>
+<!-- Three.js — démonstration 3D du configurateur -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
+<script type="module">
+  import * as THREE from 'three';
+
+  const canvas = document.getElementById('demo-3d-building');
+  if (canvas) initBuilding(canvas);
+
+  function initBuilding(canvas) {
+    const w = () => canvas.clientWidth;
+    const h = () => canvas.clientHeight;
+
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(w(), h(), false);
+
+    const scene = new THREE.Scene();
+
+    const camera = new THREE.PerspectiveCamera(32, w() / h(), 0.1, 200);
+    camera.position.set(18, 11, 22);
+    camera.lookAt(0, 2.5, 0);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+    const sun = new THREE.DirectionalLight(0xffffff, 0.85);
+    sun.position.set(14, 20, 10);
+    scene.add(sun);
+    const fill = new THREE.DirectionalLight(0xffffff, 0.25);
+    fill.position.set(-10, 5, -6);
+    scene.add(fill);
+
+    /* Ombrière photovoltaïque — variante CENTERED_POST (TopSteel default)
+       Référence : packages/cad/src/TopSteelCAD/building-estimator/templates/ombriere.template.ts
+         length    : 15 m (raccourci pour cadrage caméra, vs 20 m dans TopSteel)
+         width     : 10 m
+         clearH    : 3.0 m (hauteur libre)
+         postSpacing : 5 m  → 4 portiques
+         tilt      : 15° (inclinaison panneaux solaires)
+         postProfile : IPE 240 (poteau)
+         beamProfile : IPE 200 (traverse)
+         purlinProfile : IPE 140 (panne)
+         steelGrade : S235
+    */
+    const L = 15;
+    const W = 10;
+    const H = 3.0;
+    const halfL = L / 2;
+    const halfW = W / 2;
+    const tilt = 15 * Math.PI / 180;
+    const postSpacing = 5;
+    const numPortiques = 4;
+
+    const steelMat = new THREE.MeshStandardMaterial({ color: 0x2a2622, roughness: 0.65, metalness: 0.45 });
+    const aluMat   = new THREE.MeshStandardMaterial({ color: 0x9a958a, roughness: 0.4,  metalness: 0.75 });
+    const panelMat = new THREE.MeshStandardMaterial({ color: 0x0d1f3a, roughness: 0.18, metalness: 0.85 });
+    const cellLines = new THREE.LineBasicMaterial({ color: 0x4a5a78, transparent: true, opacity: 0.55 });
+
+    const group = new THREE.Group();
+
+    // Profil dimensions (mm → exagérés pour visualisation)
+    const ipe240 = { h: 0.40, b: 0.22 }; // poteau (IPE 240 stylisé)
+    const ipe200 = { h: 0.32, b: 0.18 }; // traverse
+    const ipe140 = { h: 0.20, b: 0.13 }; // panne
+
+    // 4 portiques — chaque portique = 1 poteau central + 1 traverse transversale
+    for (let i = 0; i < numPortiques; i++) {
+      const x = -halfL + (i / (numPortiques - 1)) * L;
+
+      // Poteau central (IPE 240)
+      const post = new THREE.Mesh(
+        new THREE.BoxGeometry(ipe240.b, H, ipe240.h),
+        steelMat
+      );
+      post.position.set(x, H / 2, 0);
+      group.add(post);
+
+      // Traverse transversale (IPE 200) — au-dessus du poteau, dans le sens de la largeur
+      // Inclinée pour suivre la pente des panneaux
+      const beamLen = W;
+      const beam = new THREE.Mesh(
+        new THREE.BoxGeometry(ipe200.b, ipe200.h, beamLen),
+        steelMat
+      );
+      // Centrée verticalement — légèrement au-dessus du poteau
+      beam.position.set(x, H + ipe200.h / 2 + 0.04, 0);
+      beam.rotation.x = -tilt; // inclinaison 15°
+      group.add(beam);
+    }
+
+    // Pannes longitudinales (IPE 140) — dans le sens de la longueur, sur les traverses inclinées
+    const numPurlins = 5;
+    const purlinSpacing = W / (numPurlins - 1);
+    for (let p = 0; p < numPurlins; p++) {
+      const z = -halfW + p * purlinSpacing;
+      // Hauteur calculée selon l'inclinaison à cette profondeur z
+      const y = H + ipe200.h + 0.10 + z * Math.sin(tilt);
+      const purlin = new THREE.Mesh(
+        new THREE.BoxGeometry(L, ipe140.h, ipe140.b),
+        steelMat
+      );
+      purlin.position.set(0, y, z * Math.cos(tilt));
+      // Tourner légèrement pour suivre la pente (inclinaison Z des pannes)
+      purlin.rotation.x = -tilt;
+      // Adjustment en Y pour rester sur les traverses
+      group.add(purlin);
+    }
+
+    // Cadre alu de support des panneaux (sur les bords longitudinaux)
+    [-halfW, halfW].forEach((z) => {
+      const y = H + ipe200.h + 0.10 + z * Math.sin(tilt);
+      const f = new THREE.Mesh(
+        new THREE.BoxGeometry(L + 0.4, 0.10, 0.10),
+        aluMat
+      );
+      f.position.set(0, y + 0.10, z * Math.cos(tilt));
+      f.rotation.x = -tilt;
+      group.add(f);
+    });
+
+    // Grille de panneaux PV — disposés dans le plan incliné
+    // Panneau Longi 540W : 2.28m × 1.13m, paysage (long edge = X)
+    // Couvrir L × W projeté sur le plan incliné
+    const panelLong  = 2.28; // côté long (le long de X)
+    const panelShort = 1.13; // côté court (le long de Z, inclinaison)
+    const gap = 0.04;
+    const panelCols = Math.floor(L / (panelLong + gap));     // ~6 colonnes
+    const panelRows = Math.floor(W / (panelShort + gap));    // ~8 rangées
+
+    // Groupe des panneaux : positionné au-dessus des pannes, incliné de 15°
+    const panelsGroup = new THREE.Group();
+    panelsGroup.position.set(0, H + ipe200.h + 0.30, 0);
+    panelsGroup.rotation.x = -tilt;
+    group.add(panelsGroup);
+
+    const panelOffsetX = -((panelCols * panelLong + (panelCols - 1) * gap) / 2 - panelLong / 2);
+    const panelOffsetZ = -((panelRows * panelShort + (panelRows - 1) * gap) / 2 - panelShort / 2);
+
+    for (let r = 0; r < panelRows; r++) {
+      for (let c = 0; c < panelCols; c++) {
+        const x = panelOffsetX + c * (panelLong + gap);
+        const z = panelOffsetZ + r * (panelShort + gap);
+
+        const panel = new THREE.Mesh(
+          new THREE.BoxGeometry(panelLong, 0.04, panelShort),
+          panelMat
+        );
+        panel.position.set(x, 0, z);
+        panelsGroup.add(panel);
+
+        // Cellules photovoltaïques (12 × 6 sur chaque panneau, classique)
+        const cellsX = 12, cellsZ = 6;
+        const pts = [];
+        for (let i = 1; i < cellsX; i++) {
+          const lx = -panelLong / 2 + i * (panelLong / cellsX);
+          pts.push(new THREE.Vector3(lx, 0.025, -panelShort / 2 + 0.02));
+          pts.push(new THREE.Vector3(lx, 0.025,  panelShort / 2 - 0.02));
+        }
+        for (let j = 1; j < cellsZ; j++) {
+          const lz = -panelShort / 2 + j * (panelShort / cellsZ);
+          pts.push(new THREE.Vector3(-panelLong / 2 + 0.02, 0.025, lz));
+          pts.push(new THREE.Vector3( panelLong / 2 - 0.02, 0.025, lz));
+        }
+        const lineGeo = new THREE.BufferGeometry().setFromPoints(pts);
+        const lines = new THREE.LineSegments(lineGeo, cellLines);
+        panel.add(lines);
+      }
+    }
+
+    scene.add(group);
+
+    // Sol — disque discret
+    const ringGeo = new THREE.RingGeometry(11, 11.08, 96);
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0xb0a89e, transparent: true, opacity: 0.45, side: THREE.DoubleSide });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.rotation.x = -Math.PI / 2;
+    scene.add(ring);
+
+    // Grille de sol (parking)
+    const grid = new THREE.GridHelper(20, 20, 0xc8bfa9, 0xc8bfa9);
+    grid.material.opacity = 0.25;
+    grid.material.transparent = true;
+    scene.add(grid);
+
+    // Marquage au sol — 2 rangées de places (de part et d'autre du poteau central)
+    // Sur toute la longueur (15 m) : 6 places × 2 rangées = 12 places
+    const parkLineMat = new THREE.MeshStandardMaterial({
+      color: 0xefe6d4, roughness: 0.85, metalness: 0,
+    });
+    const parkSpaceLength = 5;    // 5 m (profondeur d'une place, axe Z)
+    const parkSpaceWidth  = 2.5;  // 2.5 m (largeur d'une place, axe X)
+    const numSpaces = 6;          // nb de places par rangée
+    const lineThickness = 0.16;   // largeur du trait peint
+    const lineHeight = 0.03;
+
+    const totalParkX = numSpaces * parkSpaceWidth; // 15 m, = longueur ombrière
+
+    // Séparateurs verticaux (axe Z) — 7 lignes par rangée
+    for (let i = 0; i <= numSpaces; i++) {
+      const x = -totalParkX / 2 + i * parkSpaceWidth;
+      // rangée arrière (Z négatif)
+      const lineBack = new THREE.Mesh(
+        new THREE.BoxGeometry(lineThickness, lineHeight, parkSpaceLength),
+        parkLineMat
+      );
+      lineBack.position.set(x, 0.015, -parkSpaceLength / 2);
+      group.add(lineBack);
+      // rangée avant (Z positif)
+      const lineFront = new THREE.Mesh(
+        new THREE.BoxGeometry(lineThickness, lineHeight, parkSpaceLength),
+        parkLineMat
+      );
+      lineFront.position.set(x, 0.015, parkSpaceLength / 2);
+      group.add(lineFront);
+    }
+
+    // Lignes d'arrêt aux deux extrémités (avant + arrière) — sur toute la largeur du parking
+    [-parkSpaceLength, parkSpaceLength].forEach((z) => {
+      const stop = new THREE.Mesh(
+        new THREE.BoxGeometry(totalParkX + lineThickness, lineHeight, lineThickness),
+        parkLineMat
+      );
+      stop.position.set(0, 0.015, z);
+      group.add(stop);
+    });
+
+    function animate() {
+      group.rotation.y += 0.003;
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    function resize() {
+      renderer.setSize(w(), h(), false);
+      camera.aspect = w() / h();
+      camera.updateProjectionMatrix();
+    }
+    window.addEventListener('resize', resize);
+  }
+</script>
 </body>
 </html>

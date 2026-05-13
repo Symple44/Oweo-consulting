@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Politique de confidentialité — Oweo</title>
+<meta name="description" content="Politique de confidentialité du site oweo-consulting.fr — protection des données personnelles, RGPD." />
+<meta name="robots" content="noindex, follow" />
+<link rel="canonical" href="https://oweo-consulting.fr/confidentialite.html" />
+
+<link rel="icon" type="image/png" href="/assets/images/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
+<link rel="shortcut icon" href="/assets/images/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/oweo.css" />
+<style>
+  .legal-article {
+    max-width: 72ch;
+    margin: 0 auto;
+    font-family: var(--sans);
+    color: var(--ink-2);
+    font-size: 17px;
+    line-height: 1.7;
+  }
+  .legal-article section { padding: 36px 0; border-top: 1px solid var(--rule-soft); }
+  .legal-article section:first-of-type { border-top: none; padding-top: 0; }
+  .legal-article h2 {
+    font-family: var(--serif);
+    font-variation-settings: "opsz" 36, "wght" 460;
+    font-size: clamp(22px, 2.4vw, 30px);
+    line-height: 1.2;
+    letter-spacing: -0.018em;
+    color: var(--ink);
+    margin-bottom: 18px;
+  }
+  .legal-article p { margin-bottom: 14px; }
+  .legal-article ul { padding-left: 22px; margin-bottom: 14px; }
+  .legal-article li { padding: 4px 0; }
+  .legal-article a { color: var(--ink); border-bottom: 1px solid var(--oxide); text-decoration: none; padding-bottom: 1px; }
+  .legal-article strong { font-weight: 600; color: var(--ink); }
+</style>
+</head>
+<body>
+
+<header class="topline">
+  <div class="topline-row">
+    <div>
+      <span>Cabinet de conseil &amp; développement</span>
+      <span class="sep">·</span>
+      <span>Métallurgie — charpente, chaudronnerie, métallerie</span>
+    </div>
+    <div>
+      <span>Orvault — Nantes</span>
+      <span class="sep">·</span>
+      <span>Depuis 2025</span>
+    </div>
+  </div>
+</header>
+
+<nav class="nav">
+  <div class="nav-row">
+    <a class="brand" href="index.html" aria-label="Oweo — accueil">
+      <img src="assets/images/oweo.png" alt="Oweo" class="brand-logo" />
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html#manifesto">Approche</a>
+      <a class="nav-link" href="index.html#expertise">Périmètre</a>
+      <a class="nav-link" href="index.html#method">Méthode</a>
+      <a class="nav-link" href="index.html#modules">Cas concrets</a>
+      <a class="nav-link" href="index.html#ia">IA</a>
+      <a class="nav-link" href="index.html#contact">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <a class="btn primary nav-cta-desktop" href="index.html#contact">Prendre contact</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false" type="button">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+  <div class="nav-overlay-inner">
+    <a class="nav-overlay-link" href="index.html#manifesto">Approche</a>
+    <a class="nav-overlay-link" href="index.html#expertise">Périmètre</a>
+    <a class="nav-overlay-link" href="index.html#method">Méthode</a>
+    <a class="nav-overlay-link" href="index.html#modules">Cas concrets</a>
+    <a class="nav-overlay-link" href="index.html#ia">IA</a>
+    <a class="nav-overlay-link" href="index.html#contact">Contact</a>
+    <div class="nav-overlay-cta">
+      <a class="btn primary" href="index.html#contact">Prendre contact</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const toggle = document.getElementById("nav-toggle");
+    const overlay = document.getElementById("nav-overlay");
+    if (!toggle || !overlay) return;
+    const close = () => {
+      overlay.classList.remove("is-open");
+      overlay.setAttribute("aria-hidden", "true");
+      toggle.setAttribute("aria-expanded", "false");
+      document.body.classList.remove("nav-open");
+    };
+    toggle.addEventListener("click", () => {
+      const open = overlay.classList.toggle("is-open");
+      overlay.setAttribute("aria-hidden", String(!open));
+      toggle.setAttribute("aria-expanded", String(open));
+      document.body.classList.toggle("nav-open", open);
+    });
+    overlay.querySelectorAll("a").forEach((a) => a.addEventListener("click", close));
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+  })();
+</script>
+
+<main>
+  <section style="padding: 80px 0;">
+    <div class="container">
+      <div class="mark">
+        <div class="num"><b>—</b> RGPD</div>
+        <h2>Politique de <em>confidentialité.</em></h2>
+      </div>
+
+      <article class="legal-article">
+        <section>
+          <h2>Responsable du traitement</h2>
+          <p>Le responsable du traitement des données personnelles collectées sur ce site est&nbsp;:</p>
+          <p><strong>OWEO SAS</strong>, 10 rue du Sous-Bois, 44700 Orvault — France.<br />Contact&nbsp;: <a href="mailto:nicolas.dubain@oweo-consulting.fr">nicolas.dubain@oweo-consulting.fr</a></p>
+        </section>
+
+        <section>
+          <h2>Données collectées</h2>
+          <p>Nous collectons uniquement les données strictement nécessaires aux finalités suivantes&nbsp;:</p>
+          <ul>
+            <li><strong>Formulaire de contact / prise de rendez-vous</strong> (Calendly) — nom, email, téléphone, contexte de la demande</li>
+            <li><strong>Mesure d'audience</strong> (Google Analytics 4 / Google Tag Manager) — données de navigation anonymisées</li>
+          </ul>
+          <p>Aucune donnée n'est cédée ni vendue à un tiers à des fins commerciales.</p>
+        </section>
+
+        <section>
+          <h2>Finalités &amp; bases légales</h2>
+          <ul>
+            <li>Répondre aux demandes de contact — <em>intérêt légitime</em></li>
+            <li>Organiser les rendez-vous via Calendly — <em>exécution de mesures précontractuelles</em></li>
+            <li>Mesurer l'audience du site — <em>consentement</em> (cookies)</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Durée de conservation</h2>
+          <ul>
+            <li>Données de contact&nbsp;: 3 ans après la dernière interaction</li>
+            <li>Données comptables liées à un contrat&nbsp;: 10 ans (obligation légale)</li>
+            <li>Cookies analytiques&nbsp;: 13 mois maximum</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Vos droits</h2>
+          <p>Conformément au RGPD et à la loi Informatique et Libertés, vous disposez des droits&nbsp;:</p>
+          <ul>
+            <li>D'accès, de rectification, d'effacement</li>
+            <li>De limitation et d'opposition au traitement</li>
+            <li>De portabilité de vos données</li>
+            <li>De définir des directives post-mortem</li>
+          </ul>
+          <p>Pour exercer ces droits&nbsp;: <a href="mailto:nicolas.dubain@oweo-consulting.fr">nicolas.dubain@oweo-consulting.fr</a>. Vous pouvez aussi adresser une réclamation à la <a href="https://www.cnil.fr" target="_blank" rel="noopener">CNIL</a>.</p>
+        </section>
+
+        <section>
+          <h2>Cookies</h2>
+          <p>Le site utilise des cookies de mesure d'audience (Google Analytics) déposés uniquement après votre consentement. Vous pouvez à tout moment retirer ce consentement via les paramètres de votre navigateur ou un module dédié.</p>
+        </section>
+
+        <section>
+          <h2>Sous-traitants &amp; transferts</h2>
+          <p>Les services tiers utilisés par le site (et leur localisation principale)&nbsp;:</p>
+          <ul>
+            <li><strong>Google Analytics / Google Tag Manager</strong> — Google Ireland Ltd. (UE)</li>
+            <li><strong>Calendly</strong> — États-Unis (clauses contractuelles types)</li>
+            <li><strong>OVH</strong> — Hébergement, France</li>
+          </ul>
+        </section>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-row">
+    <div class="foot-sig">
+      <img src="assets/images/oweo.png" alt="Oweo" class="foot-logo" />
+      <p>Cabinet de conseil et développement pour la métallurgie — charpente, chaudronnerie, métallerie, serrurerie. Nantes, France, depuis 2025.</p>
+    </div>
+    <div class="foot-col">
+      <h5>Société</h5>
+      <ul>
+        <li><a href="index.html#manifesto">Approche</a></li>
+        <li><a href="index.html#expertise">Périmètre</a></li>
+        <li><a href="index.html#modules">Cas concrets</a></li>
+        <li><a href="index.html#method">Méthode</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h5>Périmètre</h5>
+      <ul>
+        <li>Audit &amp; conseil SI</li>
+        <li>Migration ERP &amp; reprise</li>
+        <li>Facture électronique</li>
+        <li>Développement métier</li>
+        <li>BI &amp; reporting</li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h5>Contact</h5>
+      <ul>
+        <li>Orvault — Nantes</li>
+        <li><a href="mailto:nicolas.dubain@oweo-consulting.fr">@oweo-consulting.fr</a></li>
+        <li><a href="https://linkedin.com/company/oweo-consulting">LinkedIn ↗</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bot">
+    <div>© 2025 — 2026 Oweo · <b>Tous droits réservés</b></div>
+    <div><a href="mentions-legales.html"><b>Mentions légales</b></a> · <a href="cgv.html"><b>CGV</b></a> · <a href="confidentialite.html"><b>Confidentialité</b></a></div>
+  </div>
+</footer>
+
+</body>
+</html>

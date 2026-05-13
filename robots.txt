@@ -1,18 +1,8 @@
 User-agent: *
 Allow: /
 
-# Sitemaps
+# Sitemap
 Sitemap: https://oweo-consulting.fr/sitemap.xml
-
-# Disallow admin pages (if any)
-Disallow: /admin/
-Disallow: /private/
-
-# Allow important resources
-Allow: /css/
-Allow: /js/
-Allow: /assets/images/
-Allow: /assets/docs/
 
 # Host
 Host: oweo-consulting.fr
